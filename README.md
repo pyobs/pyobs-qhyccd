@@ -1,0 +1,2 @@
+QHYCCD module for *pyobs*
+=========================
