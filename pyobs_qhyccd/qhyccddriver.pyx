@@ -84,9 +84,8 @@ cdef class QHYCCDDriver:
         """
 
         # close camera
-        if self._device is not None:
-            if CloseQHYCCD(self._device) != 0:
-                raise ValueError('Could not close device.')
+        if CloseQHYCCD(self._device) != 0:
+            raise ValueError('Could not close device.')
 
         # release resource
         ReleaseQHYCCDResource()

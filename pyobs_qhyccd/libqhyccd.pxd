@@ -84,3 +84,19 @@ cdef extern from "../lib/usr/local/include/qhyccd.h":
     unsigned int SetQHYCCDStreamMode(libusb_device_handle *handle, unsigned char mode)
     unsigned int InitQHYCCD(libusb_device_handle *handle)
     unsigned int CloseQHYCCD(libusb_device_handle *handle)
+    unsigned int GetQHYCCDEffectiveArea(libusb_device_handle *h, unsigned int *startX, unsigned int *startY,
+                                        unsigned int *sizeX, unsigned int *sizeY)
+    unsigned int GetQHYCCDOverScanArea(libusb_device_handle *h, unsigned int *startX, unsigned int *startY,
+                                       unsigned int *sizeX, unsigned int *sizeY)
+    unsigned int GetQHYCCDChipInfo(libusb_device_handle *h, double *chipw, double *chiph, unsigned int *imagew,
+                                   unsigned int *imageh, double *pixelw, double *pixelh, unsigned int *bpp)
+    unsigned int SetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId, double value)
+    double GetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId)
+    unsigned int SetQHYCCDResolution(libusb_device_handle *handle, unsigned int x, unsigned int y,
+                                     unsigned int xsize, unsigned int ysize);
+    unsigned int SetQHYCCDBinMode(libusb_device_handle *handle, unsigned int wbin, unsigned int hbin)
+    unsigned int ExpQHYCCDSingleFrame(libusb_device_handle *handle)
+    unsigned int GetQHYCCDMemLength(libusb_device_handle *handle)
+    unsigned int GetQHYCCDSingleFrame(libusb_device_handle *handle,unsigned int *w, unsigned int *h,
+                                      unsigned int *bpp, unsigned int *channels, unsigned char *imgdata)
+    unsigned int CancelQHYCCDExposingAndReadout(libusb_device_handle *handle)
