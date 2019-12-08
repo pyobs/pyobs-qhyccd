@@ -27,10 +27,6 @@ cdef class QHYCCDDriver:
 
         # scan cameras
         cam_count = ScanQHYCCD()
-        if cam_count > 0:
-            print("Number of QHYCCD cameras found: %d" % cam_count)
-        else:
-            raise ValueError('No QHYCCD cameras found.')
 
         # get IDs
         cdef char cam_id[32]
