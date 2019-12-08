@@ -3,9 +3,76 @@ cdef extern from "/usr/include/libusb-1.0/libusb.h":
 
 
 cdef extern from "../lib/usr/local/include/qhyccdstruct.h":
-    cdef cppclass CONTROL_ID:
-        pass
+    cdef enum CONTROL_ID:
+        CONTROL_BRIGHTNESS,
+        CONTROL_CONTRAST,
+        CONTROL_WBR,
+        CONTROL_WBB,
+        CONTROL_WBG,
+        CONTROL_GAMMA,
+        CONTROL_GAIN,
+        CONTROL_OFFSET,
+        CONTROL_EXPOSURE,
+        CONTROL_SPEED,
+        CONTROL_TRANSFERBIT,
+        CONTROL_CHANNELS,
+        CONTROL_USBTRAFFIC,
+        CONTROL_ROWNOISERE,
+        CONTROL_CURTEMP,
+        CONTROL_CURPWM,
+        CONTROL_MANULPWM,
+        CONTROL_CFWPORT,
+        CONTROL_COOLER,
+        CONTROL_ST4PORT,
+        CAM_COLOR,
+        CAM_BIN1X1MODE,
+        CAM_BIN2X2MODE,
+        CAM_BIN3X3MODE,
+        CAM_BIN4X4MODE,
+        CAM_MECHANICALSHUTTER,
+        CAM_TRIGER_INTERFACE,
+        CAM_TECOVERPROTECT_INTERFACE,
+        CAM_SINGNALCLAMP_INTERFACE,
+        CAM_FINETONE_INTERFACE,
+        CAM_SHUTTERMOTORHEATING_INTERFACE,
+        CAM_CALIBRATEFPN_INTERFACE,
+        CAM_CHIPTEMPERATURESENSOR_INTERFACE,
+        CAM_USBREADOUTSLOWEST_INTERFACE,
 
+        CAM_8BITS,
+        CAM_16BITS,
+        CAM_GPS,
+
+        CAM_IGNOREOVERSCAN_INTERFACE,
+
+        QHYCCD_3A_AUTOBALANCE,
+        QHYCCD_3A_AUTOEXPOSURE,
+        QHYCCD_3A_AUTOFOCUS,
+        CONTROL_AMPV,
+        CONTROL_VCAM,
+        CAM_VIEW_MODE,
+
+        CONTROL_CFWSLOTSNUM,
+        IS_EXPOSING_DONE,
+        ScreenStretchB,
+        ScreenStretchW,
+        CONTROL_DDR,
+        CAM_LIGHT_PERFORMANCE_MODE,
+
+        CAM_QHY5II_GUIDE_MODE,
+        DDR_BUFFER_CAPACITY,
+        DDR_BUFFER_READ_THRESHOLD,
+        DefaultGain,
+        DefaultOffset,
+        OutputDataActualBits,
+        OutputDataAlignment,
+
+        CAM_SINGLEFRAMEMODE,
+        CAM_LIVEVIDEOMODE,
+        CAM_IS_COLOR,
+        hasHardwareFrameCounter,
+        CONTROL_MAX_ID,
+        CAM_HUMIDITY
 
 cdef extern from "../lib/usr/local/include/qhyccd.h":
     unsigned int InitQHYCCDResource()

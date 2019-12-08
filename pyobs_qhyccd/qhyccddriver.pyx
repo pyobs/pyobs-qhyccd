@@ -64,11 +64,29 @@ cdef class QHYCCDDriver:
         # open cam
         self._device = OpenQHYCCD(cam_id)
 
+        # does it support single frames?
+        if IsQHYCCDControlAvailable(self._device, CONTROL_ID.CAM_SINGLEFRAMEMODE) != 0:
+            raise ValueError('Camera does not support single frames.')
+
+        # set single frame mode
+        if SetQHYCCDStreamMode(self._device, 0) != 0:
+            raise ValueError('Could not set single frame mode.')
+
+        # init camera
+        if InitQHYCCD(self._device) != 0:
+            raise ValueError('Could not initialize camera.')
+
     def close(self):
         """Close driver.
 
         Raises:
             ValueError: If closing failed.
         """
-        if CloseQHYCCD(self._device) != 0:
-            raise ValueError('Could not close device.')
+
+        # close camera
+        if self._device is not None:
+            if CloseQHYCCD(self._device) != 0:
+                raise ValueError('Could not close device.')
+
+        # release resource
+        ReleaseQHYCCDResource()
