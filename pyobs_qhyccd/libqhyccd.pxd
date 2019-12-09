@@ -91,6 +91,7 @@ cdef extern from "../lib/usr/local/include/qhyccd.h":
     unsigned int GetQHYCCDChipInfo(libusb_device_handle *h, double *chipw, double *chiph, unsigned int *imagew,
                                    unsigned int *imageh, double *pixelw, double *pixelh, unsigned int *bpp)
     unsigned int SetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId, double value)
+    unsigned int SetQHYCCDBitsMode(libusb_device_handle *handle, unsigned int bits)
     double GetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId)
     unsigned int SetQHYCCDResolution(libusb_device_handle *handle, unsigned int x, unsigned int y,
                                      unsigned int xsize, unsigned int ysize);
