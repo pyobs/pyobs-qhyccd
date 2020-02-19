@@ -25,7 +25,6 @@ setup(
     install_requires=[
         'cython',
         'numpy',
-        'astropy',
-        'pyobs-core'
+        'astropy'
     ]
 )
