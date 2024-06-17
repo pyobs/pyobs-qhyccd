@@ -7,7 +7,7 @@ cimport numpy as np
 np.import_array()
 from libc.string cimport strcpy, strlen
 
-from libqhyccd cimport *
+from pyobs_qhyccd.libqhyccd cimport *
 
 
 class Control(Enum):
@@ -81,6 +81,9 @@ class Control(Enum):
     CONTROL_MAX_ID = CONTROL_ID.CONTROL_MAX_ID,
     CAM_HUMIDITY = CONTROL_ID.CAM_HUMIDITY
 
+
+def set_log_level(log_level):
+    SetQHYCCDLogLevel(log_level)
 
 cdef class QHYCCDDriver:
     """Wrapper for the QHYCCD driver."""
@@ -226,3 +229,12 @@ cdef class QHYCCDDriver:
 
         # return trimmed and reshaped image
         return img[:roiSizeX * roiSizeY].reshape((roiSizeY, roiSizeX))
+
+    def get_time_remaining(self):
+        return GetQHYCCDExposureRemaining(self._device)
+
+    def get_status(self):
+        cdef unsigned char status
+        GetQHYCCDCameraStatus(self._device, &status)
+        return status
+
