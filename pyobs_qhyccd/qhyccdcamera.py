@@ -178,34 +178,17 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         Raises:
             GrabImageError: If exposure was not successful.
         """
-        # check driver
-        if self._driver is None:
-            raise ValueError("No camera driver.")
-
-        # set binning
-        log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
-        self._driver.set_bin_mode(*self._binning)
 
         await self._prepare_driver_for_exposure(exposure_time)
         log.info("Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time)
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
 
-        # expose
-        print("before expose", time.time())
         self._driver.expose_single_frame()
-        print("after expose", time.time())
 
-        # wait for exposure
-        if exposure_time > 0.5:
-            await event_wait(abort_event, exposure_time - 0.5)
-        #if abort_event.is_set():
-        #    raise
+        await event_wait(abort_event, exposure_time-0.5)
 
-        # get image
-        time_before_get = time.time()
         loop = asyncio.get_running_loop()
         img = await loop.run_in_executor(None, self._driver.get_single_frame)
-        print("after get", time.time() - time_before_get)
 
         # wait exposure
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
@@ -267,7 +250,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
 
     async def _abort_exposure(self) -> None:
         """Abort the running exposure. Should be implemented by derived class.
-
         Raises:
             ValueError: If an error occured.
         """
