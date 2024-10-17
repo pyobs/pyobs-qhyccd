@@ -183,7 +183,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         self._driver.set_resolution(self._window[0], self._window[1], width, height)
 
         # exposure time
-        self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0))
+        self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
         # get date obs
         log.info(
