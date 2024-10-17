@@ -144,6 +144,26 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         """
         return [(1, 1), (2, 2), (3, 3), (4, 4)]
 
+    async def _prepare_driver_for_exposure(self, exposure_time):
+        if self._driver is None:
+            raise ValueError("No camera driver.")
+        log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
+        self._driver.set_bin_mode(*self._binning)
+
+        width = int(math.floor(self._window[2]) / self._binning[0])
+        height = int(math.floor(self._window[3]) / self._binning[1])
+        log.info(
+            "Set window to %dx%d (binned %dx%d) at %d,%d.",
+            self._window[2],
+            self._window[3],
+            width,
+            height,
+            self._window[0],
+            self._window[1],
+        )
+        self._driver.set_resolution(self._window[0], self._window[1], width, height)
+        self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
+
     async def _expose(self, exposure_time: float, open_shutter: bool, abort_event: asyncio.Event) -> Image:
         """Actually do the exposure, should be implemented by derived classes.
 
@@ -166,29 +186,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
         self._driver.set_bin_mode(*self._binning)
 
-        # set window, divide width/height by binning, from libfli:
-        # "Note that the given lower-right coordinate must take into account the horizontal and
-        # vertical bin factor settings, but the upper-left coordinate is absolute."
-        width = int(math.floor(self._window[2]) / self._binning[0])
-        height = int(math.floor(self._window[3]) / self._binning[1])
-        log.info(
-            "Set window to %dx%d (binned %dx%d) at %d,%d.",
-            self._window[2],
-            self._window[3],
-            width,
-            height,
-            self._window[0],
-            self._window[1],
-        )
-        self._driver.set_resolution(self._window[0], self._window[1], width, height)
-
-        # exposure time
-        self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
-
-        # get date obs
-        log.info(
-            "Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time
-        )
+        await self._prepare_driver_for_exposure(exposure_time)
+        log.info("Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time)
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
 
         # expose
