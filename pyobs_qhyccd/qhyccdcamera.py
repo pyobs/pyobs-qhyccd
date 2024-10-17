@@ -164,6 +164,27 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         self._driver.set_resolution(self._window[0], self._window[1], width, height)
         self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
+    async def _get_image_with_header(self, image_data, date_obs, exposure_time):
+        image = Image(image_data)
+        image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
+        image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
+        # image.header["DET-TEMP"] = (self._driver.get_temp(FliTemperature.CCD), "CCD temperature [C]")
+        # image.header["DET-COOL"] = (self._driver.get_cooler_power(), "Cooler power [percent]")
+        # image.header["DET-TSET"] = (self._temp_setpoint, "Cooler setpoint [C]")
+        # image.header["INSTRUME"] = (self._driver.name, "Name of instrument")
+        image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
+        image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
+        image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
+        image.header["YORGSUBF"] = (self._window[1], "Subframe origin on Y axis")
+        image.header["DATAMIN"] = (float(np.min(image_data)), "Minimum data value")
+        image.header["DATAMAX"] = (float(np.max(image_data)), "Maximum data value")
+        image.header["DATAMEAN"] = (float(np.mean(image_data)), "Mean data value")
+
+        # biassec/trimsec
+        # full = self._driver.get_visible_frame()
+        # self.set_biassec_trimsec(image.header, *full)
+        return image
+
     async def _expose(self, exposure_time: float, open_shutter: bool, abort_event: asyncio.Event) -> Image:
         """Actually do the exposure, should be implemented by derived classes.
 
@@ -184,46 +205,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
 
         self._driver.expose_single_frame()
-
         await event_wait(abort_event, exposure_time-0.5)
-
         loop = asyncio.get_running_loop()
-        img = await loop.run_in_executor(None, self._driver.get_single_frame)
-
-        # wait exposure
+        image_data = await loop.run_in_executor(None, self._driver.get_single_frame)
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
 
-        # create FITS image and set header
-        image = Image(img)
-        image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
-        image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
-        #image.header["DET-TEMP"] = (self._driver.get_temp(FliTemperature.CCD), "CCD temperature [C]")
-        #image.header["DET-COOL"] = (self._driver.get_cooler_power(), "Cooler power [percent]")
-        #image.header["DET-TSET"] = (self._temp_setpoint, "Cooler setpoint [C]")
-
-        # instrument and detector
-        #image.header["INSTRUME"] = (self._driver.name, "Name of instrument")
-
-        # binning
-        image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
-        image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
-
-        # window
-        image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
-        image.header["YORGSUBF"] = (self._window[1], "Subframe origin on Y axis")
-
-        # statistics
-        image.header["DATAMIN"] = (float(np.min(img)), "Minimum data value")
-        image.header["DATAMAX"] = (float(np.max(img)), "Maximum data value")
-        image.header["DATAMEAN"] = (float(np.mean(img)), "Mean data value")
-
-        # biassec/trimsec
-        #full = self._driver.get_visible_frame()
-        #self.set_biassec_trimsec(image.header, *full)
-
-        # return FITS image
         log.info("Readout finished.")
-        return image
+        return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
     async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
         """Wait for exposure to finish.
