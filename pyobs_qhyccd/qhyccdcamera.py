@@ -142,7 +142,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         Returns:
             List of available binnings as (x, y) tuples.
         """
-        return [(1, 1), (2, 2), (3, 3), (4, 4)]   # TODO: get available binnings directly from driver
+        binnings = []
+        if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
+            binnings.append((1, 1))
+        if self._driver.is_control_available(Control.CAM_BIN2X2MODE):
+            binnings.append((2, 2))
+        if self._driver.is_control_available(Control.CAM_BIN3X3MODE):
+            binnings.append((3, 3))
+        if self._driver.is_control_available(Control.CAM_BIN4X4MODE):
+            binnings.append((4, 4))
+        return binnings
 
     async def _prepare_driver_for_exposure(self, exposure_time):
         if self._driver is None:
