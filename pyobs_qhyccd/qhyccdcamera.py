@@ -202,11 +202,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         #    raise
 
         # get image
-        print("before get", time.time())
-        img = self._driver.get_single_frame()
-        #loop = asyncio.get_running_loop()
-        #img = await loop.run_in_executor(None, self._driver.get_single_frame)
-        print("after get", time.time())
+        time_before_get = time.time()
+        loop = asyncio.get_running_loop()
+        img = await loop.run_in_executor(None, self._driver.get_single_frame)
+        print("after get", time.time() - time_before_get)
 
         # wait exposure
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
