@@ -142,7 +142,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         Returns:
             List of available binnings as (x, y) tuples.
         """
-        return [(1, 1), (2, 2), (3, 3), (4, 4)]
+        return [(1, 1), (2, 2), (3, 3), (4, 4)]   # TODO: get available binnings directly from driver
 
     async def _prepare_driver_for_exposure(self, exposure_time):
         if self._driver is None:
@@ -183,6 +183,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         # biassec/trimsec
         # full = self._driver.get_visible_frame()
         # self.set_biassec_trimsec(image.header, *full)
+        log.info("Readout finished.")
         return image
 
     async def _expose(self, exposure_time: float, open_shutter: bool, abort_event: asyncio.Event) -> Image:
@@ -203,38 +204,11 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         await self._prepare_driver_for_exposure(exposure_time)
         log.info("Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time)
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
-
         self._driver.expose_single_frame()
         await event_wait(abort_event, exposure_time-0.5)
         loop = asyncio.get_running_loop()
         image_data = await loop.run_in_executor(None, self._driver.get_single_frame)
-        await self._wait_exposure(abort_event, exposure_time, open_shutter)
-
-        log.info("Readout finished.")
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
-
-    async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
-        """Wait for exposure to finish.
-
-        Params:
-            abort_event: Event that aborts the exposure.
-            exposure_time: Exp time in sec.
-        """
-
-        """
-        while True:
-            # aborted?
-            if abort_event.is_set():
-                await self._change_exposure_status(ExposureStatus.IDLE)
-                raise InterruptedError("Aborted exposure.")
-
-            # is exposure finished?
-            if self._driver.is_exposing():
-                break
-            else:
-                # sleep a little
-                await asyncio.sleep(0.01)
-        """
 
     async def _abort_exposure(self) -> None:
         """Abort the running exposure. Should be implemented by derived class.
