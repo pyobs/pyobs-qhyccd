@@ -17,20 +17,18 @@ from .qhyccddriver import QHYCCDDriver, Control, set_log_level
 log = logging.getLogger(__name__)
 
 
-class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
+class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling):
     """A pyobs module for QHYCCD cameras."""
 
     __module__ = "pyobs_qhyccd"
 
-    def __init__(self, **kwargs: Any):
+    def __init__(self, setpoint: float=-20, **kwargs: Any):
         """Initializes a new QHYCCDCamera.
         """
         BaseCamera.__init__(self, **kwargs)
 
-        # driver
         self._driver: Optional[QHYCCDDriver] = None
-
-        # window and binning
+        self._setpoint = setpoint
         self._window = (0, 0, 0, 0)
         self._binning = (1, 1)
 
@@ -142,6 +140,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         Returns:
             List of available binnings as (x, y) tuples.
         """
+
         binnings = []
         if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
             binnings.append((1, 1))
@@ -153,7 +152,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
             binnings.append((4, 4))
         return binnings
 
-    async def _prepare_driver_for_exposure(self, exposure_time):
+    async def _prepare_driver_for_exposure(self, exposure_time) -> None:
         if self._driver is None:
             raise ValueError("No camera driver.")
         log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
@@ -173,7 +172,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
         self._driver.set_resolution(self._window[0], self._window[1], width, height)
         self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
-    async def _get_image_with_header(self, image_data, date_obs, exposure_time):
+    async def _get_image_with_header(self, image_data, date_obs, exposure_time) -> Image:
         image = Image(image_data)
         image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
         image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
@@ -228,5 +227,19 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable):
             raise ValueError("No camera driver.")
         #self._driver.cancel_exposure()
 
+    async def get_cooling(self, **kwargs: Any) -> Tuple[bool, float, float]:
+        enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
+        setpoint = self._setpoint
+        power = self._driver.get_param(Control.CONTROL_CURPWM)
+        return enabled, setpoint, power
+
+    async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
+        if not enabled:
+            self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO:
+        self._setpoint = setpoint #TODO: actually set the temperature, not only the parameter
+
+    async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
+        #temperature =
+        return {"CCD": self._driver.get_param(Control.CONTROL_CURTEMP)}
 
 __all__ = ["QHYCCDCamera"]
