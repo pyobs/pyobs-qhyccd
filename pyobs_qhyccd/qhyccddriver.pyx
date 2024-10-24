@@ -197,6 +197,10 @@ cdef class QHYCCDDriver:
         if SetQHYCCDParam(self._device, param.value[0], value) != 0:
             raise ValueError('Could not set parameter %s to %f.' % (param, value))
 
+    def set_temperature(self, temperature: float):
+        if ControlQHYCCDTemp(self._device, temperature) != 0:
+            raise ValueError("Could not set temperature to %f °C" % temperature)
+
     def set_resolution(self, x, y, width, height):
         if SetQHYCCDResolution(self._device, x, y, width, height) != 0:
             raise ValueError('Could not set resolution to %dx%d at %d,%d.' % (width, height, x, y))

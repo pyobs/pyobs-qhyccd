@@ -234,9 +234,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         return enabled, setpoint, power
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
-        if not enabled:
-            self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO:
-        self._setpoint = setpoint #TODO: actually set the temperature, not only the parameter
+        #if not enabled:
+        #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO:
+        self._setpoint = setpoint
+        self._driver.set_temperature(self._setpoint)
 
     async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
         #temperature =

@@ -103,4 +103,5 @@ cdef extern from "../lib/usr/local/include/qhyccd.h":
     unsigned int CancelQHYCCDExposingAndReadout(libusb_device_handle *handle)
     unsigned int GetQHYCCDExposureRemaining(libusb_device_handle *handle)
     unsigned int GetQHYCCDCameraStatus(libusb_device_handle *handle, unsigned char *buf);
+    unsigned int ControlQHYCCDTemp(libusb_device_handle *handle, double targettemp);
     void SetQHYCCDLogLevel(unsigned int logLevel);
