@@ -37,7 +37,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         await BaseCamera.open(self)
 
         # disable logs
-        set_log_level(0)
+        set_log_level(0) #TODO:
 
         # get devices
         devices = QHYCCDDriver.list_devices()
@@ -230,17 +230,31 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
     async def get_cooling(self, **kwargs: Any) -> Tuple[bool, float, float]:
         enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
         setpoint = self._setpoint
-        power = self._driver.get_param(Control.CONTROL_CURPWM)
+        power = self._driver.get_param(Control.CONTROL_CURPWM) #TODO: von PWM auf Power schließen, z.B. PWM/256 * 100% ?
         return enabled, setpoint, power
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
         #if not enabled:
-        #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO:
+        #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO: einfach PWM auf 0?
         self._setpoint = setpoint
-        self._driver.set_temperature(self._setpoint)
+        await self._stepwise_cooling(setpoint)
+
+    async def _wait_for_reaching_temperature(self, target_temperature, wait_step=0.1):
+        while target_temperature != await self.get_temperatures()["CCD"]:
+            time.sleep(wait_step)
+
+    async def _stepwise_cooling(self, target_temperature, temperature_stepwidth=1):
+        while await self.get_temperatures()["CCD"] - target_temperature > temperature_stepwidth:
+            intermediate_temperature = await self.get_temperatures()["CCD"] - temperature_stepwidth
+            self._driver.set_temperature(intermediate_temperature)
+            await self._wait_for_reaching_temperature(intermediate_temperature)
+        self._driver.set_temperature(target_temperature)
+
+    async def handle_cooling_bug(self):
+        ... #TODO: implementation and better naming
+        # z.B. aktuelle temperatur +5 als neuen setpoint setzen und von da an auf vorigen setpoint plus puffer stellen
 
     async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
-        #temperature =
         return {"CCD": self._driver.get_param(Control.CONTROL_CURTEMP)}
 
 __all__ = ["QHYCCDCamera"]
