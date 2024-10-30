@@ -22,7 +22,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
     __module__ = "pyobs_qhyccd"
 
-    def __init__(self, setpoint: float=-20, **kwargs: Any):
+    def __init__(self, setpoint: float=-10, **kwargs: Any):
         """Initializes a new QHYCCDCamera.
         """
         BaseCamera.__init__(self, **kwargs)
@@ -70,8 +70,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         self._window = self._driver.get_effective_area()
 
         # set cooling
-        #if self._temp_setpoint is not None:
-        #    await self.set_cooling(True, self._temp_setpoint)
+        if self._setpoint is not None:
+            await self.set_cooling(True, self._setpoint)
 
     async def close(self) -> None:
         """Close the module."""
