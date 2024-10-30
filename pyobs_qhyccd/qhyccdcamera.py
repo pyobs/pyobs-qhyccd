@@ -237,24 +237,47 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         #if not enabled:
         #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO: einfach PWM auf 0?
         self._setpoint = setpoint
-        await self._stepwise_cooling(setpoint)
+        await self._cool_stepwise(setpoint)
 
-    async def _wait_for_reaching_temperature(self, target_temperature, wait_step=0.1):
-        while target_temperature != await self.get_temperatures()["CCD"]:
+    async def _wait_for_reaching_temperature(self, target_temperature, wait_step=1):
+        while await self._get_ccd_temperature() > target_temperature:
+            print("Current temperature is", await self._get_ccd_temperature(), "Target temperature is", target_temperature)
+            if await self._cooling_bug_occured():
+                break
             time.sleep(wait_step)
 
-    async def _stepwise_cooling(self, target_temperature, temperature_stepwidth=1):
-        while await self.get_temperatures()["CCD"] - target_temperature > temperature_stepwidth:
-            intermediate_temperature = await self.get_temperatures()["CCD"] - temperature_stepwidth
+    async def _cooling_bug_occured(self):
+        return (self._driver.get_param(Control.CONTROL_CURPWM) > 250) & (await self._get_ccd_temperature() < 0)
+
+    async def _get_ccd_temperature(self):
+        return self._driver.get_param(Control.CONTROL_CURTEMP)
+
+    async def _cool_stepwise(self, target_temperature, temperature_stepwidth=1):
+        print("Start stepwise cooling to ", target_temperature)
+        while await self._get_ccd_temperature() - target_temperature > temperature_stepwidth:
+            intermediate_temperature = await self._get_ccd_temperature() - temperature_stepwidth
+            print("Set temperature to", intermediate_temperature)
             self._driver.set_temperature(intermediate_temperature)
             await self._wait_for_reaching_temperature(intermediate_temperature)
+            if await self._cooling_bug_occured():
+                await self._handle_cooling_bug(intermediate_temperature)
+                return
+        print("Set temperature to", target_temperature)
         self._driver.set_temperature(target_temperature)
+        print("End stepwise cooling to", target_temperature)
 
-    async def handle_cooling_bug(self):
-        ... #TODO: implementation and better naming
-        # z.B. aktuelle temperatur +5 als neuen setpoint setzen und von da an auf vorigen setpoint plus puffer stellen
+    async def _handle_cooling_bug(self, original_target_temperature, puffer=5, correction_step=1):
+        print(f"Setpoint of {original_target_temperature:.2f} °C too low for cooler. Temporarily resetting it to {await self._get_ccd_temperature() + puffer:.2f} °C.")
+        while await self._cooling_bug_occured():
+            time.sleep(1)
+            await self._cool_stepwise(await self._get_ccd_temperature() + puffer)
+        print("Wait a minute")
+        time.sleep(60)
+        self._setpoint = original_target_temperature + correction_step
+        print("Retry stepwise cooling with new setpoint of", self._setpoint)
+        await self._cool_stepwise(self._setpoint)
 
     async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
-        return {"CCD": self._driver.get_param(Control.CONTROL_CURTEMP)}
+        return {"CCD": await self._get_ccd_temperature()}
 
 __all__ = ["QHYCCDCamera"]
