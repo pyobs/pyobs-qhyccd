@@ -176,9 +176,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         image = Image(image_data)
         image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
         image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
-        # image.header["DET-TEMP"] = (self._driver.get_temp(FliTemperature.CCD), "CCD temperature [C]")
-        # image.header["DET-COOL"] = (self._driver.get_cooler_power(), "Cooler power [percent]")
-        # image.header["DET-TSET"] = (self._temp_setpoint, "Cooler setpoint [C]")
+        image.header["DET-TEMP"] = (await self._get_ccd_temperature(), "CCD temperature [C]")
+        image.header["DET-COOL"] = (await self._get_cooling_power(), "Cooler power [percent]")
+        image.header["DET-TSET"] = (self._setpoint, "Cooler setpoint [C]")
         # image.header["INSTRUME"] = (self._driver.name, "Name of instrument")
         image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
         image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
@@ -227,10 +227,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
             raise ValueError("No camera driver.")
         #self._driver.cancel_exposure()
 
+    async def _get_cooling_power(self):
+        return self._driver.get_param(Control.CONTROL_CURPWM) /256 * 100 # TODO:
+
     async def get_cooling(self, **kwargs: Any) -> Tuple[bool, float, float]:
         enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
         setpoint = self._setpoint
-        power = self._driver.get_param(Control.CONTROL_CURPWM) #TODO: von PWM auf Power schließen, z.B. PWM/256 * 100% ?
+        power = await self._get_cooling_power()
         return enabled, setpoint, power
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
