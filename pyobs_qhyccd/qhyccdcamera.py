@@ -234,6 +234,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
         setpoint = self._setpoint
         power = await self._get_cooling_power()
+        if await self._cooling_bug_occured():
+            await self._handle_cooling_bug(self._setpoint)
         return enabled, setpoint, power
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
