@@ -225,7 +225,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
-        #self._driver.cancel_exposure()
+        self._driver.cancel_exposure_and_readout()
 
     async def _get_cooling_power(self):
         return self._driver.get_param(Control.CONTROL_CURPWM) /256 * 100 # TODO:

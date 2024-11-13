@@ -245,3 +245,6 @@ cdef class QHYCCDDriver:
         GetQHYCCDCameraStatus(self._device, &status)
         return status
 
+    def cancel_exposure_and_readout(self):
+        return CancelQHYCCDExposingAndReadout(self._device)
+
