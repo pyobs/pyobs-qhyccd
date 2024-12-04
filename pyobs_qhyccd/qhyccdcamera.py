@@ -282,10 +282,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
     async def _handle_cooling_bug(self, original_target_temperature, puffer=5, correction_step=1):
         print(f"Setpoint of {original_target_temperature:.2f} °C too low for cooler. Temporarily resetting it to {await self._get_ccd_temperature() + puffer:.2f} °C.")
         while await self._cooling_bug_occured():
-            time.sleep(1)
+            await asyncio.sleep(1)
             await self._cool_stepwise(await self._get_ccd_temperature() + puffer)
         print("Wait a minute")
-        time.sleep(60)
+        await asyncio.sleep(60)
         self._setpoint = original_target_temperature + correction_step
         print("Retry stepwise cooling with new setpoint of", self._setpoint)
         await self._cool_stepwise(self._setpoint)
