@@ -247,7 +247,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
             print("Current temperature is", await self._get_ccd_temperature(), "Target temperature is", target_temperature)
             if await self._cooling_bug_occured():
                 break
-            time.sleep(wait_step)
+            await asyncio.sleep(wait_step)
 
     async def _cooling_bug_occured(self):
         return (self._driver.get_param(Control.CONTROL_CURPWM) > 250) & (await self._get_ccd_temperature() < 0)
