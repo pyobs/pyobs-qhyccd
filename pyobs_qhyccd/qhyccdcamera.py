@@ -213,10 +213,20 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         log.info("Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time)
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
         self._driver.expose_single_frame()
-        await event_wait(abort_event, exposure_time-0.5)
+        await self._wait_exposure(abort_event, exposure_time, open_shutter)
         loop = asyncio.get_running_loop()
         image_data = await loop.run_in_executor(None, self._driver.get_single_frame)
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
+
+    async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
+        """Wait for exposure to finish.
+
+        Params:
+            abort_event: Event that aborts the exposure.
+            exposure_time: Exp time in sec.
+            open_shutter: Whether shutter should be opened.
+        """
+        await event_wait(abort_event, exposure_time - 0.5)
 
     async def _abort_exposure(self) -> None:
         """Abort the running exposure. Should be implemented by derived class.
