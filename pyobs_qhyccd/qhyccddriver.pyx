@@ -188,11 +188,18 @@ cdef class QHYCCDDriver:
         cdef unsigned int imagew, imageh, bpp
         if  GetQHYCCDChipInfo(self._device, &chipw, &chiph, &imagew, &imageh, &pixelw, &pixelh, &bpp) != 0:
             raise ValueError('Could not fetch chip info.')
-        return chipw, chiph, imagew, imageh, pixelw, pixelh, bpp
+        return chipw, chiph, imagew, imageh, pixelw, pixelh,
+
+    def get_param(self, param: Control):
+        return GetQHYCCDParam(self._device, param.value[0])
 
     def set_param(self, param: Control, value: float):
         if SetQHYCCDParam(self._device, param.value[0], value) != 0:
             raise ValueError('Could not set parameter %s to %f.' % (param, value))
+
+    def set_temperature(self, temperature: float):
+        if ControlQHYCCDTemp(self._device, temperature) != 0:
+            raise ValueError("Could not set temperature to %f °C" % temperature)
 
     def set_resolution(self, x, y, width, height):
         if SetQHYCCDResolution(self._device, x, y, width, height) != 0:
