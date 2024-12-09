@@ -132,7 +132,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         Raises:
             ValueError: If binning could not be set.
         """
-        await self.set_window(**self._full_window)
         self._binning = (x, y)
         log.info("Setting binning to %dx%d...", x, y)
 
@@ -157,6 +156,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
     async def _prepare_driver_for_exposure(self, exposure_time) -> None:
         if self._driver is None:
             raise ValueError("No camera driver.")
+        await self.set_window(*self._full_window)
         log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
         self._driver.set_bin_mode(*self._binning)
 
