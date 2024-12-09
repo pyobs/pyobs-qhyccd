@@ -68,6 +68,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
         # get full window
         self._window = self._driver.get_effective_area()
+        self._full_window = self._driver.get_effective_area()
 
         # set cooling
         if self._setpoint is not None:
@@ -131,6 +132,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         Raises:
             ValueError: If binning could not be set.
         """
+        await self.set_window(**self._full_window)
         self._binning = (x, y)
         log.info("Setting binning to %dx%d...", x, y)
 
