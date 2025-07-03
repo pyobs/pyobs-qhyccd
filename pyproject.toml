@@ -1,31 +1,33 @@
-[tool.poetry]
+[project]
 name = "pyobs-qhyccd"
-version = "1.2.2"
+version = "1.3.0"
 description = "pyobs module for QHYCCD cameras"
-authors = ["Tim-Oliver Husser <thusser@uni-goettingen.de>"]
+authors = [{ name = "Tim-Oliver Husser", email = "thusser@uni-goettingen.de" }]
+requires-python = ">=3.11"
 license = "MIT"
-include = ['lib']
+dependencies = [
+    "astropy>=7.0.1,<8",
+    "numpy>=2.2.5,<3",
+    "pyobs-core>=1,<2",
+]
 
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = false
+[dependency-groups]
+dev = [
+    "black>=25.1.0,<26",
+    "pre-commit>=4.2.0,<5",
+    "flake8>=7.3.0",
+    "cython>=3.0.0,<4",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.13"
-astropy = "^5.0"
-numpy = "^1.21"
-pyobs-core = "^1.0"
+[tool.hatch.build.targets.sdist]
+include = ["lib"]
 
-[tool.poetry.dev-dependencies]
-black = "^21.12b0"
-pre-commit = "^2.16"
-sphinx-rtd-theme = "^1.0"
-Sphinx = "^4.4"
-cython = "^3.0.0"
+[tool.hatch.build.targets.wheel]
+include = ["lib"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "Cython>=3.0.0", "numpy>=1.21.0", "setuptools"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 120
