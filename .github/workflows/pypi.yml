@@ -8,19 +8,19 @@ jobs:
     name: Build and publish package to PyPI
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v2
       - name: Set up Python
-        uses: astral-sh/setup-uv@v5
+        uses: actions/setup-python@v1
         with:
-          enable-cache: true
           python-version: "3.11"
-
-      - name: Build
-        run: uv build
-
+      - name: Install poetry
+        run: |
+          curl -fsS -o get-poetry.py https://install.python-poetry.org
+          python get-poetry.py -y
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.pypi_password }}
-        run: uv publish --token $PYPI_TOKEN
+        run: |
+          $HOME/.local/bin/poetry config pypi-token.pypi $PYPI_TOKEN
+          $HOME/.local/bin/poetry build -f sdist
+          $HOME/.local/bin/poetry publish
