@@ -1,6 +1,6 @@
 [project]
 name = "pyobs-qhyccd"
-version = "1.4.0"
+version = "1.4.1"
 description = "pyobs module for QHYCCD cameras"
 authors = [{ name = "Tim-Oliver Husser", email = "thusser@uni-goettingen.de" }]
 requires-python = ">=3.11,<3.14"
