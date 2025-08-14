@@ -182,7 +182,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
         eff = self._driver.get_effective_area()
-        self._effective_area = (eff[0], eff[1], eff[2] * self._binning[0], eff[3] + self._binning[1])
+        self._effective_area = (eff[0], eff[1], eff[2] * self._binning[0], eff[3] * self._binning[1])
 
     async def _get_image_with_header(self, image_data, date_obs, exposure_time) -> Image:
         image = Image(image_data)
