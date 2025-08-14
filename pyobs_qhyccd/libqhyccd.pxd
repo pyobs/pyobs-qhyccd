@@ -45,7 +45,7 @@ cdef extern from "../lib/usr/local/include/qhyccdstruct.h":
 
         CAM_IGNOREOVERSCAN_INTERFACE,
 
-        QHYCCD_3A_AUTOBALANCE,
+        #QHYCCD_3A_AUTOBALANCE,
         QHYCCD_3A_AUTOEXPOSURE,
         QHYCCD_3A_AUTOFOCUS,
         CONTROL_AMPV,
@@ -75,33 +75,34 @@ cdef extern from "../lib/usr/local/include/qhyccdstruct.h":
         CAM_HUMIDITY
 
 cdef extern from "../lib/usr/local/include/qhyccd.h":
+    ctypedef void* qhyccd_handle
     unsigned int InitQHYCCDResource()
     unsigned int ScanQHYCCD()
     unsigned int GetQHYCCDId(unsigned int index, char *id)
     unsigned int ReleaseQHYCCDResource()
-    libusb_device_handle *OpenQHYCCD(char *id)
-    unsigned int IsQHYCCDControlAvailable(libusb_device_handle *handle, CONTROL_ID controlId)
-    unsigned int SetQHYCCDStreamMode(libusb_device_handle *handle, unsigned char mode)
-    unsigned int InitQHYCCD(libusb_device_handle *handle)
-    unsigned int CloseQHYCCD(libusb_device_handle *handle)
-    unsigned int GetQHYCCDEffectiveArea(libusb_device_handle *h, unsigned int *startX, unsigned int *startY,
+    qhyccd_handle *OpenQHYCCD(char *id)
+    unsigned int IsQHYCCDControlAvailable(qhyccd_handle *handle, CONTROL_ID controlId)
+    unsigned int SetQHYCCDStreamMode(qhyccd_handle *handle, unsigned char mode)
+    unsigned int InitQHYCCD(qhyccd_handle *handle)
+    unsigned int CloseQHYCCD(qhyccd_handle *handle)
+    unsigned int GetQHYCCDEffectiveArea(qhyccd_handle *h, unsigned int *startX, unsigned int *startY,
                                         unsigned int *sizeX, unsigned int *sizeY)
-    unsigned int GetQHYCCDOverScanArea(libusb_device_handle *h, unsigned int *startX, unsigned int *startY,
+    unsigned int GetQHYCCDOverScanArea(qhyccd_handle *h, unsigned int *startX, unsigned int *startY,
                                        unsigned int *sizeX, unsigned int *sizeY)
-    unsigned int GetQHYCCDChipInfo(libusb_device_handle *h, double *chipw, double *chiph, unsigned int *imagew,
+    unsigned int GetQHYCCDChipInfo(qhyccd_handle *h, double *chipw, double *chiph, unsigned int *imagew,
                                    unsigned int *imageh, double *pixelw, double *pixelh, unsigned int *bpp)
-    unsigned int SetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId, double value)
-    unsigned int SetQHYCCDBitsMode(libusb_device_handle *handle, unsigned int bits)
-    double GetQHYCCDParam(libusb_device_handle *handle, CONTROL_ID controlId)
-    unsigned int SetQHYCCDResolution(libusb_device_handle *handle, unsigned int x, unsigned int y,
+    unsigned int SetQHYCCDParam(qhyccd_handle *handle, CONTROL_ID controlId, double value)
+    unsigned int SetQHYCCDBitsMode(qhyccd_handle *handle, unsigned int bits)
+    double GetQHYCCDParam(qhyccd_handle *handle, CONTROL_ID controlId)
+    unsigned int SetQHYCCDResolution(qhyccd_handle *handle, unsigned int x, unsigned int y,
                                      unsigned int xsize, unsigned int ysize);
-    unsigned int SetQHYCCDBinMode(libusb_device_handle *handle, unsigned int wbin, unsigned int hbin)
-    unsigned int ExpQHYCCDSingleFrame(libusb_device_handle *handle)
-    unsigned int GetQHYCCDMemLength(libusb_device_handle *handle)
-    unsigned int GetQHYCCDSingleFrame(libusb_device_handle *handle,unsigned int *w, unsigned int *h,
+    unsigned int SetQHYCCDBinMode(qhyccd_handle *handle, unsigned int wbin, unsigned int hbin)
+    unsigned int ExpQHYCCDSingleFrame(qhyccd_handle *handle)
+    unsigned int GetQHYCCDMemLength(qhyccd_handle *handle)
+    unsigned int GetQHYCCDSingleFrame(qhyccd_handle *handle,unsigned int *w, unsigned int *h,
                                       unsigned int *bpp, unsigned int *channels, unsigned char *imgdata)
-    unsigned int CancelQHYCCDExposingAndReadout(libusb_device_handle *handle)
-    unsigned int GetQHYCCDExposureRemaining(libusb_device_handle *handle)
-    unsigned int GetQHYCCDCameraStatus(libusb_device_handle *handle, unsigned char *buf);
-    unsigned int ControlQHYCCDTemp(libusb_device_handle *handle, double targettemp);
+    unsigned int CancelQHYCCDExposingAndReadout(qhyccd_handle *handle)
+    unsigned int GetQHYCCDExposureRemaining(qhyccd_handle *handle)
+    unsigned int GetQHYCCDCameraStatus(qhyccd_handle *handle, unsigned char *buf);
+    unsigned int ControlQHYCCDTemp(qhyccd_handle *handle, double targettemp);
     void SetQHYCCDLogLevel(unsigned int logLevel);
