@@ -69,12 +69,12 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         log.info(f"Pixel size:     {chip[4]:.3f}x {chip[5]:.3f} [um]")
         log.info(f"Image size:     {chip[2]}x{chip[3]}")
         overscan = self._driver.get_overscan_area()
-        log.info(f"Overscan Area:  {overscan[1]}x{overscan[2]} from {overscan[0]},{overscan[1]}")
+        log.info(f"Overscan Area:  {overscan[2]}x{overscan[3]} from {overscan[0]},{overscan[1]}")
         effective = self._driver.get_effective_area()
-        log.info(f"Effective Area: {effective[1]}x{effective[2]} from {effective[0]},{effective[1]}")
+        log.info(f"Effective Area: {effective[2]}x{effective[3]} from {effective[0]},{effective[1]}")
 
         # get full window
-        self._window = effective
+        self._window = await self.get_full_frame()
 
         # set cooling
         if self._setpoint is not None:
@@ -95,7 +95,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
-        return self._driver.get_effective_area()
+        chip = self._driver.get_chip_info()
+        return 0, 0, chip[2], chip[3]
 
     async def get_window(self, **kwargs: Any) -> Tuple[int, int, int, int]:
         """Returns the camera window.
