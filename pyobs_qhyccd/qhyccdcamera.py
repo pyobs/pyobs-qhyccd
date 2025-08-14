@@ -28,6 +28,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         self._setpoint = setpoint
         self._window = (0, 0, 0, 0)
         self._binning = (1, 1)
+        self._effective_area = (0, 0, 0, 0)
 
     async def open(self) -> None:
         """Open module."""
@@ -180,6 +181,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         self._driver.set_resolution(self._window[0], self._window[1], width, height)
         self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
+        self._effective_area = self._driver.get_effective_area()
+        self._effective_area[2] *= self._binning[0]
+        self._effective_area[3] *= self._binning[1]
+
     async def _get_image_with_header(self, image_data, date_obs, exposure_time) -> Image:
         image = Image(image_data)
         image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
@@ -197,8 +202,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         image.header["DATAMEAN"] = (float(np.mean(image_data)), "Mean data value")
 
         # biassec/trimsec
-        full = self._driver.get_effective_area()
-        self.set_biassec_trimsec(image.header, *full)
+        self.set_biassec_trimsec(image.header, *self._effective_area)
         log.info("Readout finished.")
         return image
 
