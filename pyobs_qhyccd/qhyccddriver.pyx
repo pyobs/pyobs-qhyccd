@@ -52,7 +52,7 @@ class Control(Enum):
 
     CAM_IGNOREOVERSCAN_INTERFACE = CONTROL_ID.CAM_IGNOREOVERSCAN_INTERFACE,
 
-    QHYCCD_3A_AUTOBALANCE = CONTROL_ID.QHYCCD_3A_AUTOBALANCE,
+    #QHYCCD_3A_AUTOBALANCE = CONTROL_ID.QHYCCD_3A_AUTOBALANCE,
     QHYCCD_3A_AUTOEXPOSURE = CONTROL_ID.QHYCCD_3A_AUTOEXPOSURE,
     QHYCCD_3A_AUTOFOCUS = CONTROL_ID.QHYCCD_3A_AUTOFOCUS,
     CONTROL_AMPV = CONTROL_ID.CONTROL_AMPV,
@@ -114,7 +114,7 @@ cdef class QHYCCDDriver:
         return cameras
 
     """Storage for link to device."""
-    cdef libusb_device_handle *_device
+    cdef qhyccd_handle *_device
     cdef char _cam_id[32]
 
     def __init__(self, cam_id: bytes):
