@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import math
-import time
 from datetime import datetime, timezone
 from typing import Tuple, Any, Optional, Dict, List
 import numpy as np
@@ -9,7 +8,6 @@ import numpy as np
 from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.images import Image
-from pyobs.utils.enums import ExposureStatus
 from pyobs.utils.parallel import event_wait
 
 from .qhyccddriver import QHYCCDDriver, Control, set_log_level
@@ -22,9 +20,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
     __module__ = "pyobs_qhyccd"
 
-    def __init__(self, setpoint: float=-10, **kwargs: Any):
-        """Initializes a new QHYCCDCamera.
-        """
+    def __init__(self, setpoint: float = -10, **kwargs: Any):
+        """Initializes a new QHYCCDCamera."""
         BaseCamera.__init__(self, **kwargs)
 
         self._driver: Optional[QHYCCDDriver] = None
@@ -37,7 +34,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         await BaseCamera.open(self)
 
         # disable logs
-        set_log_level(0) #TODO:
+        set_log_level(0)  # TODO:
 
         # get devices
         devices = QHYCCDDriver.list_devices()
@@ -48,7 +45,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
         # color cam?
         if self._driver.is_control_available(Control.CAM_COLOR):
-            raise ValueError('Color cams are not supported.')
+            raise ValueError("Color cams are not supported.")
 
         # usb traffic?
         if self._driver.is_control_available(Control.CONTROL_USBTRAFFIC):
@@ -66,8 +63,18 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
             self._driver.set_bits_mode(16)
 
+        # some info
+        chip = self._driver.get_chip_info()
+        log.info(f"Chip  size:     {chip[0]:.3f}x{chip[1]:.3f} [mm]")
+        log.info(f"Pixel size:     {chip[4]:.3f}x {chip[5]:.3f} [um]")
+        log.info(f"Image size:     {chip[2]}x{chip[3]}")
+        overscan = self._driver.get_overscan_area()
+        log.info(f"Overscan Area:  {overscan[1]}x{overscan[2]} from {overscan[0]},{overscan[1]}")
+        effective = self._driver.get_effective_area()
+        log.info(f"Effective Area: {effective[1]}x{effective[2]} from {effective[0]},{effective[1]}")
+
         # get full window
-        self._window = self._driver.get_effective_area()
+        self._window = effective
 
         # set cooling
         if self._setpoint is not None:
@@ -210,7 +217,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         """
 
         await self._prepare_driver_for_exposure(exposure_time)
-        log.info("Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time)
+        log.info(
+            "Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time
+        )
         date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
         self._driver.expose_single_frame()
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
@@ -235,10 +244,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
-        #self._driver.cancel_exposure()
+        # self._driver.cancel_exposure()
 
     async def _get_cooling_power(self):
-        return self._driver.get_param(Control.CONTROL_CURPWM) /256 * 100 # TODO:
+        return self._driver.get_param(Control.CONTROL_CURPWM) / 256 * 100  # TODO:
 
     async def get_cooling(self, **kwargs: Any) -> Tuple[bool, float, float]:
         enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
@@ -247,14 +256,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         return enabled, setpoint, power
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
-        #if not enabled:
+        # if not enabled:
         #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO: einfach PWM auf 0?
         self._setpoint = setpoint
         await self._cool_stepwise(setpoint)
 
     async def _wait_for_reaching_temperature(self, target_temperature, wait_step=1):
         while await self._get_ccd_temperature() > target_temperature:
-            print("Current temperature is", await self._get_ccd_temperature(), "Target temperature is", target_temperature)
+            print(
+                "Current temperature is", await self._get_ccd_temperature(), "Target temperature is", target_temperature
+            )
             if await self._cooling_bug_occured():
                 break
             await asyncio.sleep(wait_step)
@@ -280,7 +291,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         print("End stepwise cooling to", target_temperature)
 
     async def _handle_cooling_bug(self, original_target_temperature, puffer=5, correction_step=1):
-        print(f"Setpoint of {original_target_temperature:.2f} °C too low for cooler. Temporarily resetting it to {await self._get_ccd_temperature() + puffer:.2f} °C.")
+        print(
+            f"Setpoint of {original_target_temperature:.2f} °C too low for cooler. Temporarily resetting it to {await self._get_ccd_temperature() + puffer:.2f} °C."
+        )
         while await self._cooling_bug_occured():
             await asyncio.sleep(1)
             await self._cool_stepwise(await self._get_ccd_temperature() + puffer)
@@ -292,5 +305,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
     async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
         return {"CCD": await self._get_ccd_temperature()}
+
 
 __all__ = ["QHYCCDCamera"]
