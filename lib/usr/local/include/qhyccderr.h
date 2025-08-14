@@ -2,9 +2,21 @@
 #ifndef __QHYCCDERR_H__
 #define __QHYCCDERR_H__
 
+// This is used by old CCD or A series cameras, if you exp 5 sec, you need to read just after you begin exp, not 5 sec after start exp
 #define QHYCCD_READ_DIRECTLY            0x2001
 
 #define QHYCCD_DELAY_200MS              0x2000
+
+/**
+ * It means the camera using PCIE transfer data */
+#define QHYCCD_PCIE						 9
+
+
+/**
+ * It means the camera using WINPCAP transfer data */
+#define QHYCCD_WINPCAP                   8
+
+
 /**
  * It means the camera using GiGaE transfer data */
 #define QHYCCD_QGIGAE                   7
@@ -40,6 +52,10 @@
 /**
  * Other error */
 #define QHYCCD_ERROR                    0xFFFFFFFF
+
+#define QHYCCD_ERROR_IMAGESHIFT          -2
+
+#define QHYCCD_ERROR_DEVICELOSE          -3
 
 #if 0
 /**
