@@ -166,8 +166,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
         self._driver.set_bin_mode(*self._binning)
 
-        width = int(math.floor(self._window[2]) / self._binning[0]) * self._binning[0]
-        height = int(math.floor(self._window[3]) / self._binning[1]) * self._binning[1]
+        width = int(math.floor(self._window[2]) / self._binning[0])
+        height = int(math.floor(self._window[3]) / self._binning[1])
         log.info(
             "Set window to %dx%d (binned %dx%d) at %d,%d.",
             self._window[2],
