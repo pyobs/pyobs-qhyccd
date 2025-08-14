@@ -197,8 +197,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         image.header["DATAMEAN"] = (float(np.mean(image_data)), "Mean data value")
 
         # biassec/trimsec
-        # full = self._driver.get_visible_frame()
-        # self.set_biassec_trimsec(image.header, *full)
+        full = self._driver.get_effective_area()
+        self.set_biassec_trimsec(image.header, *full)
         log.info("Readout finished.")
         return image
 
