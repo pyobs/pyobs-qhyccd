@@ -32,6 +32,8 @@ rm -rf  /lib/firmware/qhy/*
 
 rm -rf /usr/local/testapp/*
 
+rm -rf /usr/local/testapp/riffa_linux_driver
+
 rm -f  /usr/local/udev/85-qhy.rules
 
 rm -f  /usr/local/udev/85-qhyccd.rules

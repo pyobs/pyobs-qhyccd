@@ -40,6 +40,9 @@ cp -a  lib/firmware/qhy/*  /lib/firmware/qhy
 mkdir -p /usr/local/testapp
 cp -a usr/local/testapp/*  /usr/local/testapp
 
+mkdir -p /usr/local/riffa_linux_driver
+cp -a usr/local/riffa_linux_driver/*  /usr/local/riffa_linux_driver
+
 mkdir -p /usr/local/udev
 cp -a usr/local/udev/*  /usr/local/udev
 

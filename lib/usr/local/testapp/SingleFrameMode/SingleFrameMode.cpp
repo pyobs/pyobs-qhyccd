@@ -436,16 +436,16 @@ int main(int argc, char *argv[])
 
   delete [] pImgData;
 
-  retVal = CancelQHYCCDExposingAndReadout(pCamHandle);
-  if (QHYCCD_SUCCESS == retVal)
-  {
-    printf("CancelQHYCCDExposingAndReadout success.\n");
-  }
-  else
-  {
-    printf("CancelQHYCCDExposingAndReadout failure, error: %d\n", retVal);
-    return 1;
-  }
+  //retVal = CancelQHYCCDExposingAndReadout(pCamHandle);
+  //if (QHYCCD_SUCCESS == retVal)
+  //{
+  //  printf("CancelQHYCCDExposingAndReadout success.\n");
+  //}
+  //else
+  //{
+  //  printf("CancelQHYCCDExposingAndReadout failure, error: %d\n", retVal);
+  //  return 1;
+  //}
 
   // close camera handle
   retVal = CloseQHYCCD(pCamHandle);

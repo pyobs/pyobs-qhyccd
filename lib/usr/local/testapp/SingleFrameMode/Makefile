@@ -44,14 +44,14 @@ COMP_INC1 = /usr/include/
 COMP_INC2 = /usr/local/include/
 
 COMP_LIB = /usr/local/lib/
-
+QHY_LIB  = /usr/local/lib/libqhyccd.so
 
 CXX = g++
 
 
-CXXFLAGS = -Wall -Wsign-compare -std=c++11 -I. -I $(COMP_INC1)  -I$(COMP_INC2)
+CXXFLAGS = -Wall -Wsign-compare -std=c++11 -I. -I $(COMP_INC1)  -I $(COMP_INC2)
 
-EXTRALIBS = -lqhyccd -lusb-1.0 -pthread
+EXTRALIBS = -Wl,${QHY_LIB} -lusb-1.0 -pthread
 
 
 
