@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import Tuple, Any, Optional, Dict, List
 import numpy as np
 
-from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable
+from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable, IGain
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.images import Image
 from pyobs.utils.parallel import event_wait
@@ -15,7 +15,7 @@ from .qhyccddriver import QHYCCDDriver, Control, set_log_level
 log = logging.getLogger(__name__)
 
 
-class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling):
+class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain):
     """A pyobs module for QHYCCD cameras."""
 
     __module__ = "pyobs_qhyccd"
@@ -317,6 +317,25 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
 
     async def get_temperatures(self, **kwargs: Any) -> Dict[str, float]:
         return {"CCD": await self._get_ccd_temperature()}
+
+    async def set_gain(self, gain: float, **kwargs: Any) -> None:
+        """Set the camera gain.
+
+        Args:
+            gain: New camera gain.
+
+        Raises:
+            ValueError: If gain could not be set.
+        """
+        self._driver.set_param(Control.CONTROL_GAIN, gain)
+
+    async def get_gain(self, **kwargs: Any) -> float:
+        """Returns the camera binning.
+
+        Returns:
+            Current gain.
+        """
+        return self._driver.get_param(Control.CONTROL_GAIN)
 
 
 __all__ = ["QHYCCDCamera"]
