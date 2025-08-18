@@ -337,5 +337,24 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         return self._driver.get_param(Control.CONTROL_GAIN)
 
+    async def set_offset(self, offset: float, **kwargs: Any) -> None:
+        """Set the camera offset.
+
+        Args:
+            offset: New camera offset.
+
+        Raises:
+            ValueError: If offset could not be set.
+        """
+        self._driver.set_param(Control.CONTROL_OFFSET, offset)
+
+    async def get_offset(self, **kwargs: Any) -> float:
+        """Returns the camera offset.
+
+        Returns:
+            Current offset.
+        """
+        return self._driver.get_param(Control.CONTROL_OFFSET)
+
 
 __all__ = ["QHYCCDCamera"]
