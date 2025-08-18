@@ -77,6 +77,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         log.info(f"Gain:           {gain}")
         offset = self._driver.get_param(Control.CONTROL_OFFSET)
         log.info(f"Offset:         {offset}")
+        brightness = self._driver.get_param(Control.CONTROL_BRIGHTNESS)
+        log.info(f"Brightness:     {brightness}")
+        contrast = self._driver.get_param(Control.CONTROL_CONTRAST)
+        log.info(f"Contrast:       {contrast}")
 
         # get full window
         self._window = await self.get_full_frame()
