@@ -89,7 +89,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 if hasattr(Control, p):
                     control_param = getattr(Control, p)
                     log.info(f"Setting {control_param} to {value}.")
-                    await self._driver.set_param(control_param, value)
+                    self._driver.set_param(control_param, value)
 
     async def close(self) -> None:
         """Close the module."""
