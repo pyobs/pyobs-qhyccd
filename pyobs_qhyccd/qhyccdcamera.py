@@ -86,7 +86,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         if self._params is not None:
             for key, value in self._params.items():
                 p = "CONTROL_" + key.upper()
-                if p in Control:
+                if hasattr(Control, p):
                     control_param = getattr(Control, p)
                     log.info(f"Setting {control_param} to {value}.")
                     await self._driver.set_param(control_param, value)
