@@ -73,6 +73,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling)
         log.info(f"Overscan Area:  {overscan[2]}x{overscan[3]} from {overscan[0]},{overscan[1]}")
         effective = self._driver.get_effective_area()
         log.info(f"Effective Area: {effective[2]}x{effective[3]} from {effective[0]},{effective[1]}")
+        gain = self._driver.get_param(Control.CONTROL_GAIN)
+        log.info(f"Gain:           {gain}")
+        offset = self._driver.get_param(Control.CONTROL_OFFSET)
+        log.info(f"Offset:         {offset}")
 
         # get full window
         self._window = await self.get_full_frame()
