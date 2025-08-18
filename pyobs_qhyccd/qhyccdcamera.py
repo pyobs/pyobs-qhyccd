@@ -20,7 +20,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
     __module__ = "pyobs_qhyccd"
 
-    def __init__(self, setpoint: float = -10, **kwargs: Any):
+    def __init__(self, setpoint: float = -10, params: dict[str, float] | None = None, **kwargs: Any):
         """Initializes a new QHYCCDCamera."""
         BaseCamera.__init__(self, **kwargs)
 
@@ -29,6 +29,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._window = (0, 0, 0, 0)
         self._binning = (1, 1)
         self._effective_area = (0, 0, 0, 0)
+        self._params = params
 
     async def open(self) -> None:
         """Open module."""
@@ -73,14 +74,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         log.info(f"Overscan Area:  {overscan[2]}x{overscan[3]} from {overscan[0]},{overscan[1]}")
         effective = self._driver.get_effective_area()
         log.info(f"Effective Area: {effective[2]}x{effective[3]} from {effective[0]},{effective[1]}")
-        gain = self._driver.get_param(Control.CONTROL_GAIN)
-        log.info(f"Gain:           {gain}")
-        offset = self._driver.get_param(Control.CONTROL_OFFSET)
-        log.info(f"Offset:         {offset}")
-        brightness = self._driver.get_param(Control.CONTROL_BRIGHTNESS)
-        log.info(f"Brightness:     {brightness}")
-        contrast = self._driver.get_param(Control.CONTROL_CONTRAST)
-        log.info(f"Contrast:       {contrast}")
 
         # get full window
         self._window = await self.get_full_frame()
@@ -88,6 +81,15 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         # set cooling
         if self._setpoint is not None:
             await self.set_cooling(True, self._setpoint)
+
+        # set parameters
+        if self._params is not None:
+            for key, value in self._params.items():
+                p = "CONTROL_" + key.upper()
+                if p in Control:
+                    control_param = getattr(Control, p)
+                    log.info(f"Setting {control_param} to {value}.")
+                    await self._driver.set_param(control_param, value)
 
     async def close(self) -> None:
         """Close the module."""
