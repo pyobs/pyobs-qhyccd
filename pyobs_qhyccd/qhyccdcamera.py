@@ -310,22 +310,26 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         start_time = 0.0
         while True:
-            # time reached?
-            if start_time > 0 and time.time() - start_time > self._cooling_wait:
-                start_time = 0.0
+            try:
+                # time reached?
+                if start_time > 0 and time.time() - start_time > self._cooling_wait:
+                    start_time = 0.0
 
-            if start_time == 0.0:
-                # determine next cooling temp
-                temp = await self._get_ccd_temperature()
-                diff = self._setpoint - temp
-                sign = np.sign(diff)
-                self._cooling_next += sign * min(self._cooling_step, abs(diff))
+                if start_time == 0.0:
+                    # determine next cooling temp
+                    temp = await self._get_ccd_temperature()
+                    diff = self._setpoint - temp
+                    sign = np.sign(diff)
+                    self._cooling_next += sign * min(self._cooling_step, abs(diff))
 
-                # set start time
-                start_time = time.time()
+                    # set start time
+                    start_time = time.time()
 
-            # set cooling
-            self._driver.set_temperature(self._cooling_next)
+                # set cooling
+                self._driver.set_temperature(self._cooling_next)
+
+            except:
+                log.exception("Error updating cooling.")
 
             # sleep a little
             await asyncio.sleep(1.0)
