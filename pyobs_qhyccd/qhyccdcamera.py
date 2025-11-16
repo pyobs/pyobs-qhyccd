@@ -293,6 +293,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
         # if not enabled:
         #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO: einfach PWM auf 0?
+        if enabled:
+            log.info(f"Enabling cooling with a set point of {setpoint}°C.")
+        else:
+            log.info("Disabling cooling.")
         self._setpoint = setpoint
 
     async def _get_ccd_temperature(self) -> float:
@@ -311,28 +315,43 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         start_time = 0.0
         while True:
             try:
+                # sleep a little
+                await asyncio.sleep(1.0)
+
+                # set cooling
+                if self._cooling_next is not None:
+                    self._driver.set_temperature(self._cooling_next)
+
+                # bug?
+                if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
+                    self._cooling_next = await self._get_ccd_temperature() + 5.
+
+                # setpoint reached?
+                if self._cooling_next == self._setpoint:
+                    continue
+
                 # time reached?
                 if start_time > 0 and time.time() - start_time > self._cooling_wait:
                     start_time = 0.0
 
                 if start_time == 0.0:
-                    # determine next cooling temp
+                    # get temp
                     temp = await self._get_ccd_temperature()
+                    if self._cooling_next is None:
+                        self._cooling_next = temp
+
+                    # determine next cooling temp
                     diff = self._setpoint - temp
                     sign = np.sign(diff)
                     self._cooling_next += sign * min(self._cooling_step, abs(diff))
+                    log.info(f"Next cooling step: {self._cooling_next}°C.")
 
                     # set start time
                     start_time = time.time()
 
-                # set cooling
-                self._driver.set_temperature(self._cooling_next)
-
             except:
                 log.exception("Error updating cooling.")
 
-            # sleep a little
-            await asyncio.sleep(1.0)
 
     async def set_gain(self, gain: float, **kwargs: Any) -> None:
         """Set the camera gain.
