@@ -322,13 +322,15 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 # set cooling
                 if self._cooling_next is not None:
                     self._driver.set_temperature(self._cooling_next)
-                temp = await self._get_ccd_temperature()
+                self._current_temperature = await self._get_ccd_temperature()
 
                 # bug?
                 if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
-                    self._cooling_next = temp + 5.
-                    log.warning(f"Cooling power seems to be bugged. Setting temperature to {self._cooling_next:.2f}°. "
-                                f"Current temperature is {temp:.2f}°C.")
+                    self._cooling_next = self._current_temperature + 5.0
+                    log.warning(
+                        f"Cooling power seems to be bugged. Setting temperature to {self._cooling_next:.2f}°. "
+                        f"Current temperature is {self._current_temperature:.2f}°C."
+                    )
 
                 # setpoint reached?
                 if self._cooling_next == self._setpoint:
@@ -341,24 +343,25 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 if start_time == 0.0:
                     # get temp
                     if self._cooling_next is None:
-                        self._cooling_next = temp
+                        self._cooling_next = self._current_temperature
 
                     # determine next cooling temp
-                    diff = self._setpoint - temp
+                    diff = self._setpoint - self._current_temperature
                     if abs(diff) < abs(self._cooling_step):
                         self._cooling_next = self._setpoint
                     else:
                         sign = np.sign(diff)
                         self._cooling_next += sign * min(self._cooling_step, abs(diff))
 
-                    log.info(f"Next cooling step: {self._cooling_next:.2f}°C. Current temperature is {temp:.2f}°C.")
+                    log.info(
+                        f"Next cooling step: {self._cooling_next:.2f}°C. Current temperature is {self._current_temperature:.2f}°C."
+                    )
 
                     # set start time
                     start_time = time.time()
 
             except:
                 log.exception("Error updating cooling.")
-
 
     async def set_gain(self, gain: float, **kwargs: Any) -> None:
         """Set the camera gain.
