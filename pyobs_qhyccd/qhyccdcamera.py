@@ -41,6 +41,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._cooling_step = cooling_step
         self._cooling_wait = cooling_wait
         self._cooling_next: float | None = None
+        self._current_temperature: float = 0.0
 
         self.add_background_task(self._update_cooling)
 
@@ -280,7 +281,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
     async def _get_cooling_power(self) -> float:
         if self._driver is None:
             raise ValueError("No camera driver.")
-        return float(self._driver.get_param(Control.CONTROL_CURPWM)) / 256 * 100  # TODO:
+        return float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100  # TODO:
 
     async def get_cooling(self, **kwargs: Any) -> tuple[bool, float, float]:
         if self._driver is None:
@@ -305,7 +306,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         return float(self._driver.get_param(Control.CONTROL_CURTEMP))
 
     async def get_temperatures(self, **kwargs: Any) -> dict[str, float]:
-        return {"CCD": await self._get_ccd_temperature()}
+        return {"CCD": self._current_temperature}
 
     async def _update_cooling(self) -> None:
         await asyncio.sleep(5)
@@ -321,10 +322,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 # set cooling
                 if self._cooling_next is not None:
                     self._driver.set_temperature(self._cooling_next)
+                temp = await self._get_ccd_temperature()
 
                 # bug?
                 if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
-                    temp = await self._get_ccd_temperature()
                     self._cooling_next = temp + 5.
                     log.warning(f"Cooling power seems to be bugged. Setting temperature to {self._cooling_next:.2f}°. "
                                 f"Current temperature is {temp:.2f}°C.")
@@ -339,7 +340,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
                 if start_time == 0.0:
                     # get temp
-                    temp = await self._get_ccd_temperature()
                     if self._cooling_next is None:
                         self._cooling_next = temp
 
