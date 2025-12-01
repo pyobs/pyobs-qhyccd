@@ -324,7 +324,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
                 # bug?
                 if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
-                    self._cooling_next = await self._get_ccd_temperature() + 5.
+                    temp = await self._get_ccd_temperature()
+                    self._cooling_next = temp + 5.
+                    log.warning(f"Cooling power seems to be bugged. Setting temperature to {self._cooling_next:.2f}°. "
+                                f"Current temperature is {temp:.2f}°C.")
 
                 # setpoint reached?
                 if self._cooling_next == self._setpoint:
@@ -342,9 +345,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
                     # determine next cooling temp
                     diff = self._setpoint - temp
-                    sign = np.sign(diff)
-                    self._cooling_next += sign * min(self._cooling_step, abs(diff))
-                    log.info(f"Next cooling step: {self._cooling_next}°C.")
+                    if abs(diff) < abs(self._cooling_step):
+                        self._cooling_next = self._setpoint
+                    else:
+                        sign = np.sign(diff)
+                        self._cooling_next += sign * min(self._cooling_step, abs(diff))
+
+                    log.info(f"Next cooling step: {self._cooling_next:.2f}°C. Current temperature is {temp:.2f}°C.")
 
                     # set start time
                     start_time = time.time()
