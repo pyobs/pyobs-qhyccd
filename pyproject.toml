@@ -11,19 +11,26 @@ dependencies = [
     "pyobs-core>=1,<2",
 ]
 
-[tool.poetry.group.dev.dependencies]
-black = ">=25.1.0,<26"
-pre-commit = ">=4.2.0,<5"
-flake8 = ">=7.3.0"
-cython = ">=3.0.0,<4"
+[dependency-groups]
+dev = [
+    "black>=25.1.0,<26",
+    "pre-commit>=4.2.0,<5",
+    "flake8>=7.3.0",
+    "cython>=3.0.0,<4",
+]
 
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = false
+[tool.setuptools]
+py-modules = []
+
+[project.scripts]
+qhyccd-gui = 'pyobs_qhyccd.gui:main'
+
+[tool.scikit-build]
+wheel.packages = ["pyobs_qhyccd"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "Cython>=0.29.0", "numpy>=1.21.0", "setuptools"]
-build-backend = "poetry.core.masonry.api"
+requires = ["scikit_build_core>=0.12", "cython>=3.0", "cython-cmake", "numpy>=2.0"]
+build-backend = "scikit_build_core.build"
 
 [tool.black]
 line-length = 120
