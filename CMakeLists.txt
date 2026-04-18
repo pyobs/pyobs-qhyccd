@@ -31,9 +31,9 @@ execute_process(
 )
 
 # --- Build extension module ---
-add_library(pyobs_qhyccd MODULE ${CXX_FILE})
+add_library(qhyccddriver MODULE ${CXX_FILE})
 set_source_files_properties(${CXX_FILE} PROPERTIES LANGUAGE CXX)
-target_include_directories(pyobs_qhyccd PRIVATE
+target_include_directories(qhyccddriver PRIVATE
   ${Python3_INCLUDE_DIRS}
   ${NUMPY_INCLUDE_DIR}
 )
@@ -45,19 +45,30 @@ execute_process(
   OUTPUT_VARIABLE PY_EXT_SUFFIX
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-set_target_properties(pyobs_qhyccd PROPERTIES
+set_target_properties(qhyccddriver PROPERTIES
   PREFIX ""
   OUTPUT_NAME "qhyccddriver"
   SUFFIX "${PY_EXT_SUFFIX}"
+  POSITION_INDEPENDENT_CODE ON
 )
 message(STATUS "ext: ${PY_EXT_SUFFIX}")
 
 # --- QHYCCD ---
-target_include_directories(pyobs_qhyccd PRIVATE
+target_include_directories(qhyccddriver PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/usr/local/include/
 )
 
+# --- Link ---
+target_link_options(qhyccddriver PRIVATE
+  -Wl,--export-dynamic
+)
+target_link_libraries(qhyccddriver PRIVATE
+  cfitsio
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/usr/local/lib/libqhyccd.a
+  usb-1.0
+)
+
 # --- Install into package ---
-install(TARGETS pyobs_qhyccd
+install(TARGETS qhyccddriver
   LIBRARY DESTINATION ${SKBUILD_PROJECT_NAME}
 )
