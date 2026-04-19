@@ -20,7 +20,6 @@ class ExposeWidget(QtWidgets.QGroupBox):
         layout.addWidget(self.button)
 
 
-
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -42,12 +41,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 async def main(app: QtWidgets.QApplication) -> None:
-    #connect()
+    # connect()
     app_close_event = asyncio.Event()
     app.aboutToQuit.connect(app_close_event.set)
     main_window = MainWindow()
     main_window.show()
     await app_close_event.wait()
+
 
 def connect():
     # get devices
@@ -64,6 +64,7 @@ def connect():
     print("0. Quit")
     print("Select device:")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     asyncio.run(main(app), loop_factory=qasync.QEventLoop)
