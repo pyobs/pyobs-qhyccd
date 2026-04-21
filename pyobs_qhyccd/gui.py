@@ -4,7 +4,7 @@ from time import time
 import asyncio
 import sys
 
-import qasync
+import qasync  # type: ignore
 from PySide6 import QtWidgets, QtCore
 from qfitswidget import QFitsWidget
 
@@ -95,9 +95,9 @@ class ExposeWidget(QtWidgets.QGroupBox):
         self.progress_timer.start()
 
     @QtCore.Slot()
-    def _progress_timer_update(self):
+    def _progress_timer_update(self) -> None:
         done = min(100.0, (time() - self._exposure_start) / self._exposure_time * 100.0)
-        self.progress_bar.setValue(done)
+        self.progress_bar.setValue(int(done))
 
     @QtCore.Slot()
     def set_progress(self, progress: float = 0.0) -> None:
@@ -106,7 +106,7 @@ class ExposeWidget(QtWidgets.QGroupBox):
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.central_widget = QtWidgets.QWidget()
@@ -128,7 +128,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.expose.expose_clicked.connect(self._expose_clicked)
         self.expose.abort_clicked.connect(self._abort_clicked)
 
-    @qasync.asyncSlot()
+    @qasync.asyncSlot()  # type: ignore
     async def _expose_clicked(self) -> None:
         self.expose.start_exposure(5)
         await event_wait(self.abort_exposure, 7)
@@ -137,7 +137,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #    self.expose.set_progress(i * 10)
         self.expose.set_exposures_left()
 
-    @qasync.asyncSlot()
+    @qasync.asyncSlot()  # type: ignore
     async def _abort_clicked(self) -> None:
         self.abort_exposure.set()
         self.abort_exposure = asyncio.Event()
@@ -152,7 +152,7 @@ async def main(app: QtWidgets.QApplication) -> None:
     await app_close_event.wait()
 
 
-def connect():
+def connect() -> None:
     # get devices
     set_log_level(0)  # TODO:
     devices = QHYCCDDriver.list_devices()
@@ -170,4 +170,4 @@ def connect():
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    asyncio.run(main(app), loop_factory=qasync.QEventLoop)
+    asyncio.run(main(app), loop_factory=qasync.QEventLoop)  # type: ignore
