@@ -1,3 +1,4 @@
+from pyobs.utils.enums import ImageFormat
 from pyobs.utils.parallel import event_wait
 from time import time
 import asyncio
@@ -129,6 +130,27 @@ class BinningWidget(QtWidgets.QGroupBox):
         self.binning_changed.emit(*self._binnings[index])
 
 
+class FormatWidget(QtWidgets.QGroupBox):
+    format_changed = QtCore.Signal(ImageFormat)
+
+    def __init__(self, formats: list[ImageFormat]) -> None:
+        super().__init__()
+
+        self._formats = formats
+
+        layout = QtWidgets.QFormLayout()
+        self.setLayout(layout)
+
+        self.combo_formats = QtWidgets.QComboBox()
+        self.combo_formats.addItems([f"{f.name}" for f in formats])
+        self.combo_formats.setCurrentIndex(0)
+        self.combo_formats.currentIndexChanged.connect(self._format_changed)
+        layout.addRow("Format:", self.combo_formats)
+
+    def _format_changed(self, index: int) -> None:
+        self.format_changed.emit(self._formats[index])
+
+
 class ExposeWidget(QtWidgets.QGroupBox):
     expose_clicked = QtCore.Signal(int)
     abort_clicked = QtCore.Signal()
@@ -244,6 +266,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.binning_widget = BinningWidget([(1, 1), (2, 2)])
         self.binning_widget.binning_changed.connect(self.window_widget.set_binning)
         layout.addWidget(self.binning_widget)
+        self.format_widget = FormatWidget([ImageFormat.INT8, ImageFormat.INT16])
+        layout.addWidget(self.format_widget)
         self.expose = ExposeWidget()
         layout.addWidget(self.expose)
 
