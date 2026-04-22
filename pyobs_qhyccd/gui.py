@@ -1,3 +1,5 @@
+from astropy.io import fits
+
 from pyobs.utils.enums import ImageFormat
 from pyobs.utils.parallel import event_wait
 from time import time
@@ -7,7 +9,7 @@ import qasync  # type: ignore
 from PySide6 import QtWidgets, QtCore
 from qfitswidget import QFitsWidget
 
-from .qhyccddriver import QHYCCDDriver, set_log_level  # type: ignore
+from .qhyccddriver import QHYCCDDriver, Control, set_log_level  # type: ignore
 
 
 class WindowWidget(QtWidgets.QGroupBox):
@@ -52,6 +54,26 @@ class WindowWidget(QtWidgets.QGroupBox):
 
         self._update_min_max()
         self.full_frame()
+
+    @property
+    def left(self) -> int:
+        return self.spin_left.value()
+
+    @property
+    def top(self) -> int:
+        return self.spin_left.value()
+
+    @property
+    def width(self) -> int:
+        return self.spin_width.value()
+
+    @property
+    def height(self) -> int:
+        return self.spin_height.value()
+
+    @property
+    def values(self) -> tuple[int, int, int, int]:
+        return self.left, self.top, self.width, self.height
 
     @property
     def max_width(self) -> int:
@@ -130,6 +152,29 @@ class BinningWidget(QtWidgets.QGroupBox):
         self.binning_changed.emit(*self._binnings[index])
 
 
+class ExposureTimeWidget(QtWidgets.QGroupBox):
+    exposure_time_changed = QtCore.Signal(float)
+
+    def __init__(self, max_exposure_time_sec: float = 9999.99) -> None:
+        super().__init__()
+
+        layout = QtWidgets.QFormLayout()
+        self.setLayout(layout)
+
+        self.spin_exposure_time = QtWidgets.QDoubleSpinBox()
+        self.spin_exposure_time.setRange(0, max_exposure_time_sec)
+        self.spin_exposure_time.valueChanged.connect(self._exposure_time_changed)
+        layout.addRow("ExpTime:", self.spin_exposure_time)
+
+    @QtCore.Slot(float)
+    def _exposure_time_changed(self, value: float) -> None:
+        self.exposure_time_changed.emit(value)
+
+    @property
+    def value(self) -> float:
+        return self.spin_exposure_time.value()
+
+
 class FormatWidget(QtWidgets.QGroupBox):
     format_changed = QtCore.Signal(ImageFormat)
 
@@ -146,6 +191,10 @@ class FormatWidget(QtWidgets.QGroupBox):
         self.combo_formats.setCurrentIndex(0)
         self.combo_formats.currentIndexChanged.connect(self._format_changed)
         layout.addRow("Format:", self.combo_formats)
+
+    @property
+    def value(self) -> ImageFormat:
+        return self._formats[self.combo_formats.currentIndex()]
 
     def _format_changed(self, index: int) -> None:
         self.format_changed.emit(self._formats[index])
@@ -245,9 +294,32 @@ class ExposeWidget(QtWidgets.QGroupBox):
         self.progress_bar.setValue(int(self._progress))
 
 
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self) -> None:
+class ListPickerDialog(QtWidgets.QDialog):
+    def __init__(self, items: list[str]):
         super().__init__()
+
+        layout = QtWidgets.QHBoxLayout()
+        self.setLayout(layout)
+
+        self.combo_box = QtWidgets.QComboBox()
+        self.combo_box.addItems(items)
+        layout.addWidget(self.combo_box)
+
+        self.button = QtWidgets.QPushButton("ok")
+        layout.addWidget(self.button)
+        self.button.clicked.connect(self.accept)
+
+    def comboBox(self) -> QtWidgets.QComboBox:
+        return self.combo_box
+
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, device_name: bytes) -> None:
+        super().__init__()
+
+        self.device = QHYCCDDriver(device_name)
+        self.device.open()
+        chip_info = self.device.get_chip_info()
 
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
@@ -261,13 +333,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         layout = QtWidgets.QVBoxLayout()
         self.widgets_frame.setLayout(layout)
-        self.window_widget = WindowWidget(1000, 1000)
+        self.window_widget = WindowWidget(chip_info[2], chip_info[3])
         layout.addWidget(self.window_widget)
-        self.binning_widget = BinningWidget([(1, 1), (2, 2)])
+        self.binning_widget = BinningWidget([(1, 1)])
         self.binning_widget.binning_changed.connect(self.window_widget.set_binning)
         layout.addWidget(self.binning_widget)
         self.format_widget = FormatWidget([ImageFormat.INT8, ImageFormat.INT16])
         layout.addWidget(self.format_widget)
+        self.exposure_time = ExposureTimeWidget()
+        layout.addWidget(self.exposure_time)
         self.expose = ExposeWidget()
         layout.addWidget(self.expose)
 
@@ -277,12 +351,25 @@ class MainWindow(QtWidgets.QMainWindow):
 
     @qasync.asyncSlot()  # type: ignore
     async def _expose_clicked(self) -> None:
-        self.expose.start_exposure(5)
-        await event_wait(self.abort_exposure, 7)
-        # for i in range(10):
-        #    await asyncio.sleep(1)
-        #    self.expose.set_progress(i * 10)
+        self.device.set_resolution(*self.window_widget.values)
+        self.device.set_param(Control.CONTROL_EXPOSURE, int(self.exposure_time.value * 1000.0 * 1000.0))
+
+        if self.device.is_control_available(Control.CONTROL_TRANSFERBIT):
+            if self.format_widget.value == ImageFormat.INT8:
+                self.device.set_bits_mode(8)
+            else:
+                self.device.set_bits_mode(16)
+
+        self.expose.start_exposure(self.exposure_time.value)
+        abort_event = asyncio.Event()
+        self.device.expose_single_frame()
+        await event_wait(abort_event, self.exposure_time.value - 0.5)
+        loop = asyncio.get_running_loop()
+        image_data = await loop.run_in_executor(None, self.device.get_single_frame)
         self.expose.set_exposures_left()
+
+        image = fits.PrimaryHDU(image_data)
+        self.fits_widget.display(image)
 
     @qasync.asyncSlot()  # type: ignore
     async def _abort_clicked(self) -> None:
@@ -292,27 +379,21 @@ class MainWindow(QtWidgets.QMainWindow):
 
 async def main(app: QtWidgets.QApplication) -> None:
     # connect()
-    app_close_event = asyncio.Event()
-    app.aboutToQuit.connect(app_close_event.set)
-    main_window = MainWindow()
-    main_window.show()
-    await app_close_event.wait()
-
-
-def connect() -> None:
-    # get devices
-    set_log_level(0)  # TODO:
     devices = QHYCCDDriver.list_devices()
     if len(devices) == 0:
-        return None
+        print("No devices found. Exiting...")
+        return
+    device_picker = ListPickerDialog([d.decode("utf-8") for d in devices])
+    if device_picker.exec() != QtWidgets.QDialog.DialogCode.Accepted:
+        print("No device selected. Exiting...")
+        return
+    device_name = devices[device_picker.comboBox().currentIndex()]
 
-    # print and prompt
-    print(f"Found {len(devices)} QHYCCD devices:")
-    for i, d in enumerate(devices, 1):
-        name = d.decode("utf-8")
-        print(f"{i}. {name}")
-    print("0. Quit")
-    print("Select device:")
+    app_close_event = asyncio.Event()
+    app.aboutToQuit.connect(app_close_event.set)
+    main_window = MainWindow(device_name)
+    main_window.show()
+    await app_close_event.wait()
 
 
 if __name__ == "__main__":
