@@ -398,7 +398,7 @@ async def async_main(app: QtWidgets.QApplication) -> None:
 
 def main() -> None:
     app = QtWidgets.QApplication(sys.argv)
-    asyncio.run(main(app), loop_factory=qasync.QEventLoop)  # type: ignore
+    asyncio.run(async_main(app), loop_factory=qasync.QEventLoop)  # type: ignore
 
 
 if __name__ == "__main__":
