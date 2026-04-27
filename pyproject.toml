@@ -8,7 +8,7 @@ license = "MIT"
 dependencies = [
     "astropy>=7.0.1,<8",
     "numpy>=2.2.5,<3",
-    "pyobs-core>=1,<2",
+    "pyobs-core>=1.41.0,<2",
 ]
 
 [project.optional-dependencies]
