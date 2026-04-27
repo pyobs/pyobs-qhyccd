@@ -377,7 +377,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.abort_exposure = asyncio.Event()
 
 
-async def main(app: QtWidgets.QApplication) -> None:
+async def async_main(app: QtWidgets.QApplication) -> None:
     # connect()
     devices = QHYCCDDriver.list_devices()
     if len(devices) == 0:
@@ -396,6 +396,10 @@ async def main(app: QtWidgets.QApplication) -> None:
     await app_close_event.wait()
 
 
-if __name__ == "__main__":
+def main() -> None:
     app = QtWidgets.QApplication(sys.argv)
     asyncio.run(main(app), loop_factory=qasync.QEventLoop)  # type: ignore
+
+
+if __name__ == "__main__":
+    main()
