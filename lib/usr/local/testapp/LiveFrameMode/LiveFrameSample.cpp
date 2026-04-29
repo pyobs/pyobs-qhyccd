@@ -239,7 +239,7 @@ int main(int argc,char *argv[])
 		if(ret == QHYCCD_SUCCESS)
 		{
 			count++;
-			printf("GetQHYCCDLiveFrame success! w = %d h = %d bpp = %d channels = %d count = %d", w, h, bpp, channels, count);
+			printf("GetQHYCCDLiveFrame success! w = %d h = %d bpp = %d channels = %d count = %d\n", w, h, bpp, channels, count);
 		}
 	}
   }

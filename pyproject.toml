@@ -1,6 +1,6 @@
 [project]
 name = "pyobs-qhyccd"
-version = "1.5.1"
+version = "1.6.0"
 description = "pyobs module for QHYCCD cameras"
 authors = [{ name = "Tim-Oliver Husser", email = "thusser@uni-goettingen.de" }]
 requires-python = ">=3.11,<3.14"
@@ -8,22 +8,38 @@ license = "MIT"
 dependencies = [
     "astropy>=7.0.1,<8",
     "numpy>=2.2.5,<3",
-    "pyobs-core>=1,<2",
+    "pyobs-core>=1.41.0,<2",
 ]
 
-[tool.poetry.group.dev.dependencies]
-black = ">=25.1.0,<26"
-pre-commit = ">=4.2.0,<5"
-flake8 = ">=7.3.0"
-cython = ">=3.0.0,<4"
+[project.optional-dependencies]
+gui = [
+    "qfitswidget>=0.13.1",
+    "pyside6>=6.11.0",
+    "qasync>=0.28.0",
+]
 
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = false
+[dependency-groups]
+dev = [
+    "black>=25.1.0,<26",
+    "pre-commit>=4.2.0,<5",
+    "flake8>=7.3.0",
+    "cython>=3.0.0,<4",
+    "pandas-stubs>=3.0.0.260204",
+    "pyside6-stubs>=6.7.3.0",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[project.scripts]
+qhyccd-gui = 'pyobs_qhyccd.gui:main'
+
+[tool.scikit-build]
+wheel.packages = ["pyobs_qhyccd"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "Cython>=0.29.0", "numpy>=1.21.0", "setuptools"]
-build-backend = "poetry.core.masonry.api"
+requires = ["scikit_build_core>=0.12", "cython>=3.0", "cython-cmake", "numpy>=2.0"]
+build-backend = "scikit_build_core.build"
 
 [tool.black]
 line-length = 120

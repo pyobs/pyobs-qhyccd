@@ -11,10 +11,10 @@
 
 
 #define version_year                25
-#define version_month               6
-#define version_day                 16
-#define version_subday              15
-#define SDK_SVN_REVISION            15270
+#define version_month               9
+#define version_day                 29
+#define version_subday              10
+#define SDK_SVN_REVISION            15848
 
 #if defined (_WIN32)
 //#define ALLINSDK_SUPPORT            0

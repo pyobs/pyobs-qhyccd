@@ -8,6 +8,7 @@
 
 int main(int argc,char *argv[]){
     std::vector<qhyccd_handle*> camhandles;
+    std::vector<long> cam_frames;
     std::vector<unsigned char*> ImgDataArray;
     std::vector<cv::Mat> imgArray;
     int num = 0;
@@ -32,6 +33,7 @@ int main(int argc,char *argv[]){
         qhyccd_handle* camhandle = OpenQHYCCD(id);
         if(camhandle){
             camhandles.push_back(camhandle);
+            cam_frames.push_back(0);
             SetQHYCCDReadMode(camhandle,0);
             SetQHYCCDStreamMode(camhandle,LIVE_MODE);
             InitQHYCCD(camhandle);
@@ -76,11 +78,15 @@ int main(int argc,char *argv[]){
     t_start = time(NULL);
     int fps = 0;
     int frame_count = 0;
+    int64 start = cv::getTickCount();
     cv::namedWindow("show", cv::WINDOW_NORMAL);
     cv::resizeWindow("show", 1200, 600);
 
     imgArray.resize(camhandles.size());
     while(now_frame < max_frame){
+       if(cv::getWindowProperty("show", cv::WND_PROP_VISIBLE) <= 0){
+            break;
+       }
 
         for(size_t i = 0; i < camhandles.size(); i++){
             ret = GetQHYCCDLiveFrame(camhandles[i], &w, &h, &bpp, &channels, ImgDataArray[i]);
@@ -88,8 +94,10 @@ int main(int argc,char *argv[]){
                 cv::Mat img = cv::Mat(h, w, CV_8UC1, ImgDataArray[i]);
                 imgArray[i] = img;
 
-
+                cam_frames[i] = cam_frames[i] +1;
                 std::string text = "Cam " + std::to_string(i);
+                std::string text_id = id;
+                std::string text_frames = std::to_string(cam_frames[i]);
                 int fontFace = cv::FONT_HERSHEY_SIMPLEX;
                 double fontScale = 4.0;
                 cv::Scalar color(255);
@@ -99,6 +107,10 @@ int main(int argc,char *argv[]){
                 cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
                 cv::Point textOrg((w - textSize.width) / 2, 100);
                 cv::putText(imgArray[i], text, textOrg, fontFace, fontScale, color, thickness);
+                cv::Point textOrg_id((w - textSize.width) / 5, 200);
+                cv::putText(imgArray[i], text_id, textOrg_id, fontFace, fontScale, color, thickness);
+                cv::Point textOrg_frames((w - textSize.width) / 2, 300);
+                cv::putText(imgArray[i], text_frames, textOrg_frames, fontFace, fontScale, color, thickness);
                 now_frame++;
             }
         }
@@ -116,7 +128,8 @@ int main(int argc,char *argv[]){
                 t_start = time(NULL);
             }
         }
-        cv::waitKey(10);
+        int key = cv::waitKey(30);
+        if(key == 27){ break;}
     }
 
     for(size_t i = 0; i < camhandles.size(); i++){
@@ -125,6 +138,7 @@ int main(int argc,char *argv[]){
         free(ImgDataArray[i]);
     }
     ReleaseQHYCCDResource();
+    cv::destroyWindow("show");
     return 0;
 }
 
