@@ -257,7 +257,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             log.info("Disabling cooling.")
         self._setpoint = setpoint
         power = round(await self._get_cooling_power()) if self._driver is not None else None
-        await self.comm.set_state(ICooling, CoolingState(setpoint=setpoint if enabled else None, power=power, enabled=enabled))
+        await self.comm.set_state(
+            ICooling, CoolingState(setpoint=setpoint if enabled else None, power=power, enabled=enabled)
+        )
 
     async def _update_cooling(self) -> None:
         await asyncio.sleep(5)
