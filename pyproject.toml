@@ -22,6 +22,7 @@ gui = [
 dev = [
     "black>=25.1.0,<26",
     "ruff>=0.9.0",
+    "pyrefly>=1.1.1",
     "pre-commit>=4.2.0,<5",
     "cython>=3.0.0,<4",
 ]
