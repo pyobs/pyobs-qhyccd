@@ -1,21 +1,22 @@
+import asyncio
+import sys
+
+import qasync  # type: ignore
 from astropy.io import fits
 from pyobs.utils.enums import ImageFormat
 from pyobs.utils.gui.camera import (
-    DataDisplayWidget,
     BinningWidget,
-    ImageFormatWidget,
-    ExposureTimeWidget,
+    DataDisplayWidget,
     ExposeWidget,
+    ExposureTimeWidget,
+    ImageFormatWidget,
     ListPickerDialog,
 )
 from pyobs.utils.gui.camera.windowingwidget import WindowingWidget
 from pyobs.utils.parallel import event_wait
-import asyncio
-import sys
-import qasync  # type: ignore
 from PySide6 import QtWidgets
 
-from .qhyccddriver import QHYCCDDriver, Control, set_log_level  # type: ignore
+from .qhyccddriver import Control, QHYCCDDriver  # type: ignore
 
 
 class MainWindow(QtWidgets.QMainWindow):

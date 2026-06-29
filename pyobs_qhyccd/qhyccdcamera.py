@@ -2,16 +2,16 @@ import asyncio
 import logging
 import math
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
-import numpy as np
 
-from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable, IGain, ITemperatures
-from pyobs.modules.camera.basecamera import BaseCamera
+import numpy as np
 from pyobs.images import Image
+from pyobs.interfaces import IAbortable, IBinning, ICamera, ICooling, IGain, ITemperatures, IWindow
+from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.utils.parallel import event_wait
 
-from .qhyccddriver import QHYCCDDriver, Control, set_log_level  # type: ignore
+from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
 
 log = logging.getLogger(__name__)
 
@@ -71,13 +71,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             self._driver.set_bits_mode(16)
 
         chip = self._driver.get_chip_info()
-        log.info(f"Chip  size:     {chip[0]:.3f}x{chip[1]:.3f} [mm]")
-        log.info(f"Pixel size:     {chip[4]:.3f}x {chip[5]:.3f} [um]")
-        log.info(f"Image size:     {chip[2]}x{chip[3]}")
+        log.info("Chip  size:     %.3fx%.3f [mm]", chip[0], chip[1])
+        log.info("Pixel size:     %.3fx %.3f [um]", chip[4], chip[5])
+        log.info("Image size:     %dx%d", chip[2], chip[3])
         overscan = self._driver.get_overscan_area()
-        log.info(f"Overscan Area:  {overscan[2]}x{overscan[3]} from {overscan[0]},{overscan[1]}")
+        log.info("Overscan Area:  %dx%d from %d,%d", overscan[2], overscan[3], overscan[0], overscan[1])
         effective = self._driver.get_effective_area()
-        log.info(f"Effective Area: {effective[2]}x{effective[3]} from {effective[0]},{effective[1]}")
+        log.info("Effective Area: %dx%d from %d,%d", effective[2], effective[3], effective[0], effective[1])
 
         full_width, full_height = chip[2], chip[3]
         self._window = (0, 0, full_width, full_height)
@@ -103,7 +103,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 p = "CONTROL_" + key.upper()
                 if hasattr(Control, p):
                     control_param = getattr(Control, p)
-                    log.info(f"Setting {control_param} to {value}.")
+                    log.info("Setting %s to %s.", control_param, value)
                     self._driver.set_param(control_param, value)
 
     def _available_binnings(self) -> list[IBinning.State]:
@@ -214,7 +214,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         log.info(
             "Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time
         )
-        date_obs = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
+        date_obs = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")
         self._driver.expose_single_frame()
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
         loop = asyncio.get_running_loop()
@@ -238,7 +238,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
         if enabled:
-            log.info(f"Enabling cooling with a set point of {setpoint}°C.")
+            log.info("Enabling cooling with a set point of %.1f°C.", setpoint)
         else:
             log.info("Disabling cooling.")
         self._setpoint = setpoint
@@ -278,8 +278,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
                     self._cooling_next = self._current_temperature + 5.0
                     log.warning(
-                        f"Cooling power seems to be bugged. Setting temperature to {self._cooling_next:.2f}°. "
-                        f"Current temperature is {self._current_temperature:.2f}°C."
+                        "Cooling power seems to be bugged. Setting temperature to %.2f°. "
+                        "Current temperature is %.2f°C.",
+                        self._cooling_next,
+                        self._current_temperature,
                     )
 
                 if self._cooling_next == self._setpoint:
@@ -300,7 +302,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                         self._cooling_next += sign * min(self._cooling_step, abs(diff))
 
                     log.info(
-                        f"Next cooling step: {self._cooling_next:.2f}°C. Current temperature is {self._current_temperature:.2f}°C."
+                        "Next cooling step: %.2f°C. Current temperature is %.2f°C.",
+                        self._cooling_next,
+                        self._current_temperature,
                     )
 
                     start_time = time.time()
