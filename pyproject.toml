@@ -23,10 +23,7 @@ dev = [
     "black>=25.1.0,<26",
     "ruff>=0.9.0",
     "pre-commit>=4.2.0,<5",
-    "flake8>=7.3.0",
     "cython>=3.0.0,<4",
-    "pandas-stubs>=3.0.0.260204",
-    "pyside6-stubs>=6.7.3.0",
 ]
 
 [tool.setuptools]
