@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from typing import Any
 import numpy as np
 
-from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable, IGain
+from pyobs.interfaces import ICamera, IWindow, IBinning, ICooling, IAbortable, IGain, ITemperatures
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.images import Image
 from pyobs.utils.parallel import event_wait
@@ -49,37 +49,27 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """Open module."""
         await BaseCamera.open(self)
 
-        # disable logs
-        set_log_level(0)  # TODO:
+        set_log_level(0)
 
-        # get devices
         devices = QHYCCDDriver.list_devices()
-
-        # open camera
         self._driver = QHYCCDDriver(devices[0])
         self._driver.open()
 
-        # color cam?
         if self._driver.is_control_available(Control.CAM_COLOR):
             raise ValueError("Color cams are not supported.")
 
-        # usb traffic?
         if self._driver.is_control_available(Control.CONTROL_USBTRAFFIC):
             self._driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
 
-        # gain?
         if self._driver.is_control_available(Control.CONTROL_GAIN):
             self._driver.set_param(Control.CONTROL_GAIN, 10)
 
-        # offset?
         if self._driver.is_control_available(Control.CONTROL_OFFSET):
             self._driver.set_param(Control.CONTROL_OFFSET, 140)
 
-        # bpp
         if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
             self._driver.set_bits_mode(16)
 
-        # some info
         chip = self._driver.get_chip_info()
         log.info(f"Chip  size:     {chip[0]:.3f}x{chip[1]:.3f} [mm]")
         log.info(f"Pixel size:     {chip[4]:.3f}x {chip[5]:.3f} [um]")
@@ -89,14 +79,25 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         effective = self._driver.get_effective_area()
         log.info(f"Effective Area: {effective[2]}x{effective[3]} from {effective[0]},{effective[1]}")
 
-        # get full window
-        self._window = await self.get_full_frame()
+        full_width, full_height = chip[2], chip[3]
+        self._window = (0, 0, full_width, full_height)
 
-        # set cooling
+        # publish static capabilities
+        await self.comm.set_capabilities(
+            IWindow.Capabilities(full_frame=IWindow.State(x=0, y=0, width=full_width, height=full_height))
+        )
+        await self.comm.set_capabilities(IBinning.Capabilities(binnings=self._available_binnings()))
+
+        # publish initial states
+        await self.comm.set_state(IWindow.State(x=0, y=0, width=full_width, height=full_height))
+        await self.comm.set_state(IBinning.State(x=self._binning[0], y=self._binning[1]))
+        gain = float(self._driver.get_param(Control.CONTROL_GAIN))
+        offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
+        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
+
         if self._setpoint is not None:
             await self.set_cooling(True, self._setpoint)
 
-        # set parameters
         if self._params is not None:
             for key, value in self._params.items():
                 p = "CONTROL_" + key.upper()
@@ -105,39 +106,26 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                     log.info(f"Setting {control_param} to {value}.")
                     self._driver.set_param(control_param, value)
 
+    def _available_binnings(self) -> list[IBinning.State]:
+        if self._driver is None:
+            return []
+        binnings = []
+        if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
+            binnings.append(IBinning.State(x=1, y=1))
+        if self._driver.is_control_available(Control.CAM_BIN2X2MODE):
+            binnings.append(IBinning.State(x=2, y=2))
+        if self._driver.is_control_available(Control.CAM_BIN3X3MODE):
+            binnings.append(IBinning.State(x=3, y=3))
+        if self._driver.is_control_available(Control.CAM_BIN4X4MODE):
+            binnings.append(IBinning.State(x=4, y=4))
+        return binnings
+
     async def close(self) -> None:
         """Close the module."""
         await BaseCamera.close(self)
 
         if self._driver:
             self._driver.close()
-
-    async def get_full_frame(self, **kwargs: Any) -> tuple[int, int, int, int]:
-        """Returns full size of CCD.
-
-        Returns:
-            Tuple with left, top, width, and height set.
-        """
-        if self._driver is None:
-            raise ValueError("No camera driver.")
-        chip = self._driver.get_chip_info()
-        return 0, 0, chip[2], chip[3]
-
-    async def get_window(self, **kwargs: Any) -> tuple[int, int, int, int]:
-        """Returns the camera window.
-
-        Returns:
-            Tuple with left, top, width, and height set.
-        """
-        return self._window
-
-    async def get_binning(self, **kwargs: Any) -> tuple[int, int]:
-        """Returns the camera binning.
-
-        Returns:
-            Tuple with x and y.
-        """
-        return self._binning
 
     async def set_window(self, left: int, top: int, width: int, height: int, **kwargs: Any) -> None:
         """Set the camera window.
@@ -147,12 +135,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             top: Y offset of window.
             width: Width of window.
             height: Height of window.
-
-        Raises:
-            ValueError: If binning could not be set.
         """
         self._window = (left, top, width, height)
         log.info("Setting window to %dx%d at %d,%d...", width, height, left, top)
+        await self.comm.set_state(IWindow.State(x=left, y=top, width=width, height=height))
 
     async def set_binning(self, x: int, y: int, **kwargs: Any) -> None:
         """Set the camera binning.
@@ -160,32 +146,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         Args:
             x: X binning.
             y: Y binning.
-
-        Raises:
-            ValueError: If binning could not be set.
         """
         self._binning = (x, y)
         log.info("Setting binning to %dx%d...", x, y)
-
-    async def list_binnings(self, **kwargs: Any) -> list[tuple[int, int]]:
-        """List available binnings.
-
-        Returns:
-            List of available binnings as (x, y) tuples.
-        """
-        if self._driver is None:
-            return []
-
-        binnings: list[tuple[int, int]] = []
-        if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
-            binnings.append((1, 1))
-        if self._driver.is_control_available(Control.CAM_BIN2X2MODE):
-            binnings.append((2, 2))
-        if self._driver.is_control_available(Control.CAM_BIN3X3MODE):
-            binnings.append((3, 3))
-        if self._driver.is_control_available(Control.CAM_BIN4X4MODE):
-            binnings.append((4, 4))
-        return binnings
+        await self.comm.set_state(IBinning.State(x=x, y=y))
 
     async def _prepare_driver_for_exposure(self, exposure_time: float) -> None:
         if self._driver is None:
@@ -214,10 +178,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         image = Image(image_data)
         image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
         image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
-        image.header["DET-TEMP"] = (await self._get_ccd_temperature(), "CCD temperature [C]")
+        image.header["DET-TEMP"] = (self._current_temperature, "CCD temperature [C]")
         image.header["DET-COOL"] = (await self._get_cooling_power(), "Cooler power [percent]")
         image.header["DET-TSET"] = (self._setpoint, "Cooler setpoint [C]")
-        # image.header["INSTRUME"] = (self._driver.name, "Name of instrument")
         image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
         image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
         image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
@@ -226,7 +189,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         image.header["DATAMAX"] = (float(np.max(image_data)), "Maximum data value")
         image.header["DATAMEAN"] = (float(np.mean(image_data)), "Mean data value")
 
-        # biassec/trimsec
         self.set_biassec_trimsec(image.header, *self._effective_area)
         log.info("Readout finished.")
         return image
@@ -260,20 +222,11 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
     async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
-        """Wait for exposure to finish.
-
-        Params:
-            abort_event: Event that aborts the exposure.
-            exposure_time: Exp time in sec.
-            open_shutter: Whether shutter should be opened.
-        """
+        """Wait for exposure to finish."""
         await event_wait(abort_event, exposure_time - 0.5)
 
     async def _abort_exposure(self) -> None:
-        """Abort the running exposure. Should be implemented by derived class.
-        Raises:
-            ValueError: If an error occured.
-        """
+        """Abort the running exposure."""
         if self._driver is None:
             raise ValueError("No camera driver.")
         # self._driver.cancel_exposure()
@@ -283,30 +236,14 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             raise ValueError("No camera driver.")
         return float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100  # TODO:
 
-    async def get_cooling(self, **kwargs: Any) -> tuple[bool, float, float]:
-        if self._driver is None:
-            raise ValueError("No camera driver.")
-        enabled = self._driver.is_control_available(Control.CONTROL_COOLER)
-        setpoint = self._setpoint
-        power = await self._get_cooling_power()
-        return enabled, setpoint, power
-
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
-        # if not enabled:
-        #    self._driver.set_param(Control.CONTROL_CURPWM, 0)  #TODO: einfach PWM auf 0?
         if enabled:
             log.info(f"Enabling cooling with a set point of {setpoint}°C.")
         else:
             log.info("Disabling cooling.")
         self._setpoint = setpoint
-
-    async def _get_ccd_temperature(self) -> float:
-        if self._driver is None:
-            return 0.0
-        return float(self._driver.get_param(Control.CONTROL_CURTEMP))
-
-    async def get_temperatures(self, **kwargs: Any) -> dict[str, float]:
-        return {"CCD": self._current_temperature}
+        power = round(await self._get_cooling_power()) if self._driver is not None else None
+        await self.comm.set_state(ICooling.State(setpoint=setpoint if enabled else None, power=power, enabled=enabled))
 
     async def _update_cooling(self) -> None:
         await asyncio.sleep(5)
@@ -316,15 +253,28 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         start_time = 0.0
         while True:
             try:
-                # sleep a little
                 await asyncio.sleep(1.0)
 
-                # set cooling
                 if self._cooling_next is not None:
                     self._driver.set_temperature(self._cooling_next)
-                self._current_temperature = await self._get_ccd_temperature()
+                self._current_temperature = float(self._driver.get_param(Control.CONTROL_CURTEMP))
 
-                # bug?
+                # publish live temperatures and cooling state
+                await self.comm.set_state(
+                    ITemperatures.State(
+                        readings=[ITemperatures.Temperature(name="CCD", value=self._current_temperature)]
+                    )
+                )
+                power = round(float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100)
+                await self.comm.set_state(
+                    ICooling.State(
+                        setpoint=self._setpoint,
+                        power=power,
+                        enabled=self._driver.is_control_available(Control.CONTROL_COOLER),
+                    )
+                )
+
+                # bug: QHY PWM wraps above 250 — back off setpoint
                 if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
                     self._cooling_next = self._current_temperature + 5.0
                     log.warning(
@@ -332,20 +282,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                         f"Current temperature is {self._current_temperature:.2f}°C."
                     )
 
-                # setpoint reached?
                 if self._cooling_next == self._setpoint:
                     continue
 
-                # time reached?
                 if start_time > 0 and time.time() - start_time > self._cooling_wait:
                     start_time = 0.0
 
                 if start_time == 0.0:
-                    # get temp
                     if self._cooling_next is None:
                         self._cooling_next = self._current_temperature
 
-                    # determine next cooling temp
                     diff = self._setpoint - self._current_temperature
                     if abs(diff) < abs(self._cooling_step):
                         self._cooling_next = self._setpoint
@@ -357,10 +303,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                         f"Next cooling step: {self._cooling_next:.2f}°C. Current temperature is {self._current_temperature:.2f}°C."
                     )
 
-                    # set start time
                     start_time = time.time()
 
-            except:
+            except Exception:
                 log.exception("Error updating cooling.")
 
     async def set_gain(self, gain: float, **kwargs: Any) -> None:
@@ -368,46 +313,24 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         Args:
             gain: New camera gain.
-
-        Raises:
-            ValueError: If gain could not be set.
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
         self._driver.set_param(Control.CONTROL_GAIN, gain)
-
-    async def get_gain(self, **kwargs: Any) -> float:
-        """Returns the camera binning.
-
-        Returns:
-            Current gain.
-        """
-        if self._driver is None:
-            raise ValueError("No camera driver.")
-        return float(self._driver.get_param(Control.CONTROL_GAIN))
+        offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
+        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
 
     async def set_offset(self, offset: float, **kwargs: Any) -> None:
         """Set the camera offset.
 
         Args:
             offset: New camera offset.
-
-        Raises:
-            ValueError: If offset could not be set.
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
         self._driver.set_param(Control.CONTROL_OFFSET, offset)
-
-    async def get_offset(self, **kwargs: Any) -> float:
-        """Returns the camera offset.
-
-        Returns:
-            Current offset.
-        """
-        if self._driver is None:
-            raise ValueError("No camera driver.")
-        return float(self._driver.get_param(Control.CONTROL_OFFSET))
+        gain = float(self._driver.get_param(Control.CONTROL_GAIN))
+        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
 
 
 __all__ = ["QHYCCDCamera"]
