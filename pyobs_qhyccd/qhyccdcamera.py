@@ -7,7 +7,21 @@ from typing import Any
 
 import numpy as np
 from pyobs.images import Image
-from pyobs.interfaces import IAbortable, IBinning, ICamera, ICooling, IGain, ITemperatures, IWindow
+from pyobs.interfaces import (
+    BinningState,
+    CoolingState,
+    GainState,
+    IAbortable,
+    IBinning,
+    ICamera,
+    ICooling,
+    IGain,
+    ITemperatures,
+    IWindow,
+    SensorReading,
+    TemperaturesState,
+    WindowState,
+)
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.utils.parallel import event_wait
 
@@ -84,16 +98,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         # publish static capabilities
         await self.comm.set_capabilities(
-            IWindow.Capabilities(full_frame=IWindow.State(x=0, y=0, width=full_width, height=full_height))
+            IWindow.Capabilities(full_frame=WindowState(x=0, y=0, width=full_width, height=full_height))
         )
         await self.comm.set_capabilities(IBinning.Capabilities(binnings=self._available_binnings()))
 
         # publish initial states
-        await self.comm.set_state(IWindow.State(x=0, y=0, width=full_width, height=full_height))
-        await self.comm.set_state(IBinning.State(x=self._binning[0], y=self._binning[1]))
+        await self.comm.set_state(IWindow, WindowState(x=0, y=0, width=full_width, height=full_height))
+        await self.comm.set_state(IBinning, BinningState(x=self._binning[0], y=self._binning[1]))
         gain = float(self._driver.get_param(Control.CONTROL_GAIN))
         offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
-        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
+        await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
         if self._setpoint is not None:
             await self.set_cooling(True, self._setpoint)
@@ -106,18 +120,18 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                     log.info("Setting %s to %s.", control_param, value)
                     self._driver.set_param(control_param, value)
 
-    def _available_binnings(self) -> list[IBinning.State]:
+    def _available_binnings(self) -> list[BinningState]:
         if self._driver is None:
             return []
         binnings = []
         if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
-            binnings.append(IBinning.State(x=1, y=1))
+            binnings.append(BinningState(x=1, y=1))
         if self._driver.is_control_available(Control.CAM_BIN2X2MODE):
-            binnings.append(IBinning.State(x=2, y=2))
+            binnings.append(BinningState(x=2, y=2))
         if self._driver.is_control_available(Control.CAM_BIN3X3MODE):
-            binnings.append(IBinning.State(x=3, y=3))
+            binnings.append(BinningState(x=3, y=3))
         if self._driver.is_control_available(Control.CAM_BIN4X4MODE):
-            binnings.append(IBinning.State(x=4, y=4))
+            binnings.append(BinningState(x=4, y=4))
         return binnings
 
     async def close(self) -> None:
@@ -138,7 +152,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         self._window = (left, top, width, height)
         log.info("Setting window to %dx%d at %d,%d...", width, height, left, top)
-        await self.comm.set_state(IWindow.State(x=left, y=top, width=width, height=height))
+        await self.comm.set_state(IWindow, WindowState(x=left, y=top, width=width, height=height))
 
     async def set_binning(self, x: int, y: int, **kwargs: Any) -> None:
         """Set the camera binning.
@@ -149,7 +163,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         self._binning = (x, y)
         log.info("Setting binning to %dx%d...", x, y)
-        await self.comm.set_state(IBinning.State(x=x, y=y))
+        await self.comm.set_state(IBinning, BinningState(x=x, y=y))
 
     async def _prepare_driver_for_exposure(self, exposure_time: float) -> None:
         if self._driver is None:
@@ -243,7 +257,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             log.info("Disabling cooling.")
         self._setpoint = setpoint
         power = round(await self._get_cooling_power()) if self._driver is not None else None
-        await self.comm.set_state(ICooling.State(setpoint=setpoint if enabled else None, power=power, enabled=enabled))
+        await self.comm.set_state(ICooling, CoolingState(setpoint=setpoint if enabled else None, power=power, enabled=enabled))
 
     async def _update_cooling(self) -> None:
         await asyncio.sleep(5)
@@ -261,17 +275,17 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
                 # publish live temperatures and cooling state
                 await self.comm.set_state(
-                    ITemperatures.State(
-                        readings=[ITemperatures.Temperature(name="CCD", value=self._current_temperature)]
-                    )
+                    ITemperatures,
+                    TemperaturesState(readings=[SensorReading(name="CCD", value=self._current_temperature)]),
                 )
                 power = round(float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100)
                 await self.comm.set_state(
-                    ICooling.State(
+                    ICooling,
+                    CoolingState(
                         setpoint=self._setpoint,
                         power=power,
                         enabled=self._driver.is_control_available(Control.CONTROL_COOLER),
-                    )
+                    ),
                 )
 
                 # bug: QHY PWM wraps above 250 — back off setpoint
@@ -322,7 +336,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             raise ValueError("No camera driver.")
         self._driver.set_param(Control.CONTROL_GAIN, gain)
         offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
-        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
+        await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
     async def set_offset(self, offset: float, **kwargs: Any) -> None:
         """Set the camera offset.
@@ -334,7 +348,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             raise ValueError("No camera driver.")
         self._driver.set_param(Control.CONTROL_OFFSET, offset)
         gain = float(self._driver.get_param(Control.CONTROL_GAIN))
-        await self.comm.set_state(IGain.State(gain=gain, offset=offset))
+        await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
 
 __all__ = ["QHYCCDCamera"]
