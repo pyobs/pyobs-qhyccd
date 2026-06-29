@@ -8,7 +8,7 @@ license = "MIT"
 dependencies = [
     "astropy>=7.0.1,<8",
     "numpy>=2.2.5,<3",
-    "pyobs-core>=1.41.0,<2",
+    "pyobs-core>=2.0.0.dev1",
 ]
 
 [project.optional-dependencies]
@@ -21,6 +21,7 @@ gui = [
 [dependency-groups]
 dev = [
     "black>=25.1.0,<26",
+    "ruff>=0.9.0",
     "pre-commit>=4.2.0,<5",
     "flake8>=7.3.0",
     "cython>=3.0.0,<4",
@@ -44,3 +45,13 @@ build-backend = "scikit_build_core.build"
 [tool.black]
 line-length = 120
 target-version = ['py311']
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "G"]
+
+[tool.pyrefly]
+python-version = "3.11"
