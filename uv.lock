@@ -1773,7 +1773,7 @@ wheels = [
 
 [[package]]
 name = "pyobs-qhyccd"
-version = "1.6.0"
+version = "2.0.0.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "astropy" },
