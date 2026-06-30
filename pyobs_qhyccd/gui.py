@@ -14,7 +14,7 @@ from pyobs.utils.gui.camera import (
 )
 from pyobs.utils.gui.camera.windowingwidget import WindowingWidget
 from pyobs.utils.parallel import event_wait
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets  # type: ignore[import-untyped]
 
 from .qhyccddriver import Control, QHYCCDDriver  # type: ignore
 
