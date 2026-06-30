@@ -8,6 +8,7 @@ from typing import Any
 import numpy as np
 from pyobs.images import Image
 from pyobs.interfaces import (
+    BinningCapabilities,
     BinningState,
     CoolingState,
     GainState,
@@ -20,6 +21,7 @@ from pyobs.interfaces import (
     IWindow,
     SensorReading,
     TemperaturesState,
+    WindowCapabilities,
     WindowState,
 )
 from pyobs.modules.camera.basecamera import BaseCamera
@@ -98,9 +100,12 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         # publish static capabilities
         await self.comm.set_capabilities(
-            IWindow.Capabilities(full_frame=WindowState(x=0, y=0, width=full_width, height=full_height))
+            IWindow,
+            WindowCapabilities(
+                full_frame_x=0, full_frame_y=0, full_frame_width=full_width, full_frame_height=full_height
+            ),
         )
-        await self.comm.set_capabilities(IBinning.Capabilities(binnings=self._available_binnings()))
+        await self.comm.set_capabilities(IBinning, BinningCapabilities(binnings=self._available_binnings()))
 
         # publish initial states
         await self.comm.set_state(IWindow, WindowState(x=0, y=0, width=full_width, height=full_height))
