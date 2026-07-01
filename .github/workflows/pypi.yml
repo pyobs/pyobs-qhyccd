@@ -18,7 +18,7 @@ jobs:
           python-version: "3.13"
 
       - name: Build
-        run: uv build
+        run: uv build --sdist
 
       - name: Publish
         env:
