@@ -2,7 +2,7 @@ cdef extern from "/usr/include/libusb-1.0/libusb.h":
     struct libusb_device_handle
 
 
-cdef extern from "../lib/usr/local/include/qhyccdstruct.h":
+cdef extern from "qhyccdstruct.h":
     cdef enum CONTROL_ID:
         CONTROL_BRIGHTNESS,
         CONTROL_CONTRAST,
@@ -74,7 +74,7 @@ cdef extern from "../lib/usr/local/include/qhyccdstruct.h":
         CONTROL_MAX_ID,
         CAM_HUMIDITY
 
-cdef extern from "../lib/usr/local/include/qhyccd.h":
+cdef extern from "qhyccd.h":
     ctypedef void* qhyccd_handle
     unsigned int InitQHYCCDResource()
     unsigned int ScanQHYCCD()

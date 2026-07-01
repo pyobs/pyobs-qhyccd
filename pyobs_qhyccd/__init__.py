@@ -1,1 +1,1 @@
-from .qhyccdcamera import QHYCCDCamera
+from .qhyccdcamera import QHYCCDCamera as QHYCCDCamera
