@@ -1771,6 +1771,13 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/17/b6/3875a77f1206ef5d02d5ac43ae9fd90ba96be7857fe4308dfc0c599eec16/pyobs_core-2.0.0.dev6-py3-none-any.whl", hash = "sha256:542a78b069cac525cc72b9fc5fce8983629f8f0a240ff5ee722617886a8c9c13", size = 508486, upload-time = "2026-06-30T17:39:34.739Z" },
 ]
 
+[package.optional-dependencies]
+gui = [
+    { name = "pyside6" },
+    { name = "qfitswidget" },
+    { name = "qtpy" },
+]
+
 [[package]]
 name = "pyobs-qhyccd"
 version = "2.0.0.dev7"
@@ -1783,9 +1790,8 @@ dependencies = [
 
 [package.optional-dependencies]
 gui = [
-    { name = "pyside6" },
+    { name = "pyobs-core", extra = ["gui"] },
     { name = "qasync" },
-    { name = "qfitswidget" },
 ]
 
 [package.dev-dependencies]
@@ -1802,9 +1808,8 @@ requires-dist = [
     { name = "astropy", specifier = ">=7.0.1,<8" },
     { name = "numpy", specifier = ">=2.2.5,<3" },
     { name = "pyobs-core", specifier = ">=2.0.0.dev6,<3" },
-    { name = "pyside6", marker = "extra == 'gui'", specifier = ">=6.11.0" },
+    { name = "pyobs-core", extras = ["gui"], marker = "extra == 'gui'", specifier = ">=2.0.0.dev6,<3" },
     { name = "qasync", marker = "extra == 'gui'", specifier = ">=0.28.0" },
-    { name = "qfitswidget", marker = "extra == 'gui'", specifier = ">=0.13.1" },
 ]
 provides-extras = ["gui"]
 
