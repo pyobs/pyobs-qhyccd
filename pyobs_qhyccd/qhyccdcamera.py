@@ -1,9 +1,11 @@
 import asyncio
 import logging
 import math
+import threading
 import time
+from collections.abc import Callable
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, TypeVar, cast
 
 import numpy as np
 from pyobs.images import Image
@@ -30,6 +32,13 @@ from pyobs.utils.parallel import event_wait
 from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
 
 log = logging.getLogger(__name__)
+
+_T = TypeVar("_T")
+
+# QHYCCD SDK calls are blocking and are made directly on the event loop thread (see
+# _run_blocking). If the camera has gone unresponsive, they can hang indefinitely, so they're
+# bounded with a timeout rather than let a single dead camera freeze the whole module.
+_SDK_CALL_TIMEOUT = 5.0
 
 
 class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain):
@@ -61,41 +70,93 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         self.add_background_task(self._update_cooling)
 
+    @staticmethod
+    async def _run_blocking(func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
+        """Run a blocking QHYCCD SDK call in a daemon thread, so a hung call can't freeze the module.
+
+        A plain executor isn't used here, since its worker threads are non-daemon and Python joins
+        them on interpreter shutdown -- a hung call would then just move the freeze to process exit.
+
+        Returns:
+            True if func completed within timeout, False if it's still running in the background.
+        """
+        loop = asyncio.get_running_loop()
+        future: asyncio.Future[None] = loop.create_future()
+
+        def _wrapper() -> None:
+            try:
+                func()
+            finally:
+                loop.call_soon_threadsafe(future.set_result, None)
+
+        threading.Thread(target=_wrapper, daemon=True).start()
+        try:
+            await asyncio.wait_for(future, timeout=timeout)
+            return True
+        except TimeoutError:
+            return False
+
+    async def _run_blocking_or_raise(self, func: Callable[[], _T], timeout: float = _SDK_CALL_TIMEOUT) -> _T:
+        """Run a blocking QHYCCD SDK call in a thread, returning its result or re-raising what it raised.
+
+        Unlike _run_blocking(), this also carries the callable's return value/exception back to the
+        caller -- several QHYCCD calls here drive control flow via their return value or a raised
+        ValueError (e.g. unsupported color cams), which a bare fire-and-forget thread call would
+        otherwise silently lose.
+        """
+        outcome: list[Any] = []
+
+        def _wrapper() -> None:
+            try:
+                outcome.append(func())
+            except BaseException as e:
+                outcome.append(e)
+
+        if not await self._run_blocking(_wrapper, timeout=timeout):
+            raise TimeoutError(f"Timed out waiting for QHYCCD SDK call after {timeout}s.")
+        value = outcome[0]
+        if isinstance(value, BaseException):
+            raise value
+        return cast(_T, value)
+
     async def open(self) -> None:
         """Open module."""
         await BaseCamera.open(self)
 
-        set_log_level(0)
+        def _connect() -> tuple[int, int]:
+            set_log_level(0)
 
-        devices = QHYCCDDriver.list_devices()
-        self._driver = QHYCCDDriver(devices[0])
-        self._driver.open()
+            devices = QHYCCDDriver.list_devices()
+            self._driver = QHYCCDDriver(devices[0])
+            self._driver.open()
 
-        if self._driver.is_control_available(Control.CAM_COLOR):
-            raise ValueError("Color cams are not supported.")
+            if self._driver.is_control_available(Control.CAM_COLOR):
+                raise ValueError("Color cams are not supported.")
 
-        if self._driver.is_control_available(Control.CONTROL_USBTRAFFIC):
-            self._driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
+            if self._driver.is_control_available(Control.CONTROL_USBTRAFFIC):
+                self._driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
 
-        if self._driver.is_control_available(Control.CONTROL_GAIN):
-            self._driver.set_param(Control.CONTROL_GAIN, 10)
+            if self._driver.is_control_available(Control.CONTROL_GAIN):
+                self._driver.set_param(Control.CONTROL_GAIN, 10)
 
-        if self._driver.is_control_available(Control.CONTROL_OFFSET):
-            self._driver.set_param(Control.CONTROL_OFFSET, 140)
+            if self._driver.is_control_available(Control.CONTROL_OFFSET):
+                self._driver.set_param(Control.CONTROL_OFFSET, 140)
 
-        if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
-            self._driver.set_bits_mode(16)
+            if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
+                self._driver.set_bits_mode(16)
 
-        chip = self._driver.get_chip_info()
-        log.info("Chip  size:     %.3fx%.3f [mm]", chip[0], chip[1])
-        log.info("Pixel size:     %.3fx %.3f [um]", chip[4], chip[5])
-        log.info("Image size:     %dx%d", chip[2], chip[3])
-        overscan = self._driver.get_overscan_area()
-        log.info("Overscan Area:  %dx%d from %d,%d", overscan[2], overscan[3], overscan[0], overscan[1])
-        effective = self._driver.get_effective_area()
-        log.info("Effective Area: %dx%d from %d,%d", effective[2], effective[3], effective[0], effective[1])
+            chip = self._driver.get_chip_info()
+            log.info("Chip  size:     %.3fx%.3f [mm]", chip[0], chip[1])
+            log.info("Pixel size:     %.3fx %.3f [um]", chip[4], chip[5])
+            log.info("Image size:     %dx%d", chip[2], chip[3])
+            overscan = self._driver.get_overscan_area()
+            log.info("Overscan Area:  %dx%d from %d,%d", overscan[2], overscan[3], overscan[0], overscan[1])
+            effective = self._driver.get_effective_area()
+            log.info("Effective Area: %dx%d from %d,%d", effective[2], effective[3], effective[0], effective[1])
 
-        full_width, full_height = chip[2], chip[3]
+            return chip[2], chip[3]
+
+        full_width, full_height = await self._run_blocking_or_raise(_connect)
         self._window = (0, 0, full_width, full_height)
 
         # publish static capabilities
@@ -105,46 +166,64 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 full_frame_x=0, full_frame_y=0, full_frame_width=full_width, full_frame_height=full_height
             ),
         )
-        await self.comm.set_capabilities(IBinning, BinningCapabilities(binnings=self._available_binnings()))
+        await self.comm.set_capabilities(IBinning, BinningCapabilities(binnings=await self._available_binnings()))
 
         # publish initial states
         await self.comm.set_state(IWindow, WindowState(x=0, y=0, width=full_width, height=full_height))
         await self.comm.set_state(IBinning, BinningState(x=self._binning[0], y=self._binning[1]))
-        gain = float(self._driver.get_param(Control.CONTROL_GAIN))
-        offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
+
+        def _get_gain_offset() -> tuple[float, float]:
+            assert self._driver is not None
+            return float(self._driver.get_param(Control.CONTROL_GAIN)), float(
+                self._driver.get_param(Control.CONTROL_OFFSET)
+            )
+
+        gain, offset = await self._run_blocking_or_raise(_get_gain_offset)
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
         if self._setpoint is not None:
             await self.set_cooling(True, self._setpoint)
 
         if self._params is not None:
-            for key, value in self._params.items():
-                p = "CONTROL_" + key.upper()
-                if hasattr(Control, p):
-                    control_param = getattr(Control, p)
-                    log.info("Setting %s to %s.", control_param, value)
-                    self._driver.set_param(control_param, value)
+            params = self._params
 
-    def _available_binnings(self) -> list[BinningState]:
+            def _set_custom_params() -> None:
+                assert self._driver is not None
+                for key, value in params.items():
+                    p = "CONTROL_" + key.upper()
+                    if hasattr(Control, p):
+                        control_param = getattr(Control, p)
+                        log.info("Setting %s to %s.", control_param, value)
+                        self._driver.set_param(control_param, value)
+
+            await self._run_blocking_or_raise(_set_custom_params)
+
+    async def _available_binnings(self) -> list[BinningState]:
         if self._driver is None:
             return []
-        binnings = []
-        if self._driver.is_control_available(Control.CAM_BIN1X1MODE):
-            binnings.append(BinningState(x=1, y=1))
-        if self._driver.is_control_available(Control.CAM_BIN2X2MODE):
-            binnings.append(BinningState(x=2, y=2))
-        if self._driver.is_control_available(Control.CAM_BIN3X3MODE):
-            binnings.append(BinningState(x=3, y=3))
-        if self._driver.is_control_available(Control.CAM_BIN4X4MODE):
-            binnings.append(BinningState(x=4, y=4))
-        return binnings
+        driver = self._driver
+
+        def _get() -> list[BinningState]:
+            binnings = []
+            if driver.is_control_available(Control.CAM_BIN1X1MODE):
+                binnings.append(BinningState(x=1, y=1))
+            if driver.is_control_available(Control.CAM_BIN2X2MODE):
+                binnings.append(BinningState(x=2, y=2))
+            if driver.is_control_available(Control.CAM_BIN3X3MODE):
+                binnings.append(BinningState(x=3, y=3))
+            if driver.is_control_available(Control.CAM_BIN4X4MODE):
+                binnings.append(BinningState(x=4, y=4))
+            return binnings
+
+        return await self._run_blocking_or_raise(_get)
 
     async def close(self) -> None:
         """Close the module."""
         await BaseCamera.close(self)
 
         if self._driver:
-            self._driver.close()
+            if not await self._run_blocking(self._driver.close):
+                log.error("Timed out closing QHYCCD camera after %.1fs.", _SDK_CALL_TIMEOUT)
 
     async def set_window(self, left: int, top: int, width: int, height: int, **kwargs: Any) -> None:
         """Set the camera window.
@@ -173,8 +252,9 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
     async def _prepare_driver_for_exposure(self, exposure_time: float) -> None:
         if self._driver is None:
             raise ValueError("No camera driver.")
+        driver = self._driver
+
         log.info("Set binning to %dx%d.", self._binning[0], self._binning[1])
-        self._driver.set_bin_mode(*self._binning)
 
         width = int(math.floor(self._window[2]) / self._binning[0])
         height = int(math.floor(self._window[3]) / self._binning[1])
@@ -187,10 +267,14 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             self._window[0],
             self._window[1],
         )
-        self._driver.set_resolution(self._window[0], self._window[1], width, height)
-        self._driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
 
-        eff = self._driver.get_effective_area()
+        def _prepare() -> tuple[int, int, int, int]:
+            driver.set_bin_mode(*self._binning)
+            driver.set_resolution(self._window[0], self._window[1], width, height)
+            driver.set_param(Control.CONTROL_EXPOSURE, int(exposure_time * 1000.0 * 1000.0))
+            return driver.get_effective_area()
+
+        eff = await self._run_blocking_or_raise(_prepare)
         self._effective_area = (eff[0], eff[1], eff[2] * self._binning[0], eff[3] * self._binning[1])
 
     async def _get_image_with_header(self, image_data: Any, date_obs: str, exposure_time: float) -> Image:
@@ -228,16 +312,17 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
+        driver = self._driver
 
         await self._prepare_driver_for_exposure(exposure_time)
         log.info(
             "Starting exposure with %s shutter for %.2f seconds...", "open" if open_shutter else "closed", exposure_time
         )
         date_obs = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self._driver.expose_single_frame()
+        await self._run_blocking_or_raise(driver.expose_single_frame)
         await self._wait_exposure(abort_event, exposure_time, open_shutter)
         loop = asyncio.get_running_loop()
-        image_data = await loop.run_in_executor(None, self._driver.get_single_frame)
+        image_data = await loop.run_in_executor(None, driver.get_single_frame)
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
     async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
@@ -253,7 +338,12 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
     async def _get_cooling_power(self) -> float:
         if self._driver is None:
             raise ValueError("No camera driver.")
-        return float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100  # TODO:
+        driver = self._driver
+
+        def _get() -> float:
+            return float(driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100  # TODO:
+
+        return await self._run_blocking_or_raise(_get)
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
         if enabled:
@@ -270,33 +360,46 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         await asyncio.sleep(5)
         if self._driver is None:
             raise ValueError("No camera driver.")
+        driver = self._driver
 
         start_time = 0.0
         while True:
             try:
                 await asyncio.sleep(1.0)
 
-                if self._cooling_next is not None:
-                    self._driver.set_temperature(self._cooling_next)
-                self._current_temperature = float(self._driver.get_param(Control.CONTROL_CURTEMP))
+                cooling_next = self._cooling_next
+
+                def _poll() -> tuple[float, float, bool, bool]:
+                    if cooling_next is not None:
+                        driver.set_temperature(cooling_next)
+                    current_temp = float(driver.get_param(Control.CONTROL_CURTEMP))
+                    power_raw = float(driver.get_param(Control.CONTROL_CURPWM))
+                    cooler_available = driver.is_control_available(Control.CONTROL_COOLER)
+                    # bug: QHY PWM wraps above 250 -- checked with a fresh read, same as the
+                    # separate driver.get_param() call the original code made for this check
+                    pwm_over_250 = float(driver.get_param(Control.CONTROL_CURPWM)) > 250
+                    return current_temp, power_raw, cooler_available, pwm_over_250
+
+                self._current_temperature, power_raw, cooler_available, pwm_over_250 = (
+                    await self._run_blocking_or_raise(_poll)
+                )
 
                 # publish live temperatures and cooling state
                 await self.comm.set_state(
                     ITemperatures,
                     TemperaturesState(readings=[SensorReading(name="CCD", value=self._current_temperature)]),
                 )
-                power = round(float(self._driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100)
+                power = round(power_raw / 255 * 100)
                 await self.comm.set_state(
                     ICooling,
                     CoolingState(
                         setpoint=self._setpoint,
                         power=power,
-                        enabled=self._driver.is_control_available(Control.CONTROL_COOLER),
+                        enabled=cooler_available,
                     ),
                 )
 
-                # bug: QHY PWM wraps above 250 — back off setpoint
-                if self._driver.get_param(Control.CONTROL_CURPWM) > 250:
+                if pwm_over_250:
                     self._cooling_next = self._current_temperature + 5.0
                     log.warning(
                         "Cooling power seems to be bugged. Setting temperature to %.2f°. "
@@ -341,8 +444,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
-        self._driver.set_param(Control.CONTROL_GAIN, gain)
-        offset = float(self._driver.get_param(Control.CONTROL_OFFSET))
+        driver = self._driver
+
+        def _set() -> float:
+            driver.set_param(Control.CONTROL_GAIN, gain)
+            return float(driver.get_param(Control.CONTROL_OFFSET))
+
+        offset = await self._run_blocking_or_raise(_set)
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
     async def set_offset(self, offset: float, **kwargs: Any) -> None:
@@ -353,8 +461,13 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         """
         if self._driver is None:
             raise ValueError("No camera driver.")
-        self._driver.set_param(Control.CONTROL_OFFSET, offset)
-        gain = float(self._driver.get_param(Control.CONTROL_GAIN))
+        driver = self._driver
+
+        def _set() -> float:
+            driver.set_param(Control.CONTROL_OFFSET, offset)
+            return float(driver.get_param(Control.CONTROL_GAIN))
+
+        gain = await self._run_blocking_or_raise(_set)
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
 
