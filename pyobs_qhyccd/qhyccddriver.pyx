@@ -79,7 +79,7 @@ class Control(Enum):
     CAM_IS_COLOR = CONTROL_ID.CAM_IS_COLOR,
     hasHardwareFrameCounter = CONTROL_ID.hasHardwareFrameCounter,
     CONTROL_MAX_ID = CONTROL_ID.CONTROL_MAX_ID,
-    CAM_HUMIDITY = CONTROL_ID.CAM_HUMIDITY
+    CAM_HUMIDITY = CONTROL_ID.CAM_HUMIDITY,
 
 
 def set_log_level(log_level):
@@ -215,6 +215,15 @@ cdef class QHYCCDDriver:
 
     def expose_single_frame(self):
         return ExpQHYCCDSingleFrame(self._device)
+
+    def cancel_exposure(self):
+        """Force-stop a running exposure without reading out its (incomplete) data.
+
+        Raises:
+            ValueError: If cancelling failed.
+        """
+        if CancelQHYCCDExposingAndReadout(self._device) != 0:
+            raise ValueError('Could not cancel exposure.')
 
     def get_mem_length(self):
         return GetQHYCCDMemLength(self._device)
