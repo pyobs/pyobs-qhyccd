@@ -1,25 +1,25 @@
 [project]
 name = "pyobs-qhyccd"
-version = "2.0.0.dev9"
+version = "2.0.0.dev10"
 description = "pyobs module for QHYCCD cameras"
 authors = [{ name = "Tim-Oliver Husser", email = "thusser@uni-goettingen.de" }]
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11"
 license = "MIT"
 dependencies = [
     "astropy>=7.0.1,<8",
     "numpy>=2.2.5,<3",
-    "pyobs-core>=2.0.0.dev6,<3",
+    "pyobs-core>=2.0.0.dev48,<3",
 ]
 
 [project.optional-dependencies]
 gui = [
-    "pyobs-core[gui]>=2.0.0.dev6,<3",
+    "pyobs-core[gui]>=2.0.0.dev48,<3",
     "qasync>=0.28.0",
 ]
 
 [dependency-groups]
 dev = [
-    "black>=25.1.0,<26",
+    "black>=25.1.0,<27",
     "ruff>=0.9.0",
     "pyrefly>=1.1.1",
     "pre-commit>=4.2.0,<5",
@@ -34,6 +34,15 @@ qhyccd-gui = 'pyobs_qhyccd.gui:main'
 
 [tool.scikit-build]
 wheel.packages = ["pyobs_qhyccd"]
+
+[tool.cibuildwheel]
+build = "cp311-* cp312-* cp313-* cp314-*"
+skip = "*-musllinux_* *-manylinux_i686"
+archs = ["x86_64"]
+
+[tool.cibuildwheel.linux]
+manylinux-x86_64-image = "manylinux_2_28"
+before-all = "dnf install -y epel-release && dnf install -y cfitsio-devel libusbx-devel"
 
 [build-system]
 requires = ["scikit_build_core>=0.12", "cython>=3.0", "cython-cmake", "numpy>=2.0"]
