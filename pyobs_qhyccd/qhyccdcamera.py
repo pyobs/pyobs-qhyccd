@@ -10,6 +10,7 @@ from typing import Any, TypeVar, cast
 import numpy as np
 from pyobs.images import Image
 from pyobs.interfaces import (
+    Binning,
     BinningCapabilities,
     BinningState,
     CoolingState,
@@ -198,21 +199,21 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
             await self._run_blocking_or_raise(_set_custom_params)
 
-    async def _available_binnings(self) -> list[BinningState]:
+    async def _available_binnings(self) -> list[Binning]:
         if self._driver is None:
             return []
         driver = self._driver
 
-        def _get() -> list[BinningState]:
+        def _get() -> list[Binning]:
             binnings = []
             if driver.is_control_available(Control.CAM_BIN1X1MODE):
-                binnings.append(BinningState(x=1, y=1))
+                binnings.append(Binning(x=1, y=1))
             if driver.is_control_available(Control.CAM_BIN2X2MODE):
-                binnings.append(BinningState(x=2, y=2))
+                binnings.append(Binning(x=2, y=2))
             if driver.is_control_available(Control.CAM_BIN3X3MODE):
-                binnings.append(BinningState(x=3, y=3))
+                binnings.append(Binning(x=3, y=3))
             if driver.is_control_available(Control.CAM_BIN4X4MODE):
-                binnings.append(BinningState(x=4, y=4))
+                binnings.append(Binning(x=4, y=4))
             return binnings
 
         return await self._run_blocking_or_raise(_get)
