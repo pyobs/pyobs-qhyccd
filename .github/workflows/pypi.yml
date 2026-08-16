@@ -4,8 +4,24 @@ on:
     tags:
     - 'v*'
 jobs:
-  build-n-publish:
-    name: Build and publish package to PyPI
+  build-wheels:
+    name: Build wheels
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels
+          path: wheelhouse/*.whl
+
+  build-sdist:
+    name: Build sdist
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -17,13 +33,33 @@ jobs:
           enable-cache: true
           python-version: "3.13"
 
-      - name: Install system dependencies
-        run: sudo apt-get install -y libusb-1.0-0-dev libcfitsio-dev
-
-      - name: Build
+      - name: Build sdist
         run: uv build --sdist
+
+      - name: Upload sdist
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  publish:
+    name: Publish to PyPI
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Set up Python
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
 
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.pypi_password }}
-        run: uv publish --token $PYPI_TOKEN
+        run: uv publish --token $PYPI_TOKEN dist/*
