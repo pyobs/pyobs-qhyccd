@@ -336,8 +336,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         if aborted:
             # a cancelled exposure must not be read out (see cancel_exposure/_abort_exposure)
             raise AbortedError()
-        loop = asyncio.get_running_loop()
-        image_data = await loop.run_in_executor(None, driver.get_single_frame)
+        image_data = await self._run_blocking_or_raise(driver.get_single_frame)
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
     async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> bool:
