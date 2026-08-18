@@ -60,6 +60,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         BaseCamera.__init__(self, **kwargs)
 
         self._driver: QHYCCDDriver | None = None
+        self._driver_lock = threading.Lock()
         self._setpoint = setpoint
         self._window = (0, 0, 0, 0)
         self._binning = (1, 1)
@@ -72,12 +73,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         self.add_background_task(self._update_cooling)
 
-    @staticmethod
-    async def _run_blocking(func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
+    async def _run_blocking(self, func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
         """Run a blocking QHYCCD SDK call in a daemon thread, so a hung call can't freeze the module.
 
         A plain executor isn't used here, since its worker threads are non-daemon and Python joins
         them on interpreter shutdown -- a hung call would then just move the freeze to process exit.
+
+        Every SDK call is serialized behind self._driver_lock, so the helper threads and the 1s
+        cooling poll never touch the driver handle concurrently. On timeout the worker is left
+        running in the background; its result callback is guarded so it can't set_result on an
+        already-cancelled future.
 
         Returns:
             True if func completed within timeout, False if it's still running in the background.
@@ -85,11 +90,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         loop = asyncio.get_running_loop()
         future: asyncio.Future[None] = loop.create_future()
 
+        def _set_result() -> None:
+            if not future.done():
+                future.set_result(None)
+
         def _wrapper() -> None:
             try:
-                func()
+                with self._driver_lock:
+                    func()
             finally:
-                loop.call_soon_threadsafe(future.set_result, None)
+                loop.call_soon_threadsafe(_set_result)
 
         threading.Thread(target=_wrapper, daemon=True).start()
         try:
