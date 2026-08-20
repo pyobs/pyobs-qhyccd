@@ -6,6 +6,7 @@ Hardware I/O (opening, exposing, reading out) is out of scope here.
 
 import asyncio
 import threading
+import time
 from unittest.mock import AsyncMock
 
 import pytest
@@ -96,7 +97,8 @@ async def test_run_blocking_runs_func_and_returns_true() -> None:
     def fast() -> None:
         ran.append(True)
 
-    assert await QHYCCDCamera._run_blocking(fast) is True
+    camera = QHYCCDCamera()
+    assert await camera._run_blocking(fast) is True
     assert ran == [True]
 
 
@@ -107,9 +109,35 @@ async def test_run_blocking_times_out() -> None:
     def slow() -> None:
         done.wait()
 
-    assert await QHYCCDCamera._run_blocking(slow, timeout=0.01) is False
+    camera = QHYCCDCamera()
+    assert await camera._run_blocking(slow, timeout=0.01) is False
     done.set()
     await asyncio.sleep(0.05)
+
+
+@pytest.mark.asyncio
+async def test_run_blocking_serializes_concurrent_calls() -> None:
+    camera = QHYCCDCamera()
+    active = 0
+    max_active = 0
+    track_lock = threading.Lock()
+
+    def worker() -> None:
+        nonlocal active, max_active
+        with track_lock:
+            active += 1
+            max_active = max(max_active, active)
+        time.sleep(0.05)
+        with track_lock:
+            active -= 1
+
+    await asyncio.gather(
+        camera._run_blocking(worker),
+        camera._run_blocking(worker),
+        camera._run_blocking(worker),
+    )
+
+    assert max_active == 1
 
 
 @pytest.mark.asyncio

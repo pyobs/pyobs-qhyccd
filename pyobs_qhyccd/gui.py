@@ -68,12 +68,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.device.set_bits_mode(16)
 
         self.expose.start_exposure(self.exposure_time.value)
-        abort_event = asyncio.Event()
+        self.abort_exposure.clear()
         self.device.expose_single_frame()
-        await event_wait(abort_event, self.exposure_time.value - 0.5)
+        aborted = await event_wait(self.abort_exposure, self.exposure_time.value - 0.5)
+        self.expose.set_exposures_left()
+        if aborted:
+            # a cancelled exposure must not be read out (see cancel_exposure's docs)
+            self.device.cancel_exposure()
+            return
+
         loop = asyncio.get_running_loop()
         image_data = await loop.run_in_executor(None, self.device.get_single_frame)
-        self.expose.set_exposures_left()
 
         image = fits.PrimaryHDU(image_data)
         self.data_display_widget.set_data(image)
@@ -81,7 +86,10 @@ class MainWindow(QtWidgets.QMainWindow):
     @qasync.asyncSlot()  # type: ignore
     async def _abort_clicked(self) -> None:
         self.abort_exposure.set()
-        self.abort_exposure = asyncio.Event()
+
+    def closeEvent(self, event) -> None:  # type: ignore[override]
+        self.device.close()
+        super().closeEvent(event)
 
 
 async def async_main(app: QtWidgets.QApplication) -> None:

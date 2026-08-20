@@ -28,6 +28,7 @@ from pyobs.interfaces import (
     WindowState,
 )
 from pyobs.modules.camera.basecamera import BaseCamera
+from pyobs.utils.exceptions import AbortedError
 from pyobs.utils.parallel import event_wait
 
 from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
@@ -59,6 +60,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         BaseCamera.__init__(self, **kwargs)
 
         self._driver: QHYCCDDriver | None = None
+        self._driver_lock = threading.Lock()
         self._setpoint = setpoint
         self._window = (0, 0, 0, 0)
         self._binning = (1, 1)
@@ -71,12 +73,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         self.add_background_task(self._update_cooling)
 
-    @staticmethod
-    async def _run_blocking(func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
+    async def _run_blocking(self, func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
         """Run a blocking QHYCCD SDK call in a daemon thread, so a hung call can't freeze the module.
 
         A plain executor isn't used here, since its worker threads are non-daemon and Python joins
         them on interpreter shutdown -- a hung call would then just move the freeze to process exit.
+
+        Every SDK call is serialized behind self._driver_lock, so the helper threads and the 1s
+        cooling poll never touch the driver handle concurrently. On timeout the worker is left
+        running in the background; its result callback is guarded so it can't set_result on an
+        already-cancelled future.
 
         Returns:
             True if func completed within timeout, False if it's still running in the background.
@@ -84,11 +90,16 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         loop = asyncio.get_running_loop()
         future: asyncio.Future[None] = loop.create_future()
 
+        def _set_result() -> None:
+            if not future.done():
+                future.set_result(None)
+
         def _wrapper() -> None:
             try:
-                func()
+                with self._driver_lock:
+                    func()
             finally:
-                loop.call_soon_threadsafe(future.set_result, None)
+                loop.call_soon_threadsafe(_set_result)
 
         threading.Thread(target=_wrapper, daemon=True).start()
         try:
@@ -321,20 +332,28 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         )
         date_obs = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")
         await self._run_blocking_or_raise(driver.expose_single_frame)
-        await self._wait_exposure(abort_event, exposure_time, open_shutter)
-        loop = asyncio.get_running_loop()
-        image_data = await loop.run_in_executor(None, driver.get_single_frame)
+        aborted = await self._wait_exposure(abort_event, exposure_time, open_shutter)
+        if aborted:
+            # a cancelled exposure must not be read out (see cancel_exposure/_abort_exposure)
+            raise AbortedError()
+        image_data = await self._run_blocking_or_raise(driver.get_single_frame)
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
-    async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> None:
-        """Wait for exposure to finish."""
-        await event_wait(abort_event, exposure_time - 0.5)
+    async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> bool:
+        """Wait for exposure to finish.
+
+        Returns:
+            True if the exposure was aborted, False if it ran to completion.
+        """
+        return await event_wait(abort_event, exposure_time - 0.5)
 
     async def _abort_exposure(self) -> None:
         """Abort the running exposure."""
         if self._driver is None:
             raise ValueError("No camera driver.")
-        # self._driver.cancel_exposure()
+        driver = self._driver
+        if not await self._run_blocking(driver.cancel_exposure):
+            log.error("Timed out cancelling QHYCCD exposure after %.1fs.", _SDK_CALL_TIMEOUT)
 
     async def _get_cooling_power(self) -> float:
         if self._driver is None:
