@@ -2272,7 +2272,7 @@ gui = [
 
 [[package]]
 name = "pyobs-qhyccd"
-version = "2.0.0.dev14"
+version = "2.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "astropy" },
