@@ -2228,7 +2228,7 @@ wheels = [
 
 [[package]]
 name = "pyobs-core"
-version = "2.0.0.dev48"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -2258,9 +2258,9 @@ dependencies = [
     { name = "tenacity" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/c6/6f40136101e9cc6c796be02dc794a548a810994c183223a48af88b088e1a/pyobs_core-2.0.0.dev48.tar.gz", hash = "sha256:85171501029852850643c8400ec4b1ef8a4dd406e98c532911e0cab0ee6c43c0", size = 342958, upload-time = "2026-07-27T18:01:51.506Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/35/57654254c92f7264454a527abc317742995189ee7d7a2d9c6c5b32c90fc5/pyobs_core-2.0.0.tar.gz", hash = "sha256:87b77406f907a9fecb4630a45c002e354134e3c8b11a51e436289489bbb18fe6", size = 374158, upload-time = "2026-08-26T11:44:08.181Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/c0/2aec2b4680039e7a5babf7229f8abbe62236ce48b7557aed2cf50134ba3f/pyobs_core-2.0.0.dev48-py3-none-any.whl", hash = "sha256:679740a7c876a5de4632415e93bf591a0aa2cc44a8c644756e3d37da84cc902f", size = 562963, upload-time = "2026-07-27T18:01:49.743Z" },
+    { url = "https://files.pythonhosted.org/packages/35/11/e8af2e0f099a16808ef1f42d398af73bc6c3935501f08a83f6628503e679/pyobs_core-2.0.0-py3-none-any.whl", hash = "sha256:3e97cc12d653978c3d963d41b984702a3169914776ef970d0fa21619d5cb3df6", size = 596861, upload-time = "2026-08-26T11:44:06.642Z" },
 ]
 
 [package.optional-dependencies]
@@ -2272,7 +2272,7 @@ gui = [
 
 [[package]]
 name = "pyobs-qhyccd"
-version = "2.0.0.dev14"
+version = "2.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "astropy" },
@@ -2301,8 +2301,8 @@ dev = [
 requires-dist = [
     { name = "astropy", specifier = ">=7.0.1,<8" },
     { name = "numpy", specifier = ">=2.2.5,<3" },
-    { name = "pyobs-core", specifier = ">=2.0.0.dev48,<3" },
-    { name = "pyobs-core", extras = ["gui"], marker = "extra == 'gui'", specifier = ">=2.0.0.dev48,<3" },
+    { name = "pyobs-core", specifier = ">=2.0.0,<3" },
+    { name = "pyobs-core", extras = ["gui"], marker = "extra == 'gui'", specifier = ">=2.0.0,<3" },
     { name = "qasync", marker = "extra == 'gui'", specifier = ">=0.28.0" },
 ]
 provides-extras = ["gui"]
