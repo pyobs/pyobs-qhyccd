@@ -70,6 +70,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._cooling_wait = cooling_wait
         self._cooling_next: float | None = None
         self._current_temperature: float = 0.0
+        self._gain: float | None = None
+        self._offset: float | None = None
 
         self.add_background_task(self._update_cooling)
 
@@ -191,6 +193,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             )
 
         gain, offset = await self._run_blocking_or_raise(_get_gain_offset)
+        self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
         if self._setpoint is not None:
@@ -296,6 +299,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         image.header["DET-TEMP"] = (self._current_temperature, "CCD temperature [C]")
         image.header["DET-COOL"] = (await self._get_cooling_power(), "Cooler power [percent]")
         image.header["DET-TSET"] = (self._setpoint, "Cooler setpoint [C]")
+        image.header["GAIN"] = (self._gain, "Gain used for exposure")
+        image.header["OFFSET"] = (self._offset, "Offset used for exposure")
         image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
         image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
         image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
@@ -471,6 +476,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             return float(driver.get_param(Control.CONTROL_OFFSET))
 
         offset = await self._run_blocking_or_raise(_set)
+        self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
     async def set_offset(self, offset: float, **kwargs: Any) -> None:
@@ -488,6 +494,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             return float(driver.get_param(Control.CONTROL_GAIN))
 
         gain = await self._run_blocking_or_raise(_set)
+        self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
 
