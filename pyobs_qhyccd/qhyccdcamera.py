@@ -54,9 +54,18 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         params: dict[str, float] | None = None,
         cooling_step: float = 1.0,
         cooling_wait: float = 60.0,
+        default_gain: float = 10,
+        default_offset: float = 140,
         **kwargs: Any,
     ):
-        """Initializes a new QHYCCDCamera."""
+        """Initializes a new QHYCCDCamera.
+
+        Args:
+            default_gain: Gain applied on connect and restored by reset(), if the camera
+                exposes a gain control.
+            default_offset: Offset applied on connect and restored by reset(), if the camera
+                exposes an offset control.
+        """
         BaseCamera.__init__(self, **kwargs)
 
         self._driver: QHYCCDDriver | None = None
@@ -70,6 +79,8 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._cooling_wait = cooling_wait
         self._cooling_next: float | None = None
         self._current_temperature: float = 0.0
+        self._default_gain = default_gain
+        self._default_offset = default_offset
         self._gain: float | None = None
         self._offset: float | None = None
 
@@ -151,10 +162,10 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
                 self._driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
 
             if self._driver.is_control_available(Control.CONTROL_GAIN):
-                self._driver.set_param(Control.CONTROL_GAIN, 10)
+                self._driver.set_param(Control.CONTROL_GAIN, self._default_gain)
 
             if self._driver.is_control_available(Control.CONTROL_OFFSET):
-                self._driver.set_param(Control.CONTROL_OFFSET, 140)
+                self._driver.set_param(Control.CONTROL_OFFSET, self._default_offset)
 
             if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
                 self._driver.set_bits_mode(16)
@@ -196,20 +207,32 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
 
+    async def reset(self, **kwargs: Any) -> None:
+        """Reset gain and offset to their configured defaults."""
+        await BaseCamera.reset(self, **kwargs)
+        await self.set_gain(self._default_gain)
+        await self.set_offset(self._default_offset)
+
+    async def full_reset(self, **kwargs: Any) -> None:
+        """Reset the device completely, including cooling and any custom SDK parameters."""
+        await self.reset(**kwargs)
+
         if self._setpoint is not None:
             await self.set_cooling(True, self._setpoint)
 
         if self._params is not None:
             params = self._params
+            if self._driver is None:
+                raise ValueError("No camera driver.")
+            driver = self._driver
 
             def _set_custom_params() -> None:
-                assert self._driver is not None
                 for key, value in params.items():
                     p = "CONTROL_" + key.upper()
                     if hasattr(Control, p):
                         control_param = getattr(Control, p)
                         log.info("Setting %s to %s.", control_param, value)
-                        self._driver.set_param(control_param, value)
+                        driver.set_param(control_param, value)
 
             await self._run_blocking_or_raise(_set_custom_params)
 

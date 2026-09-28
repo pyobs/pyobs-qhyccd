@@ -23,6 +23,8 @@ def test_constructor_defaults() -> None:
     assert camera._effective_area == (0, 0, 0, 0)
     assert camera._cooling_step == 1.0
     assert camera._cooling_wait == 60.0
+    assert camera._default_gain == 10
+    assert camera._default_offset == 140
     assert camera._driver is None
 
 
@@ -88,6 +90,30 @@ async def test_set_gain_requires_driver() -> None:
     camera = QHYCCDCamera()
     with pytest.raises(ValueError):
         await camera.set_gain(10.0)
+
+
+@pytest.mark.asyncio
+async def test_reset_restores_gain_offset() -> None:
+    camera = QHYCCDCamera(default_gain=20, default_offset=100)
+    camera.set_gain = AsyncMock()  # type: ignore[method-assign]
+    camera.set_offset = AsyncMock()  # type: ignore[method-assign]
+
+    await camera.reset()
+
+    camera.set_gain.assert_awaited_once_with(20)
+    camera.set_offset.assert_awaited_once_with(100)
+
+
+@pytest.mark.asyncio
+async def test_full_reset_restores_cooling() -> None:
+    camera = QHYCCDCamera(setpoint=-15.0)
+    camera.reset = AsyncMock()  # type: ignore[method-assign]
+    camera.set_cooling = AsyncMock()  # type: ignore[method-assign]
+
+    await camera.full_reset()
+
+    camera.reset.assert_awaited_once()
+    camera.set_cooling.assert_awaited_once_with(True, -15.0)
 
 
 @pytest.mark.asyncio
