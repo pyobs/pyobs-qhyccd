@@ -3,9 +3,8 @@ import logging
 import math
 import threading
 import time
-from collections.abc import Callable
 from datetime import UTC, datetime
-from typing import Any, TypeVar, cast
+from typing import Any
 
 import numpy as np
 from pyobs.images import Image
@@ -31,19 +30,13 @@ from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.utils.exceptions import AbortedError
 from pyobs.utils.parallel import event_wait
 
+from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
 from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
 
 log = logging.getLogger(__name__)
 
-_T = TypeVar("_T")
 
-# QHYCCD SDK calls are blocking and are made directly on the event loop thread (see
-# _run_blocking). If the camera has gone unresponsive, they can hang indefinitely, so they're
-# bounded with a timeout rather than let a single dead camera freeze the whole module.
-_SDK_CALL_TIMEOUT = 5.0
-
-
-class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain):
+class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain):
     """A pyobs module for QHYCCD cameras."""
 
     __module__ = "pyobs_qhyccd"
@@ -85,64 +78,6 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
         self._offset: float | None = None
 
         self.add_background_task(self._update_cooling)
-
-    async def _run_blocking(self, func: Callable[[], None], timeout: float = _SDK_CALL_TIMEOUT) -> bool:
-        """Run a blocking QHYCCD SDK call in a daemon thread, so a hung call can't freeze the module.
-
-        A plain executor isn't used here, since its worker threads are non-daemon and Python joins
-        them on interpreter shutdown -- a hung call would then just move the freeze to process exit.
-
-        Every SDK call is serialized behind self._driver_lock, so the helper threads and the 1s
-        cooling poll never touch the driver handle concurrently. On timeout the worker is left
-        running in the background; its result callback is guarded so it can't set_result on an
-        already-cancelled future.
-
-        Returns:
-            True if func completed within timeout, False if it's still running in the background.
-        """
-        loop = asyncio.get_running_loop()
-        future: asyncio.Future[None] = loop.create_future()
-
-        def _set_result() -> None:
-            if not future.done():
-                future.set_result(None)
-
-        def _wrapper() -> None:
-            try:
-                with self._driver_lock:
-                    func()
-            finally:
-                loop.call_soon_threadsafe(_set_result)
-
-        threading.Thread(target=_wrapper, daemon=True).start()
-        try:
-            await asyncio.wait_for(future, timeout=timeout)
-            return True
-        except TimeoutError:
-            return False
-
-    async def _run_blocking_or_raise(self, func: Callable[[], _T], timeout: float = _SDK_CALL_TIMEOUT) -> _T:
-        """Run a blocking QHYCCD SDK call in a thread, returning its result or re-raising what it raised.
-
-        Unlike _run_blocking(), this also carries the callable's return value/exception back to the
-        caller -- several QHYCCD calls here drive control flow via their return value or a raised
-        ValueError (e.g. unsupported color cams), which a bare fire-and-forget thread call would
-        otherwise silently lose.
-        """
-        outcome: list[Any] = []
-
-        def _wrapper() -> None:
-            try:
-                outcome.append(func())
-            except BaseException as e:
-                outcome.append(e)
-
-        if not await self._run_blocking(_wrapper, timeout=timeout):
-            raise TimeoutError(f"Timed out waiting for QHYCCD SDK call after {timeout}s.")
-        value = outcome[0]
-        if isinstance(value, BaseException):
-            raise value
-        return cast(_T, value)
 
     async def open(self) -> None:
         """Open module."""
@@ -261,7 +196,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
 
         if self._driver:
             if not await self._run_blocking(self._driver.close):
-                log.error("Timed out closing QHYCCD camera after %.1fs.", _SDK_CALL_TIMEOUT)
+                log.error("Timed out closing QHYCCD camera after %.1fs.", SDK_CALL_TIMEOUT)
 
     async def set_window(self, left: int, top: int, width: int, height: int, **kwargs: Any) -> None:
         """Set the camera window.
@@ -381,7 +316,7 @@ class QHYCCDCamera(BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling,
             raise ValueError("No camera driver.")
         driver = self._driver
         if not await self._run_blocking(driver.cancel_exposure):
-            log.error("Timed out cancelling QHYCCD exposure after %.1fs.", _SDK_CALL_TIMEOUT)
+            log.error("Timed out cancelling QHYCCD exposure after %.1fs.", SDK_CALL_TIMEOUT)
 
     async def _get_cooling_power(self) -> float:
         if self._driver is None:
