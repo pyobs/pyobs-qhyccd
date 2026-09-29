@@ -6,10 +6,20 @@ install, but device enumeration/opening only happens inside open(), so instantia
 is safe with no QHYCCD hardware attached.
 """
 
-from pyobs.interfaces import IAbortable, IBinning, ICamera, ICooling, IGain, IWindow
+from pyobs.interfaces import (
+    IAbortable,
+    IBinning,
+    ICamera,
+    ICooling,
+    IExposureTime,
+    IGain,
+    IImageFormat,
+    IVideo,
+    IWindow,
+)
 from pyobs.modules import Module
 
-from pyobs_qhyccd import QHYCCDCamera
+from pyobs_qhyccd import QHYCCDCamera, QHYCCDVideo
 
 
 def test_instantiate_camera() -> None:
@@ -21,3 +31,14 @@ def test_instantiate_camera() -> None:
     assert isinstance(camera, ICooling)
     assert isinstance(camera, IGain)
     assert isinstance(camera, IAbortable)
+
+
+def test_instantiate_video() -> None:
+    video = QHYCCDVideo()
+    assert isinstance(video, Module)
+    assert isinstance(video, IVideo)
+    assert isinstance(video, IExposureTime)
+    assert isinstance(video, IWindow)
+    assert isinstance(video, IBinning)
+    assert isinstance(video, IImageFormat)
+    assert isinstance(video, IGain)

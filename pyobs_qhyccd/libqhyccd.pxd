@@ -102,6 +102,10 @@ cdef extern from "qhyccd.h":
     unsigned int GetQHYCCDSingleFrame(qhyccd_handle *handle,unsigned int *w, unsigned int *h,
                                       unsigned int *bpp, unsigned int *channels, unsigned char *imgdata)
     unsigned int CancelQHYCCDExposingAndReadout(qhyccd_handle *handle)
+    unsigned int BeginQHYCCDLive(qhyccd_handle *handle)
+    unsigned int GetQHYCCDLiveFrame(qhyccd_handle *handle, unsigned int *w, unsigned int *h,
+                                    unsigned int *bpp, unsigned int *channels, unsigned char *imgdata)
+    unsigned int StopQHYCCDLive(qhyccd_handle *handle)
     unsigned int GetQHYCCDExposureRemaining(qhyccd_handle *handle)
     unsigned int GetQHYCCDCameraStatus(qhyccd_handle *handle, unsigned char *buf);
     unsigned int ControlQHYCCDTemp(qhyccd_handle *handle, double targettemp);

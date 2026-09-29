@@ -41,10 +41,18 @@ This is an example configuration::
 Available classes
 *****************
 
-There is one single class for QHYCCD cameras.
+:class:`~pyobs_qhyccd.QHYCCDCamera` takes single exposures, :class:`~pyobs_qhyccd.QHYCCDVideo` streams video
+from a QHYCCD camera in live mode, e.g. for acquisition, guiding or focusing. Only one of them can use a camera at a
+time.
 
 QHYCCDCamera
 ============
 .. autoclass:: pyobs_qhyccd.QHYCCDCamera
+   :members:
+   :show-inheritance:
+
+QHYCCDVideo
+===========
+.. autoclass:: pyobs_qhyccd.QHYCCDVideo
    :members:
    :show-inheritance:

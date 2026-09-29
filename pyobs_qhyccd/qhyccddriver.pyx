@@ -125,8 +125,14 @@ cdef class QHYCCDDriver:
         """
         strcpy(self._cam_id, cam_id)
 
-    def open(self):
+    def open(self, live=False):
         """Open driver.
+
+        The stream mode is set before InitQHYCCD, as in the SDK's own samples, so switching between
+        single-frame and live mode means closing and re-opening.
+
+        Args:
+            live: Open in live (video) mode instead of single-frame mode.
 
         Raises:
             ValueError: If opening failed.
@@ -139,13 +145,23 @@ cdef class QHYCCDDriver:
         # open cam
         self._device = OpenQHYCCD(cam_id)
 
-        # does it support single frames?
-        if IsQHYCCDControlAvailable(self._device, CONTROL_ID.CAM_SINGLEFRAMEMODE) != 0:
-            raise ValueError('Camera does not support single frames.')
+        if live:
+            # does it support live mode?
+            if IsQHYCCDControlAvailable(self._device, CONTROL_ID.CAM_LIVEVIDEOMODE) != 0:
+                raise ValueError('Camera does not support live mode.')
 
-        # set single frame mode
-        if SetQHYCCDStreamMode(self._device, 0) != 0:
-            raise ValueError('Could not set single frame mode.')
+            # set live mode
+            if SetQHYCCDStreamMode(self._device, 1) != 0:
+                raise ValueError('Could not set live mode.')
+
+        else:
+            # does it support single frames?
+            if IsQHYCCDControlAvailable(self._device, CONTROL_ID.CAM_SINGLEFRAMEMODE) != 0:
+                raise ValueError('Camera does not support single frames.')
+
+            # set single frame mode
+            if SetQHYCCDStreamMode(self._device, 0) != 0:
+                raise ValueError('Could not set single frame mode.')
 
         # init camera
         if InitQHYCCD(self._device) != 0:
@@ -245,6 +261,41 @@ cdef class QHYCCDDriver:
 
         # return trimmed and reshaped image
         return img[:roiSizeX * roiSizeY].reshape((roiSizeY, roiSizeX))
+
+    def begin_live(self):
+        """Start continuous exposures in live mode.
+
+        Raises:
+            ValueError: If starting failed.
+        """
+        if BeginQHYCCDLive(self._device) != 0:
+            raise ValueError('Could not start live mode.')
+
+    def stop_live(self):
+        """Stop continuous exposures in live mode.
+
+        Raises:
+            ValueError: If stopping failed.
+        """
+        if StopQHYCCDLive(self._device) != 0:
+            raise ValueError('Could not stop live mode.')
+
+    def get_live_frame(self, unsigned char[::1] buffer):
+        """Fetch the next live frame into buffer, if there is one. Doesn't wait for a frame.
+
+        Args:
+            buffer: Buffer of at least get_mem_length() bytes.
+
+        Returns:
+            (width, height, bpp, channels) of the frame now in buffer, or None if no frame was
+            ready (the SDK doesn't tell that apart from other failures).
+        """
+        if buffer.shape[0] < self.get_mem_length():
+            raise ValueError('Buffer too small for live frame.')
+        cdef unsigned int w, h, bpp, channels
+        if GetQHYCCDLiveFrame(self._device, &w, &h, &bpp, &channels, &buffer[0]) != 0:
+            return None
+        return w, h, bpp, channels
 
     def get_time_remaining(self):
         return GetQHYCCDExposureRemaining(self._device)
