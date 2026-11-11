@@ -37,10 +37,12 @@ The *QHYCCDCamera* class is derived from *BaseCamera* (see *pyobs* documentation
         The cooling temperature setpoint in degrees Celsius (default: -10).
     params:
         Optional dictionary of additional QHYCCD control values to set on connect.
-    cooling_step:
-        Maximum change in setpoint per cooling adjustment, in degrees Celsius (default: 1.0).
-    cooling_wait:
-        Time to wait between cooling adjustments, in seconds (default: 60.0).
+    cooling_rate_cool / cooling_rate_warm:
+        Maximum rate in degC/min when lowering / raising the setpoint (default: 1.0 / 1.0). Warming up
+        (raising the setpoint or switching cooling off) is ramped at cooling_rate_warm before the cooler is
+        switched off. None means one step. See *CoolingRampMixin* in *pyobs-core* for the other cooling_* options.
+    cooling_step, cooling_wait:
+        Deprecated. They are converted to cooling_ramp_step and the two rates.
 
 A basic module configuration would look like this:
 

@@ -7,7 +7,7 @@ Hardware I/O (opening, exposing, reading out) is out of scope here.
 import asyncio
 import threading
 import time
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from pyobs.interfaces import IBinning, ICooling, IWindow
@@ -21,8 +21,9 @@ def test_constructor_defaults() -> None:
     assert camera._window == (0, 0, 0, 0)
     assert camera._binning == (1, 1)
     assert camera._effective_area == (0, 0, 0, 0)
-    assert camera._cooling_step == 1.0
-    assert camera._cooling_wait == 60.0
+    assert camera._cooling_ramp.rate_cool == 1.0  # unchanged from the old 1 degC per 60 s
+    assert camera._cooling_ramp.rate_warm == 1.0
+    assert camera._cooling_ramp.step == 1.0
     assert camera._default_gain == 10
     assert camera._default_offset == 140
     assert camera._driver is None
@@ -56,33 +57,79 @@ async def test_set_binning() -> None:
     assert (state.x, state.y) == (2, 3)
 
 
+def test_deprecated_cooling_step_and_wait_map_to_rates() -> None:
+    camera = QHYCCDCamera(cooling_step=2.0, cooling_wait=30.0)
+    assert camera._cooling_ramp.step == 2.0
+    assert camera._cooling_ramp.rate_cool == pytest.approx(4.0)
+    assert camera._cooling_ramp.rate_warm == pytest.approx(4.0)
+
+
 @pytest.mark.asyncio
-async def test_set_cooling_without_driver_publishes_state() -> None:
+async def test_set_cooling_queues_a_ramp_and_keeps_wanted_setpoint() -> None:
     camera = QHYCCDCamera()
     camera.comm.set_state = AsyncMock()  # type: ignore[method-assign]
 
     await camera.set_cooling(True, -15.0)
 
-    # no driver attached, so power can't be read back and is published as None
-    assert camera._setpoint == -15.0
-    assert camera.comm.set_state.await_args is not None
-    interface, state = camera.comm.set_state.await_args.args
-    assert interface is ICooling
-    assert (state.setpoint, state.power, state.enabled) == (-15.0, None, True)
+    assert camera.cooling_ramping
+    assert camera._wanted_setpoint == -15.0
+    assert camera._setpoint == -10  # configured default is not overwritten
 
 
 @pytest.mark.asyncio
-async def test_set_cooling_disabled_publishes_no_setpoint() -> None:
+async def test_set_cooling_hardware_writes_setpoint() -> None:
+    camera = QHYCCDCamera()
+    driver = MagicMock()
+    camera._driver = driver
+
+    await camera._set_cooling_hardware(True, -12.0)
+
+    driver.set_temperature.assert_called_once_with(-12.0)
+    assert camera._cooling_off is False
+
+
+@pytest.mark.asyncio
+async def test_set_cooling_hardware_off_does_not_write_and_publishes_disabled() -> None:
     camera = QHYCCDCamera()
     camera.comm.set_state = AsyncMock()  # type: ignore[method-assign]
+    driver = MagicMock()
+    camera._driver = driver
 
-    await camera.set_cooling(False, -15.0)
+    await camera._set_cooling_hardware(False, None)
+    await camera._publish_cooling(50, cooler_available=True)
 
-    # disabling cooling publishes setpoint=None even though a setpoint was passed in
-    assert camera.comm.set_state.await_args is not None
+    driver.set_temperature.assert_not_called()
     interface, state = camera.comm.set_state.await_args.args
     assert interface is ICooling
-    assert (state.setpoint, state.enabled) == (None, False)
+    assert (state.setpoint, state.power, state.enabled) == (None, 50, False)
+
+
+@pytest.mark.asyncio
+async def test_publish_cooling_reports_commanded_setpoint_and_target() -> None:
+    camera = QHYCCDCamera()
+    camera.comm.set_state = AsyncMock()  # type: ignore[method-assign]
+    camera._cooling_commanded = -8.0
+    await camera.set_cooling(True, -15.0)
+
+    await camera._publish_cooling(40, cooler_available=True)
+
+    interface, state = camera.comm.set_state.await_args.args
+    assert (state.setpoint, state.target, state.ramping, state.enabled) == (-8.0, -15.0, True, True)
+
+
+@pytest.mark.asyncio
+async def test_ramp_starts_from_sensor_temperature_and_steps_down() -> None:
+    camera = QHYCCDCamera()
+    driver = MagicMock()
+    driver.get_param.return_value = 0.0
+    camera._driver = driver
+    camera._current_temperature = 3.0
+    await camera.set_cooling(True, 1.0)
+
+    await camera._cooling_tick()  # enables at the sensor temperature, then steps once
+    await camera._cooling_tick()
+
+    assert [c.args[0] for c in driver.set_temperature.call_args_list] == [3.0, 2.0, 1.0]
 
 
 @pytest.mark.asyncio
