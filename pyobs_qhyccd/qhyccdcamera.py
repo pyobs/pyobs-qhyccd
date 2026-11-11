@@ -2,7 +2,6 @@ import asyncio
 import logging
 import math
 import threading
-import time
 from datetime import UTC, datetime
 from typing import Any
 
@@ -12,7 +11,6 @@ from pyobs.interfaces import (
     Binning,
     BinningCapabilities,
     BinningState,
-    CoolingState,
     GainState,
     IAbortable,
     IBinning,
@@ -26,6 +24,7 @@ from pyobs.interfaces import (
     WindowCapabilities,
     WindowState,
 )
+from pyobs.mixins import CoolingRampMixin
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.utils.exceptions import AbortedError
 from pyobs.utils.parallel import event_wait
@@ -36,7 +35,9 @@ from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
 log = logging.getLogger(__name__)
 
 
-class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain):
+class QHYCCDCamera(
+    CoolingRampMixin, BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAbortable, ICooling, IGain
+):
     """A pyobs module for QHYCCD cameras."""
 
     __module__ = "pyobs_qhyccd"
@@ -45,21 +46,35 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
         self,
         setpoint: float = -10,
         params: dict[str, float] | None = None,
-        cooling_step: float = 1.0,
-        cooling_wait: float = 60.0,
+        cooling_step: float | None = None,
+        cooling_wait: float | None = None,
         default_gain: float = 10,
         default_offset: float = 140,
         **kwargs: Any,
     ):
         """Initializes a new QHYCCDCamera.
 
+        Cooling is ramped by CoolingRampMixin, see its cooling_* options (cooling_rate_warm, cooling_rate_cool,
+        cooling_ramp_step, ...). The cooling rate defaults to 1 degC/min when cooling down, as before.
+
         Args:
+            setpoint: Setpoint in degC that full_reset() cools to.
+            cooling_step: Deprecated, use cooling_ramp_step.
+            cooling_wait: Deprecated, use cooling_rate_warm/cooling_rate_cool (step / wait * 60 degC/min).
             default_gain: Gain applied on connect and restored by reset(), if the camera
                 exposes a gain control.
             default_offset: Offset applied on connect and restored by reset(), if the camera
                 exposes an offset control.
         """
-        BaseCamera.__init__(self, **kwargs)
+        if cooling_step is not None or cooling_wait is not None:
+            step = cooling_step if cooling_step is not None else 1.0
+            wait = cooling_wait if cooling_wait is not None else 60.0
+            log.warning("cooling_step and cooling_wait are deprecated, use cooling_ramp_step and cooling_rate_*.")
+            kwargs.setdefault("cooling_ramp_step", step)
+            kwargs.setdefault("cooling_rate_warm", step / wait * 60.0)
+            kwargs.setdefault("cooling_rate_cool", step / wait * 60.0)
+        kwargs.setdefault("cooling_rate_cool", 1.0)
+        CoolingRampMixin.__init__(self, **kwargs)
 
         self._driver: QHYCCDDriver | None = None
         self._driver_lock = threading.Lock()
@@ -68,9 +83,8 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
         self._binning = (1, 1)
         self._effective_area = (0, 0, 0, 0)
         self._params = params
-        self._cooling_step = cooling_step
-        self._cooling_wait = cooling_wait
-        self._cooling_next: float | None = None
+        self._wanted_setpoint = setpoint
+        self._cooling_off = False
         self._current_temperature: float = 0.0
         self._default_gain = default_gain
         self._default_offset = default_offset
@@ -192,7 +206,7 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
 
     async def close(self) -> None:
         """Close the module."""
-        await BaseCamera.close(self)
+        await super().close()
 
         if self._driver:
             if not await self._run_blocking(self._driver.close):
@@ -256,7 +270,7 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
         image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
         image.header["DET-TEMP"] = (self._current_temperature, "CCD temperature [C]")
         image.header["DET-COOL"] = (await self._get_cooling_power(), "Cooler power [percent]")
-        image.header["DET-TSET"] = (self._setpoint, "Cooler setpoint [C]")
+        image.header["DET-TSET"] = (self._commanded_setpoint(), "Cooler setpoint [C]")
         image.header["GAIN"] = (self._gain, "Gain used for exposure")
         image.header["OFFSET"] = (self._offset, "Offset used for exposure")
         image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
@@ -329,14 +343,41 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
         return await self._run_blocking_or_raise(_get)
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
+        """Enables/disables cooling and sets setpoint, see CoolingRampMixin."""
         if enabled:
-            log.info("Enabling cooling with a set point of %.1f°C.", setpoint)
+            self._wanted_setpoint = setpoint
+        await CoolingRampMixin.set_cooling(self, enabled, setpoint, **kwargs)
+
+    def _commanded_setpoint(self) -> float:
+        """Setpoint last written to the camera, or the configured one if nothing was written yet."""
+        return self._cooling_commanded if self._cooling_commanded is not None else self._setpoint
+
+    async def _set_cooling_hardware(self, enabled: bool, setpoint: float | None) -> None:
+        if self._driver is None:
+            raise ValueError("No camera driver.")
+        driver = self._driver
+
+        self._cooling_off = not enabled
+        if enabled and setpoint is not None:
+            await self._run_blocking_or_raise(lambda: driver.set_temperature(setpoint))
         else:
-            log.info("Disabling cooling.")
-        self._setpoint = setpoint
+            # The wrapper has no verified way to switch the cooler off. The warm-up ramp has already raised the
+            # setpoint, so the cooler is idle by now; only the published state changes.
+            log.info("Cooling disabled, setpoint left at its last value.")
+
+    async def _get_cooling_hardware(self) -> tuple[bool, float | None, int | None]:
+        # the camera cannot report its setpoint, so the ramp starts from the sensor temperature
         power = round(await self._get_cooling_power()) if self._driver is not None else None
+        return not self._cooling_off, None, power
+
+    async def _get_sensor_temperature(self) -> float | None:
+        return self._current_temperature if self._driver is not None else None
+
+    async def _publish_cooling(self, power: int | None, cooler_available: bool) -> None:
+        enabled = cooler_available and not self._cooling_off
         await self.comm.set_state(
-            ICooling, CoolingState(setpoint=setpoint if enabled else None, power=power, enabled=enabled)
+            ICooling,
+            self._cooling_state(power, enabled, self._commanded_setpoint() if enabled else None),
         )
 
     async def _update_cooling(self) -> None:
@@ -345,16 +386,11 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
             raise ValueError("No camera driver.")
         driver = self._driver
 
-        start_time = 0.0
         while True:
             try:
                 await asyncio.sleep(1.0)
 
-                cooling_next = self._cooling_next
-
                 def _poll() -> tuple[float, float, bool, bool]:
-                    if cooling_next is not None:
-                        driver.set_temperature(cooling_next)
                     current_temp = float(driver.get_param(Control.CONTROL_CURTEMP))
                     power_raw = float(driver.get_param(Control.CONTROL_CURPWM))
                     cooler_available = driver.is_control_available(Control.CONTROL_COOLER)
@@ -372,49 +408,18 @@ class QHYCCDCamera(BlockingSdkMixin, BaseCamera, ICamera, IWindow, IBinning, IAb
                     ITemperatures,
                     TemperaturesState(readings=[SensorReading(name="CCD", value=self._current_temperature)]),
                 )
-                power = round(power_raw / 255 * 100)
-                await self.comm.set_state(
-                    ICooling,
-                    CoolingState(
-                        setpoint=self._setpoint,
-                        power=power,
-                        enabled=cooler_available,
-                    ),
-                )
+                await self._publish_cooling(round(power_raw / 255 * 100), cooler_available)
 
-                if pwm_over_250:
-                    self._cooling_next = self._current_temperature + 5.0
+                if pwm_over_250 and not self._cooling_off:
+                    # Park the setpoint above the sensor to stop the cooler, then ramp back to the wanted setpoint.
                     log.warning(
-                        "Cooling power seems to be bugged. Setting temperature to %.2f°. "
+                        "Cooling power seems to be bugged. Setting temperature to %.2f°C. "
                         "Current temperature is %.2f°C.",
-                        self._cooling_next,
+                        self._current_temperature + 5.0,
                         self._current_temperature,
                     )
-
-                if self._cooling_next == self._setpoint:
-                    continue
-
-                if start_time > 0 and time.time() - start_time > self._cooling_wait:
-                    start_time = 0.0
-
-                if start_time == 0.0:
-                    if self._cooling_next is None:
-                        self._cooling_next = self._current_temperature
-
-                    diff = self._setpoint - self._current_temperature
-                    if abs(diff) < abs(self._cooling_step):
-                        self._cooling_next = self._setpoint
-                    else:
-                        sign = np.sign(diff)
-                        self._cooling_next += sign * min(self._cooling_step, abs(diff))
-
-                    log.info(
-                        "Next cooling step: %.2f°C. Current temperature is %.2f°C.",
-                        self._cooling_next,
-                        self._current_temperature,
-                    )
-
-                    start_time = time.time()
+                    await CoolingRampMixin.set_cooling(self, True, self._current_temperature + 5.0, ramp=False)
+                    await CoolingRampMixin.set_cooling(self, True, self._wanted_setpoint)
 
             except Exception:
                 log.exception("Error updating cooling.")
