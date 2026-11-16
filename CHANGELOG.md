@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Entries for releases before this file existed were generated from commit subjects.
 
+## [Unreleased]
+
+- Cooling is ramped by pyobs-core's `CoolingRampMixin` (needs pyobs-core 2.24.0). `set_cooling` returns at once and
+  the setpoint is stepped in the background, also when warming up and when disabling cooling. The published
+  `CoolingState` shows the commanded setpoint and the target. `cooling_step`/`cooling_wait` are deprecated in
+  favour of `cooling_ramp_step` and `cooling_rate_warm`/`cooling_rate_cool`.
+- The setpoint set via `set_cooling` no longer overwrites the configured `setpoint` used by `full_reset()`.
+- `set_cooling(False)` still has no hardware switch-off (the wrapper has none): the setpoint is ramped up and
+  only the published state changes.
+
 ## [2.1.1] - 2026-10-04
 
 - Add MIT LICENSE
