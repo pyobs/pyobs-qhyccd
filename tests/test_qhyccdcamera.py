@@ -38,7 +38,7 @@ async def test_set_window() -> None:
 
     assert camera._window == (10, 20, 100, 200)
     assert camera.comm.set_state.await_args is not None
-    interface, state = camera.comm.set_state.await_args.args
+    interface, state = camera.comm.set_state.await_args.args  # type: ignore[union-attr]
     assert interface is IWindow
     assert (state.x, state.y, state.width, state.height) == (10, 20, 100, 200)
 
@@ -52,7 +52,7 @@ async def test_set_binning() -> None:
 
     assert camera._binning == (2, 3)
     assert camera.comm.set_state.await_args is not None
-    interface, state = camera.comm.set_state.await_args.args
+    interface, state = camera.comm.set_state.await_args.args  # type: ignore[union-attr]
     assert interface is IBinning
     assert (state.x, state.y) == (2, 3)
 
@@ -99,7 +99,7 @@ async def test_set_cooling_hardware_off_does_not_write_and_publishes_disabled() 
     await camera._publish_cooling(50, cooler_available=True)
 
     driver.set_temperature.assert_not_called()
-    interface, state = camera.comm.set_state.await_args.args
+    interface, state = camera.comm.set_state.await_args.args  # type: ignore[union-attr]
     assert interface is ICooling
     assert (state.setpoint, state.power, state.enabled) == (None, 50, False)
 
@@ -113,7 +113,7 @@ async def test_publish_cooling_reports_commanded_setpoint_and_target() -> None:
 
     await camera._publish_cooling(40, cooler_available=True)
 
-    interface, state = camera.comm.set_state.await_args.args
+    interface, state = camera.comm.set_state.await_args.args  # type: ignore[union-attr]
     assert (state.setpoint, state.target, state.ramping, state.enabled) == (-8.0, -15.0, True, True)
 
 
