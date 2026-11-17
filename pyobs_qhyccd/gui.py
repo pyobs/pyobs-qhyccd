@@ -54,6 +54,7 @@ def make_header(
             date_obs=date_obs,
             exposure_time=exposure_time,
             window=window,
+            binning=(1, 1),  # the GUI only offers 1x1
             pixel_size=chip_info[4] / 1000.0,
             gain=param(Control.CONTROL_GAIN),
             offset=param(Control.CONTROL_OFFSET),
