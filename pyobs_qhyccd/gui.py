@@ -1,9 +1,13 @@
 import asyncio
 import sys
+from datetime import UTC, datetime
+from typing import Any
 
 import qasync  # type: ignore
 from astropy.io import fits
+from numpy.typing import NDArray
 from pyobs.utils.enums import ImageFormat
+from pyobs.utils.frameheader import FrameSettings, make_frame_header
 from pyobs.utils.gui.camera import (
     BinningWidget,
     DataDisplayWidget,
@@ -19,6 +23,47 @@ from PySide6 import QtWidgets  # type: ignore[import-untyped]
 from .qhyccddriver import Control, QHYCCDDriver  # type: ignore
 
 
+def make_header(
+    device: QHYCCDDriver,
+    chip_info: tuple[float, ...],
+    date_obs: datetime,
+    exposure_time: float,
+    window: tuple[int, int, int, int],
+    data: NDArray[Any],
+) -> fits.Header:
+    """Builds the FITS header for a frame, reading gain, offset and cooling from the camera (blocking).
+
+    Args:
+        device: Camera to read the current settings from.
+        chip_info: Result of the driver's get_chip_info (pixel size in um at index 4).
+        date_obs: UTC time the exposure was started.
+        exposure_time: Exposure time in seconds.
+        window: Left, top, width and height of the window.
+        data: The frame.
+
+    Returns:
+        The header.
+    """
+
+    def param(control: Control) -> float | None:
+        return float(device.get_param(control)) if device.is_control_available(control) else None
+
+    power = param(Control.CONTROL_CURPWM) if device.is_control_available(Control.CONTROL_COOLER) else None
+    return make_frame_header(
+        FrameSettings(
+            date_obs=date_obs,
+            exposure_time=exposure_time,
+            window=window,
+            pixel_size=chip_info[4] / 1000.0,
+            gain=param(Control.CONTROL_GAIN),
+            offset=param(Control.CONTROL_OFFSET),
+            temperature=param(Control.CONTROL_CURTEMP),
+            cooler_power=None if power is None else round(power / 255 * 100),
+            data=data,
+        )
+    )
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, device_name: bytes) -> None:
         super().__init__()
@@ -26,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.device = QHYCCDDriver(device_name)
         self.device.open()
         chip_info = self.device.get_chip_info()
+        self.chip_info = chip_info
 
         self.central_widget = QtWidgets.QWidget()
         self.setCentralWidget(self.central_widget)
@@ -67,6 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.device.set_bits_mode(16)
 
+        date_obs = datetime.now(UTC)
         self.expose.start_exposure(self.exposure_time.value)
         self.abort_exposure.clear()
         self.device.expose_single_frame()
@@ -80,7 +127,17 @@ class MainWindow(QtWidgets.QMainWindow):
         loop = asyncio.get_running_loop()
         image_data = await loop.run_in_executor(None, self.device.get_single_frame)
 
-        image = fits.PrimaryHDU(image_data)
+        header = await loop.run_in_executor(
+            None,
+            make_header,
+            self.device,
+            self.chip_info,
+            date_obs,
+            self.exposure_time.value,
+            self.window_widget.values,
+            image_data,
+        )
+        image = fits.PrimaryHDU(image_data, header=header)
         self.data_display_widget.set_data(image)
 
     @qasync.asyncSlot()  # type: ignore

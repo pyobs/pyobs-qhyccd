@@ -5,7 +5,6 @@ import threading
 from datetime import UTC, datetime
 from typing import Any
 
-import numpy as np
 from pyobs.images import Image
 from pyobs.interfaces import (
     Binning,
@@ -27,6 +26,7 @@ from pyobs.interfaces import (
 from pyobs.mixins import CoolingRampMixin
 from pyobs.modules.camera.basecamera import BaseCamera
 from pyobs.utils.exceptions import AbortedError
+from pyobs.utils.frameheader import FrameSettings, make_frame_header
 from pyobs.utils.parallel import event_wait
 
 from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
@@ -266,20 +266,22 @@ class QHYCCDCamera(
 
     async def _get_image_with_header(self, image_data: Any, date_obs: str, exposure_time: float) -> Image:
         image = Image(image_data)
-        image.header["DATE-OBS"] = (date_obs, "Date and time of start of exposure")
-        image.header["EXPTIME"] = (exposure_time, "Exposure time [s]")
-        image.header["DET-TEMP"] = (self._current_temperature, "CCD temperature [C]")
-        image.header["DET-COOL"] = (await self._get_cooling_power(), "Cooler power [percent]")
-        image.header["DET-TSET"] = (self._commanded_setpoint(), "Cooler setpoint [C]")
-        image.header["GAIN"] = (self._gain, "Gain used for exposure")
-        image.header["OFFSET"] = (self._offset, "Offset used for exposure")
-        image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
-        image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
-        image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
-        image.header["YORGSUBF"] = (self._window[1], "Subframe origin on Y axis")
-        image.header["DATAMIN"] = (float(np.min(image_data)), "Minimum data value")
-        image.header["DATAMAX"] = (float(np.max(image_data)), "Maximum data value")
-        image.header["DATAMEAN"] = (float(np.mean(image_data)), "Mean data value")
+        image.header.update(
+            make_frame_header(
+                FrameSettings(
+                    date_obs=date_obs,
+                    exposure_time=exposure_time,
+                    binning=self._binning,
+                    window=self._window,
+                    gain=self._gain,
+                    offset=self._offset,
+                    temperature=self._current_temperature,
+                    cooler_power=await self._get_cooling_power(),
+                    setpoint=self._commanded_setpoint(),
+                    data=image_data,
+                )
+            )
+        )
 
         self.set_biassec_trimsec(image.header, *self._effective_area)
         log.info("Readout finished.")
