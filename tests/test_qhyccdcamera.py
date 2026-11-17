@@ -9,6 +9,7 @@ import threading
 import time
 from unittest.mock import AsyncMock, MagicMock
 
+import numpy as np
 import pytest
 from pyobs.interfaces import IBinning, ICooling, IWindow
 
@@ -228,3 +229,21 @@ async def test_run_blocking_or_raise_reraises() -> None:
 
     with pytest.raises(ValueError):
         await camera._run_blocking_or_raise(boom)
+
+
+@pytest.mark.asyncio
+async def test_image_header_has_the_shared_cards() -> None:
+    camera = QHYCCDCamera()
+    camera._window = (0, 0, 4, 2)
+    camera._effective_area = (0, 0, 4, 2)
+    camera._current_temperature = -9.5
+    camera._get_cooling_power = AsyncMock(return_value=50.0)  # type: ignore[method-assign]
+    data = np.array([[1, 2, 3, 4], [5, 6, 7, 8]], dtype=np.uint16)
+
+    image = await camera._get_image_with_header(data, "2026-11-17T10:00:00.000000", 5.0)
+
+    h = image.header
+    assert h["DATE-OBS"] == "2026-11-17T10:00:00.000000" and h["EXPTIME"] == 5.0
+    assert h["DET-TEMP"] == -9.5 and h["DET-COOL"] == 50.0 and "DET-TSET" in h
+    assert h["DET-BIN1"] == 1 and h["XORGSUBF"] == 0
+    assert (h["DATAMIN"], h["DATAMAX"], h["DATAMEAN"]) == (1.0, 8.0, 4.5)

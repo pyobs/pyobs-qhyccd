@@ -26,6 +26,7 @@ from pyobs.interfaces import (
 )
 from pyobs.modules.camera import BaseVideo, Frame
 from pyobs.utils.enums import ImageFormat, ImageType
+from pyobs.utils.frameheader import FrameSettings, make_frame_header
 
 from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
 from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
@@ -343,14 +344,17 @@ class QHYCCDVideo(BlockingSdkMixin, BaseVideo, IExposureTime, IGain, IWindow, IB
 
     async def _finish_image(self, image: Image, broadcast: bool, image_type: ImageType) -> tuple[Image, str]:
         """Add settings headers, then finish up as usual."""
-        image.header["XBINNING"] = image.header["DET-BIN1"] = (self._binning[0], "Binning factor used on X axis")
-        image.header["YBINNING"] = image.header["DET-BIN2"] = (self._binning[1], "Binning factor used on Y axis")
-        image.header["XORGSUBF"] = (self._window[0], "Subframe origin on X axis")
-        image.header["YORGSUBF"] = (self._window[1], "Subframe origin on Y axis")
-        image.header["GAIN"] = (self._gain, "Gain used for exposure")
-        image.header["OFFSET"] = (self._offset, "Offset used for exposure")
-        if self._pixel_size is not None:
-            image.header["DET-PIXL"] = (self._pixel_size, "Size of detector pixels [mm]")
+        image.header.update(
+            make_frame_header(
+                FrameSettings(
+                    binning=self._binning,
+                    window=self._window,
+                    pixel_size=self._pixel_size,
+                    gain=self._gain,
+                    offset=self._offset,
+                )
+            )
+        )
         return await super()._finish_image(image, broadcast, image_type)
 
     async def _set(self, update: Callable[[], None]) -> None:
