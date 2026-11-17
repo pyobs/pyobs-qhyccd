@@ -1,0 +1,103 @@
+{
+ "info": {
+  "Name": "QHY294PROM",
+  "ID": "QHY294PROM-cfb85516525f0aced",
+  "ChipWidthMM": 19.50156,
+  "ChipHeightMM": 13.1955,
+  "PixelWidthUM": 2.081e-320,
+  "PixelHeightUM": 1.408e-320,
+  "ImageWidth": 3092376453,
+  "ImageHeight": 3092376453,
+  "ReadMode": {
+   "index": 0,
+   "name": "11M MODE",
+   "width": 4164,
+   "height": 2822
+  },
+  "ReadModes": [
+   {
+    "index": 0,
+    "name": "11M MODE",
+    "width": 4164,
+    "height": 2822
+   },
+   {
+    "index": 1,
+    "name": "47M MODE",
+    "width": 8336,
+    "height": 5648
+   }
+  ],
+  "SupportedBins": [
+   1,
+   2,
+   4
+  ],
+  "EffectiveArea": [
+   36,
+   28,
+   4164,
+   2795
+  ],
+  "OverscanArea": [
+   36,
+   10,
+   4164,
+   10
+  ]
+ },
+ "serial": "cfb85516525f0aced",
+ "sdk": "/usr/local/lib/libqhyccd.so",
+ "controls": {
+  "Gain": {
+   "available": true,
+   "min": 0.0,
+   "max": 3624.0,
+   "step": 1.0,
+   "result": 0
+  },
+  "Offset": {
+   "available": true,
+   "min": 0.0,
+   "max": 200.0,
+   "step": 1.0,
+   "result": 0
+  },
+  "Exposure": {
+   "available": true,
+   "min": 1.0,
+   "max": 3600000000.0,
+   "step": 1.0,
+   "result": 0
+  },
+  "USBTraffic": {
+   "available": true,
+   "min": 0.0,
+   "max": 255.0,
+   "step": 1.0,
+   "result": 0
+  },
+  "Speed": {
+   "available": false,
+   "min": 0.0,
+   "max": 1.0,
+   "step": 1.0,
+   "result": 0
+  },
+  "TransferBit": {
+   "available": true,
+   "min": 8.0,
+   "max": 16.0,
+   "step": 8.0,
+   "result": 0
+  },
+  "ManualPWM": {
+   "available": true,
+   "min": 0.0,
+   "max": 255.0,
+   "step": 1.0,
+   "result": 0
+  }
+ },
+ "usb_traffic": 60
+}

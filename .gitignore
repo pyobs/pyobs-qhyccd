@@ -1,0 +1,3 @@
+# characterization: cutouts and logs are not kept, data, images and READMEs are
+characterization/**/frames/
+characterization/**/*.log
