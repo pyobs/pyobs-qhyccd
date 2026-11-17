@@ -9,10 +9,15 @@ Entries for releases before this file existed were generated from commit subject
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-11-17
+
 - The GUI writes a FITS header into the frames it saves (it was empty). `QHYCCDCamera`, `QHYCCDVideo` and the GUI build
   the header cards with `make_frame_header` from pyobs-core, so key names and comments are the same everywhere. Needs
   pyobs-core 2.28.0.
 - Closing the camera warms up first (pyobs-core `CoolingRampMixin`). The time limit `cooling_close_timeout` is now estimated from the current setpoint and `cooling_rate_warm` instead of a fixed 300 s, so a deeply cooled camera is warmed up completely before it is closed. Needs pyobs-core 2.28.0.
+
+## [2.2.0] - 2026-11-16
+
 - Cooling is ramped by pyobs-core's `CoolingRampMixin` (needs pyobs-core 2.24.0). `set_cooling` returns at once and
   the setpoint is stepped in the background, also when warming up and when disabling cooling. The published
   `CoolingState` shows the commanded setpoint and the target. `cooling_step`/`cooling_wait` are deprecated in
@@ -20,6 +25,14 @@ Entries for releases before this file existed were generated from commit subject
 - The setpoint set via `set_cooling` no longer overwrites the configured `setpoint` used by `full_reset()`.
 - `set_cooling(False)` still has no hardware switch-off (the wrapper has none): the setpoint is ramped up and
   only the published state changes.
+
+## [2.1.3] - 2026-10-04
+
+- Put the email on the copyright line of `LICENSE`, so that GitHub detects the MIT license.
+
+## [2.1.2] - 2026-10-04
+
+- Added `CONTRIBUTING.md` and this changelog, and the readme and project URLs to the package metadata.
 
 ## [2.1.1] - 2026-10-04
 
