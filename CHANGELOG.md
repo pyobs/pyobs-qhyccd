@@ -9,6 +9,7 @@ Entries for releases before this file existed were generated from commit subject
 
 ## [Unreleased]
 
+- Closing the camera warms up first (pyobs-core `CoolingRampMixin`). The time limit `cooling_close_timeout` is now estimated from the current setpoint and `cooling_rate_warm` instead of a fixed 300 s, so a deeply cooled camera is warmed up completely before it is closed. Needs pyobs-core 2.28.0.
 - Cooling is ramped by pyobs-core's `CoolingRampMixin` (needs pyobs-core 2.24.0). `set_cooling` returns at once and
   the setpoint is stepped in the background, also when warming up and when disabling cooling. The published
   `CoolingState` shows the commanded setpoint and the target. `cooling_step`/`cooling_wait` are deprecated in
