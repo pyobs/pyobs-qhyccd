@@ -46,9 +46,9 @@ cooling numbers):
   it faster. USB traffic 60 costs nothing measurable here.
 - Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and at most about
   0.003 to 0.004 ADU/s below -5 °C (see the unit report).
-- Cooling target: about 10 °C below ambient is easy (55% drive level); the cooler reaches about 37 °C below ambient at
+- Cooling target: about 10 °C below ambient is easy (55% drive level); the cooler reaches about 33 °C below ambient at
   full drive and gains less than 1 °C per 20 PWM above 170, so do not plan for more than about -10 to -12 °C in a room at
-  20 to 25 °C.
+  about 20 °C.
 
 ## Cooling
 
@@ -75,7 +75,7 @@ seen the same behaviour on two different QHY cameras. On this unit the collapse 
 a bigger supply, so a supply that is too small may explain at least part of what the workaround covers. Not tested on the
 other cameras.
 
-**Reach.** With the 5 A supply at ambient 24.5 °C the camera reached -12.8 °C at PWM 240; PWM 200 gave -11.5 °C and PWM
+**Reach.** With the 5 A supply at an ambient of about 20 °C the camera reached -12.8 °C at PWM 240; PWM 200 gave -11.5 °C and PWM
 170 gave -9.8 °C.
 
 **Characterization script.** `tools/characterize.py` drives the cooler with a PI controller on the PWM (1 Hz, gains

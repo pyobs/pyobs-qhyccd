@@ -66,3 +66,10 @@
 {"time": 1795003879.3560798, "label": "ramp", "temp": 1.0, "power": 24, "target": 1}
 {"time": 1795003939.3613048, "label": "ramp", "temp": 2.0, "power": 22, "target": 2}
 {"time": 1795003999.3666859, "label": "ramp", "temp": 3.0, "power": 20, "target": 3}
+{"time": 1795004059.372697, "label": "ramp", "temp": 4.1, "power": 19, "target": 4}
+{"time": 1795004119.3790045, "label": "ramp", "temp": 5.1, "power": 17, "target": 5}
+{"time": 1795004179.3855782, "label": "ramp", "temp": 6.1, "power": 16, "target": 6}
+{"time": 1795004239.3916905, "label": "ramp", "temp": 7.1, "power": 14, "target": 7}
+{"time": 1795004299.397407, "label": "ramp", "temp": 8.1, "power": 12, "target": 8}
+{"time": 1795004359.4043655, "label": "ramp", "temp": 9.1, "power": 11, "target": 9}
+{"time": 1795004419.4101772, "label": "ramp", "temp": 10.1, "power": 9, "target": 10}

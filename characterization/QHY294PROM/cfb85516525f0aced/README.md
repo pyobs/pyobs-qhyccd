@@ -18,7 +18,7 @@ checked separately) or **from the SDK**. All numbers are for this unit.
   close to what the method can resolve. There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
 - **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
-  5 A supply it ran at full drive without trouble and reached -12.8 °C at 24.5 °C ambient (measured), which is about
+  5 A supply it ran at full drive without trouble and reached -12.8 °C at an ambient of about 20 °C (measured), which is about
   the limit of the cooler. The cause was probably the supply (inferred).
 - **Not measured:** gain in e-/ADU, full well, linearity, short exposures, read mode 1.
 
@@ -35,7 +35,9 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 ## Bias and read noise (measured)
 
 Pairs of bias frames (shortest exposure) at 21 °C, noise from the difference of each pair divided by the square root
-of 2. Data: [bias.csv](bias.csv), plot: [images/bias.png](images/bias.png).
+of 2. Data: [bias.csv](bias.csv).
+
+![Bias noise and level vs. gain and offset](images/bias.png)
 
 | Gain | Noise [ADU] | Clipped at offset 0 |
 |---|---|---|
@@ -102,6 +104,14 @@ subtracted. The pair is taken before the darks. Two series exist:
 
 The supply does not change the dark current at the temperatures where both worked (compare the rows below).
 
+5 A supply (read noise, dark current and hot pixel fraction vs. temperature):
+
+![Temperature series, 5 A supply](images/temperature.png)
+
+1.5 A supply:
+
+![Temperature series, 1.5 A supply](images/temperature_1p5A_supply.png)
+
 | Setpoint [°C] | Supply | Sensor [°C] | Drive level | Dark 60 s [ADU/s] | Dark 300 s [ADU/s] | Bias noise [ADU] |
 |---|---|---|---|---|---|---|
 | 10 | 1.5 A | 10.0 | 10% | 0.045 | 0.043 | 7.02 |
@@ -140,8 +150,12 @@ and then to ambient, with the PWM at 94%. On 18 November a sweep of fixed PWM le
 the 1.5 A supply, and no collapse with a 5 A supply.
 
 Fixed PWM, ascending levels, each held for up to 10 min or until the sensor moved less than 0.1 °C in 3 min. Data:
-[cooling_1p5A_supply.jsonl](cooling_1p5A_supply.jsonl) and [cooling.jsonl](cooling.jsonl) (5 A). Ambient 23.3 °C (1.5 A)
-and 24.5 °C (5 A), lens capped, no exposures.
+[cooling_1p5A_supply.jsonl](cooling_1p5A_supply.jsonl) and [cooling.jsonl](cooling.jsonl) (5 A). The idle sensor settles at 20.3 °C, which is taken as the ambient temperature. The sweeps started with the
+sensor at 19.1 °C (1.5 A) and 24.5 °C (5 A), lens capped, no exposures.
+
+![Fixed PWM sweeps, sensor temperature and PWM vs. time](images/cooling.png)
+
+Top: 5 A supply. Bottom: 1.5 A supply, interrupted by hand at 39 min.
 
 | PWM | Drive level | 1.5 A supply, lowest [°C] | 5 A supply, lowest [°C] |
 |---|---|---|---|
@@ -152,7 +166,7 @@ and 24.5 °C (5 A), lens capped, no exposures.
 | 220 | 86% | not run | -12.3 |
 | 240 | 94% | not run | -12.8 |
 
-- With the 1.5 A supply the sensor warmed above ambient (23 °C) at PWM 200 and kept the PWM reading of 200. With no
+- With the 1.5 A supply the sensor warmed above ambient (20 °C) at PWM 200 and kept the PWM reading of 200. With no
   supply connected at all (unplugged by mistake on 18 November) the sensor also warmed (23.3 to 24.7 °C in 150 s at
   PWM 100, measured), so the electronics alone heat it. The cooler had probably lost its power, not just been overloaded
   (inferred).
@@ -162,7 +176,7 @@ and 24.5 °C (5 A), lens capped, no exposures.
 - The 5 A supply is a different unit (voltage and polarity checked with a multimeter before connecting). The 1.5 A
   supply had a rating of 1.5 A; the current of the camera at full drive was not measured, and the rated current of the
   camera was not looked up.
-- Full drive reaches only 37 °C below ambient (-12.8 °C at 24.5 °C ambient). Each step of 20 PWM above 170 gains less
+- Full drive reaches only about 33 °C below ambient (-12.8 °C at about 20 °C ambient). Each step of 20 PWM above 170 gains less
   than 1 °C, so the cooler is near its limit (heat sink and fan, or the TEC itself). -15 °C needs a colder room or
   better heat removal (inferred).
 - The qhyccd driver's workaround for "PWM above 250" (see the [model notes](../README.md#cooling)) was not tested
@@ -182,7 +196,7 @@ temperature of the level. The 1.5 A run in `cooling_1p5A_supply.jsonl` ends with
 - **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
   short exposures.
 - **Bin 4 readout** at a low offset, and the whole characterization in **read mode 1** (47M, `--read-mode 1`).
-- **Temperature below -13 °C:** not reachable at 20 to 25 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
+- **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current below -5 °C** with longer darks (900 s or more), to settle the 60 s versus 300 s difference described
   under [Dark current](#dark-current-and-temperature-measured).
 - **The SDK's own cooling control** (`ControlQHYCCDTemp`, `CONTROL_COOLER`) on the 5 A supply. All measurements here

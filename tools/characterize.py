@@ -1111,6 +1111,25 @@ def make_report(out: Output) -> None:
         fig.tight_layout()
         save(fig, "temperature.png")
 
+    cooling_sets = [(n, out.read(n)) for n in sorted(f.stem for f in out.folder.glob("cooling*.jsonl"))]
+    cooling_sets = [(n, [r for r in rows if "temp" in r and "pwm_set" in r]) for n, rows in cooling_sets]
+    cooling_sets = [(n, rows) for n, rows in cooling_sets if rows]
+    if cooling_sets:
+        fig, axs = plt.subplots(len(cooling_sets), 1, figsize=(10, 3.5 * len(cooling_sets)), squeeze=False)
+        for ax, (name, rows) in zip(axs[:, 0], cooling_sets):
+            t0 = rows[0]["time"]
+            minutes = [(r["time"] - t0) / 60 for r in rows]
+            ax.plot(minutes, [r["temp"] for r in rows], "-", color="C0")
+            ax.set_ylabel("sensor temperature [degC]", color="C0")
+            ax.set_xlabel("time [min]")
+            ax.set_title(name)
+            ax.grid(alpha=0.3)
+            ax2 = ax.twinx()
+            ax2.step(minutes, [r["pwm_set"] for r in rows], where="post", color="C1")
+            ax2.set_ylabel("PWM set", color="C1")
+        fig.tight_layout()
+        save(fig, "cooling.png")
+
     if short:
         rows = [r for r in short if r["exposure"] >= SHORT_FIT_MIN_S]
         t = np.array([r["exposure"] for r in short])
