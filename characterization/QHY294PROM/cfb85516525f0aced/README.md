@@ -15,8 +15,8 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Bias noise** is 7.2 ADU at gain 10 and offset 140 (measured). It grows to 8.4 ADU at gain 400 and 10.5 ADU at gain
   800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. Gain in e-/ADU and read noise in e- are not
   measured yet.
-- **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. Below -5 °C it is at most 0.003 to 0.004 ADU/s,
-  close to what the method can resolve. There is no sign of amp glow in the mean (mean only; no images checked by eye).
+- **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. At -10 °C it is about 0.0037 ADU/s (300 s and
+  900 s darks), and at -5 °C about 0.006 ADU/s (measured). There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
 - **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
   5 A supply it ran at full drive without trouble and reached -12.8 °C at an ambient of about 20 °C (measured), which is about
@@ -220,19 +220,44 @@ The supply does not change the dark current at the temperatures where both worke
   a 300 s dark collects about 1 ADU per pixel, and the median pixel shows 0.000 ADU/s everywhere, so the mean comes
   from a small share of pixels (hot fraction 1e-4 to 3e-4, defined as 20 sigma above the median). Treat 0.003 to
   0.004 ADU/s as an upper bound (inferred).
-- The 60 s darks give lower rates than the 300 s darks at -10 and -12 °C, on both supplies, so the supply is not the
-  reason. A line through both exposure times gives a rate of about 0.004 ADU/s and an offset of -0.09 ADU at -10 °C and
-  0.0035 ADU/s and -0.15 ADU at -12 °C (5 A data), and no offset at -5 °C. An offset of 0.1 ADU between the bias pair and
-  the dark frames would explain it, and would hide the real rate in the 60 s darks (inferred, not checked). Longer
-  darks (900 s or more) at one or two temperatures would settle it.
+- **Longer darks (5 A supply, -10 °C, 60 / 300 / 900 s):** 0.0052 / 0.0039 / 0.0036 ADU/s at -10.7 / -11.1 / -10.7 °C,
+  bias noise 6.77 ADU, hot fraction 1e-4 / 3e-4 / 5e-4, dark noise 6.77 / 6.97 / 7.75 ADU. The 300 s and 900 s values
+  agree, and the three 300 s or longer darks at -10 °C (0.0038, 0.0039, 0.0036) are within 10%. So the dark current at
+  -10 °C is about 0.0037 ADU/s (measured). The 60 s values scatter between 0.0026 and 0.0052 ADU/s in different runs;
+  a 60 s dark collects only 0.2 ADU per pixel, so single 60 s pairs are not reliable at this level. My earlier idea of an
+  offset of 0.1 ADU between the bias pair and the dark frames is not supported: this run has the 60 s value above the
+  300 s one.
+- The dark noise grows with exposure time (6.77, 6.97, 7.75 ADU) as the dark signal adds shot noise and hot pixels
+  appear. If it were shot noise only, the excess variance per mean dark signal would give a gain of roughly 0.2 to
+  0.4 e-/ADU at gain 10, but the hot pixels add to the mean in a non-Poissonian way, so this is a rough hint at most
+  (inferred, not a measurement).
 - The bias noise falls from 7.02 ADU at 10 °C to 6.74 ADU at -12 °C. The noise of the 300 s darks is 7.1 ADU, against
   6.8 ADU for the 60 s darks (5 A data, -5 to -12 °C).
 - The sensor ran 0.7 to 1.7 °C below the setpoint during the -5 °C darks on the 5 A supply (PI controller overshoot),
   so that point is not at -5.0 °C.
 
-### Read mode 1 (47M mode): pending
+### Read mode 1 (47M mode)
 
-The temperature series in read mode 1 has not finished yet.
+Same procedure as above (5 A supply, PI controller, gain 10, offset 140, 60 s and 300 s darks, ambient 20 °C). Data:
+[temperature.csv](../cfb85516525f0aced_mode1/temperature.csv), cooling log
+[templog.csv](../cfb85516525f0aced_mode1/templog.csv), plot
+[images/temperature.png](../cfb85516525f0aced_mode1/images/temperature.png).
+
+![Temperature series, read mode 1](../cfb85516525f0aced_mode1/images/temperature.png)
+
+| Setpoint [°C] | Sensor [°C] | Drive level | Dark 60 s [ADU/s] | Dark 300 s [ADU/s] | Bias noise [ADU] |
+|---|---|---|---|---|---|
+| -5 | -5.6 / -6.5 | 44% / 38% | 0.0172 | 0.0082 | 22.26 |
+| -10 | -10.1 / -10.1 | 59% | 0.0021 | 0.0036 | 22.02 |
+
+- At -10 °C the dark current per pixel is 0.0036 ADU/s (300 s), the same as in read mode 0 (0.0037 ADU/s from 300 s and
+  900 s darks). The 60 s value is lower at -10 °C and much higher at -5 °C (0.0172, against 0.0065 in mode 0), so the 60 s
+  pairs scatter by more than the 300 s darks, as in mode 0 (the hot fraction is also lower at 60 s).
+- At -5 °C the 300 s dark gives 0.0082 ADU/s, a little above mode 0 (0.0064). The sensor was 1 °C colder during the 300 s
+  dark than the setpoint, so the temperatures are not exactly the same. Two points are too few for an activation energy.
+- Whether the dark current per electron differs between the modes cannot be said before the gain (e-/ADU) of mode 1 is
+  measured. In ADU/s per pixel at gain 10 it is the same.
+- The bias noise falls from 22.26 to 22.02 ADU between -5 and -10 °C (6.83 to 6.77 ADU in mode 0).
 
 ## Cooling and the power supply
 
@@ -295,8 +320,12 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
 |---|---|
 | `CONTROL_COOLER`, ramp | **Inconclusive.** The run started at 17.4 °C and stopped after 60 s because the script flagged a collapse: the sensor had dropped to 14.2 °C in 15 s (PWM 31 read once), the camera then set the PWM to 0 and the sensor warmed to 16.7 °C, towards the target of 17 °C. That is what a regulator does when the sensor is below the target, so the collapse flag was wrong (the check did not compare with the target). Fixed in the script; to be repeated. |
 | `ControlQHYCCDTemp`, jump to -10 °C | Sensor went from 17.4 °C to -11.6 °C in 4.5 min while the SDK drove the PWM at 217 to 255 (85% to 100%). It overshot to -11.6 °C and rose to -10.6 °C, so the script flagged a collapse and stopped at 5 min. That was wrong: the sensor was still below the target (the check at that time looked only at the rise from the lowest value). **Inconclusive for the hold, but at PWM 255 the cooler kept cooling for at least 2 minutes (inferred from -8.9 to -11.6 °C at 255 and 233).** To be repeated with the fixed check. |
+| `CONTROL_COOLER`, jump to -10 °C | **Worked.** The camera regulated by itself: the sensor went from 17.4 °C to -11.5 °C in 4.5 min at PWM 225 to 255 (100% for about 2 min), overshot by 1.5 °C, settled at -10.1 °C after 7 min and held it for 15 min. The PWM fell slowly from 195 to 183 (72%) during the hold. No collapse. |
 | `ControlQHYCCDTemp`, ramp | Reached -10 °C after 31 min and held -10.0 °C for 15 min (lowest -10.3 °C). PWM rose from 5 at 19 °C to 159 at the end of the ramp and settled at 171 to 179 (67% to 70%). No collapse. |
 
+- `CONTROL_COOLER` regulates by itself, so it needs no call per second and is the simpler choice for the driver (inferred
+  from one run). In the jump runs the PWM stayed at 255 for about 2 min while the sensor cooled from 0 to -11 °C and
+  nothing stopped: with the 5 A supply the supposed wrap above 250 did not appear (inferred, only these runs).
 - On the ramp the SDK followed the target within about 1 °C (sensor 0.8 to 1 °C above the target while ramping). The PWM
   was never close to 250. The reading of 255 in the first sample of each run is the unset `CONTROL_CURPWM` (it reads
   garbage until the first PWM is set), not a drive level.
@@ -312,8 +341,7 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
   short exposures.
 - **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
-- **Dark current below -5 °C** with longer darks (900 s or more), to settle the 60 s versus 300 s difference described
-  under [Dark current](#dark-current-and-temperature-measured).
+- **Dark current** with 900 s darks at 0 and -5 °C and at -12 °C (only -10 °C was done).
 - **The SDK's own cooling control** (`ControlQHYCCDTemp`, `CONTROL_COOLER`) on the 5 A supply. All measurements here
   used the PI controller on the manual PWM, so the driver's park-and-retry workaround is not yet judged.
 

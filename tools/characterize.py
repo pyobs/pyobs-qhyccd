@@ -25,6 +25,10 @@ Steps (all on a central 2048x2048 window of the effective area, USB traffic as s
   ``ControlQHYCCDTemp`` once per second, ``--sdk-mode cooler`` sets ``CONTROL_COOLER`` once. The target
   (``--cool-target``) is reached in steps of 1 degC/min or, with ``--jump``, in one step. Logs the PWM the SDK chooses
   to ``sdkcool.jsonl`` and stops on a collapse (sensor 1 degC above its lowest value).
+* ``driver``: the cooling procedure of the pyobs-qhyccd module (``QHYCCDCamera``) on the real camera: opens the
+  module, ``set_cooling`` to ``--cool-target`` (the module ramps), holds ``--hold`` s, reads the setpoint and power
+  back, switches cooling off and checks PWM 0. ``--sdk-mode`` chooses ``cooling_control`` (cooler/temp),
+  ``--wrap-workaround`` the PWM > 250 workaround. Log: ``driver.jsonl``, the checks are in its last record.
 * ``flat``: photon transfer curve from pairs of frames of a steady, roughly uniform light source (e.g. a wall): gain in
   e-/ADU, read noise in e-, saturation and linearity. The bias level comes from the fit of level vs. exposure time.
 * ``short``: signal vs. exposure times from the minimum up to 100 ms with a steady light source, to find an offset in
@@ -830,6 +834,145 @@ def run_sdkcool(
         sweep_warm_up(cam, out, ambient, log="sdkcool")
 
 
+def run_driver(
+    cooling_control: str, wrap: bool, target: int, hold_s: float, ambient: float, out_root: Path, folder: Path | None
+) -> None:
+    """Test the cooling procedure of the pyobs-qhyccd module (QHYCCDCamera), not the SDK through ctypes.
+
+    Opens the module like pyobs does, switches cooling on with ``set_cooling`` (the module ramps the setpoint), holds
+    ``hold_s`` seconds, reads the setpoint and power back through the module, switches cooling off (ramp up, PWM 0)
+    and checks the result. Everything is logged to ``driver.jsonl``; the checks are in the last record.
+    """
+    import asyncio
+
+    from pyobs_qhyccd.qhyccddriver import Control, QHYCCDDriver  # type: ignore[import-untyped]
+
+    from pyobs_qhyccd import QHYCCDCamera  # type: ignore[import-untyped]
+
+    devices = QHYCCDDriver.list_devices()
+    if not devices:
+        raise SystemExit("No camera found.")
+    cam_id = devices[0].decode() if isinstance(devices[0], bytes) else str(devices[0])
+    model, _, serial = cam_id.partition("-")
+    out = Output(folder or Path(out_root) / model / serial)
+    run = f"driver_{cooling_control}_{'wrap_' if wrap else ''}{target}"
+    published: dict[str, Any] = {}
+
+    async def set_state(interface: Any, state: Any, *args: Any, **kwargs: Any) -> None:
+        published[interface.__name__] = state
+
+    async def main_async() -> None:
+        camera = QHYCCDCamera(cooling_control=cooling_control, pwm_wrap_workaround=wrap)
+        camera.comm.set_state = set_state  # type: ignore[method-assign]
+        checks: dict[str, Any] = {"run": run}
+        start = time.time()
+
+        async def sample(label: str) -> dict[str, Any]:
+            driver = camera._driver
+            hw_enabled, hw_setpoint, hw_power = await camera._get_cooling_hardware()
+            state = published.get("ICooling")
+            record = {
+                "time": time.time(),
+                "run": run,
+                "label": label,
+                "temp": camera._current_temperature,
+                "pwm_read": float(driver.get_param(Control.CONTROL_CURPWM)),
+                "pwm_set": float(driver.get_param(Control.CONTROL_CURPWM)),
+                "cooler_param": float(driver.get_param(Control.CONTROL_COOLER)),
+                "commanded": camera._cooling_commanded,
+                "ramping": camera.cooling_ramping,
+                "hw_enabled": hw_enabled,
+                "hw_setpoint": hw_setpoint,
+                "hw_power": hw_power,
+                "state_setpoint": getattr(state, "setpoint", None),
+                "state_power": getattr(state, "power", None),
+                "state_enabled": getattr(state, "enabled", None),
+                "state_target": getattr(state, "target", None),
+            }
+            out.write("driver", record)
+            return record
+
+        await camera.open()
+        try:
+            await asyncio.sleep(8)  # the cooling task starts after 5 s
+            first = await sample("open")
+            checks["idle_after_open"] = {
+                "hw": [first["hw_enabled"], first["hw_setpoint"], first["hw_power"]],
+                "pwm_read": first["pwm_read"],
+                "ok": first["hw_setpoint"] is None and first["pwm_read"] == 0.0,
+            }
+            lowest = camera._current_temperature
+            await camera.set_cooling(True, target)
+            hold_start: float | None = None
+            outcome = "time"
+            last = time.time()
+            while True:
+                await asyncio.sleep(1.0)
+                if time.time() - last < POLL_S:
+                    continue
+                last = time.time()
+                rec = await sample("cool")
+                lowest = min(lowest, rec["temp"])
+                print(
+                    f"  {run}: T={rec['temp']:.1f} commanded={rec['commanded']} pwm={rec['pwm_read']:.0f} "
+                    f"hw setpoint={rec['hw_setpoint']} ramping={rec['ramping']}",
+                    flush=True,
+                )
+                if not rec["ramping"] and hold_start is None:
+                    hold_start = time.time()
+                commanded = rec["commanded"] if rec["commanded"] is not None else target
+                if (
+                    time.time() - start > 120
+                    and rec["temp"] - lowest >= SWEEP_COLLAPSE_C
+                    and (rec["temp"] - commanded >= SWEEP_COLLAPSE_C)
+                ):
+                    outcome = "collapse"
+                    break
+                if hold_start is not None and time.time() - hold_start >= hold_s:
+                    break
+            rec = await sample("hold_end")
+            checks["cooling"] = {
+                "outcome": outcome,
+                "end_temp": rec["temp"],
+                "reached_target": abs(rec["temp"] - target) <= 1.0,
+                "readback_setpoint": rec["hw_setpoint"],
+                "readback_ok": rec["hw_setpoint"] is not None and abs(rec["hw_setpoint"] - target) <= 0.5,
+                "power": rec["hw_power"],
+                "state_power": rec["state_power"],
+                "state_enabled": rec["state_enabled"],
+            }
+            print(f"  cooling: {checks['cooling']}", flush=True)
+
+            await camera.set_cooling(False, target)
+            warm_start = time.time()
+            last = 0.0
+            while time.time() - warm_start < 3000:
+                await asyncio.sleep(1.0)
+                if time.time() - last < POLL_S:
+                    continue
+                last = time.time()
+                rec = await sample("warm")
+                print(f"  {run}: warming T={rec['temp']:.1f} pwm={rec['pwm_read']:.0f}", flush=True)
+                if not rec["ramping"] and rec["temp"] >= ambient - 3:
+                    break
+            await asyncio.sleep(10)
+            rec = await sample("off")
+            checks["off"] = {
+                "pwm_read": rec["pwm_read"],
+                "state_enabled": rec["state_enabled"],
+                "hw_enabled": rec["hw_enabled"],
+                "temp": rec["temp"],
+                "ok": rec["pwm_read"] == 0.0 and not rec["state_enabled"],
+            }
+            print(f"  off: {checks['off']}", flush=True)
+        finally:
+            checks["elapsed_s"] = time.time() - start
+            out.write("driver", {"time": time.time(), "run": run, "label": "checks", **checks})
+            await camera.close()
+
+    asyncio.run(main_async())
+
+
 def run_short(cam: Camera, out: Output, gain: int, offset: int, reference_s: float = SHORT_REFERENCE_S) -> None:
     """Mean level of the central window vs. exposure time for short exposures, with a reference exposure between."""
     min_s = cam.min_exposure_us * 1e-6
@@ -1205,10 +1348,13 @@ def make_report(out: Output) -> None:
 
     cooling_sets = [(n, out.read(n)) for n in sorted(f.stem for f in out.folder.glob("cooling*.jsonl"))]
     cooling_sets = [(n, [r for r in rows if "temp" in r and "pwm_set" in r]) for n, rows in cooling_sets]
-    sdk_rows = out.read("sdkcool") if (out.folder / "sdkcool.jsonl").exists() else []
-    for run in dict.fromkeys(r["run"] for r in sdk_rows):
-        rows = [dict(r, pwm_set=r["pwm_read"]) for r in sdk_rows if r["run"] == run and "temp" in r and "pwm_read" in r]
-        cooling_sets.append((f"sdkcool {run}", rows))
+    for source in ("sdkcool", "driver"):
+        sdk_rows = out.read(source)
+        for run in dict.fromkeys(r["run"] for r in sdk_rows):
+            rows = [
+                dict(r, pwm_set=r["pwm_read"]) for r in sdk_rows if r["run"] == run and "temp" in r and "pwm_read" in r
+            ]
+            cooling_sets.append((f"{source} {run}", rows))
     cooling_sets = [(n, rows) for n, rows in cooling_sets if rows]
     if cooling_sets:
         fig, axs = plt.subplots(len(cooling_sets), 1, figsize=(10, 3.5 * len(cooling_sets)), squeeze=False)
@@ -1263,7 +1409,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "step",
-        choices=["bias", "gain", "temperature", "cooling", "sdkcool", "flat", "short", "readout", "pixels", "report"],
+        choices=[
+            "bias",
+            "gain",
+            "temperature",
+            "cooling",
+            "sdkcool",
+            "driver",
+            "flat",
+            "short",
+            "readout",
+            "pixels",
+            "report",
+        ],
     )
     parser.add_argument("--sdk", default="/usr/local/lib/libqhyccd.so", help="path of libqhyccd.so")
     parser.add_argument("--read-mode", type=int, default=0, help="read mode of the camera, see meta.json")
@@ -1277,8 +1435,14 @@ def main() -> None:
     )
     parser.add_argument("--temperatures", type=int, nargs="+", default=TEMPERATURES)
     parser.add_argument("--pwms", type=int, nargs="+", default=SWEEP_PWMS, help="PWM levels (0 to 255), cooling step")
-    parser.add_argument("--sdk-mode", choices=["temp", "cooler"], default="temp", help="sdkcool step")
+    parser.add_argument(
+        "--sdk-mode",
+        choices=["temp", "cooler"],
+        default="temp",
+        help="sdkcool step; driver step: temp = ControlQHYCCDTemp",
+    )
     parser.add_argument("--cool-target", type=int, default=-10, help="target in degC, sdkcool step")
+    parser.add_argument("--wrap-workaround", action="store_true", help="driver step: turn the PWM > 250 workaround on")
     parser.add_argument("--jump", action="store_true", help="sdkcool step: go to the target in one step")
     parser.add_argument("--ambient", type=float, default=20.0, help="ambient temperature in degC, sdkcool step")
     parser.add_argument("--frames", type=int, default=PIXEL_FRAMES, help="frames for the pixels step")
@@ -1300,6 +1464,19 @@ def main() -> None:
     if args.step == "report":
         # no camera needed, use the saved data
         make_report(Output(args.folder or find_report_folder(Path(args.out))))
+        return
+
+    if args.step == "driver":
+        # the pyobs-qhyccd module opens the camera itself
+        run_driver(
+            "temperature" if args.sdk_mode == "temp" else "cooler",
+            args.wrap_workaround,
+            args.cool_target,
+            args.hold,
+            args.ambient,
+            Path(args.out),
+            args.folder,
+        )
         return
 
     cam = Camera(args.sdk, args.read_mode, args.usb_traffic)

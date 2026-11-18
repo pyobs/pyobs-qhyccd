@@ -45,8 +45,8 @@ cooling numbers):
   saturated at 65535; use offset 10 or less when binning (bin 4 then has a bias of 10600 ADU and 30.6 ADU noise).
 - A full read of the effective area takes 0.6 s with USB traffic 0 and 60, and 0.71 s with 150. Binning does not make
   it faster. USB traffic 60 costs nothing measurable here.
-- Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and at most about
-  0.003 to 0.004 ADU/s below -5 °C (see the unit report).
+- Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and about
+  0.0037 ADU/s at -10 °C (900 s darks; see the unit report).
 - Cooling target: about 10 °C below ambient is easy (55% drive level); the cooler reaches about 33 °C below ambient at
   full drive and gains less than 1 °C per 20 PWM above 170, so do not plan for more than about -10 to -12 °C in a room at
   about 20 °C.

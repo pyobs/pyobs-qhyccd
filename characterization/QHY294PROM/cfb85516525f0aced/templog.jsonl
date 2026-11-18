@@ -73,3 +73,64 @@
 {"time": 1795004299.397407, "label": "ramp", "temp": 8.1, "power": 12, "target": 8}
 {"time": 1795004359.4043655, "label": "ramp", "temp": 9.1, "power": 11, "target": 9}
 {"time": 1795004419.4101772, "label": "ramp", "temp": 10.1, "power": 9, "target": 10}
+{"time": 1795009995.3771455, "label": "ramp", "temp": 16.3, "power": 7, "target": 16}
+{"time": 1795010055.3844934, "label": "ramp", "temp": 15.0, "power": 8, "target": 15}
+{"time": 1795010115.3920782, "label": "ramp", "temp": 13.9, "power": 9, "target": 14}
+{"time": 1795010175.3982658, "label": "ramp", "temp": 12.9, "power": 11, "target": 13}
+{"time": 1795010235.4061382, "label": "ramp", "temp": 11.9, "power": 12, "target": 12}
+{"time": 1795010295.4128501, "label": "ramp", "temp": 10.9, "power": 13, "target": 11}
+{"time": 1795010355.4186087, "label": "ramp", "temp": 9.9, "power": 15, "target": 10}
+{"time": 1795010415.4255767, "label": "ramp", "temp": 8.9, "power": 16, "target": 9}
+{"time": 1795010475.4330368, "label": "ramp", "temp": 7.9, "power": 18, "target": 8}
+{"time": 1795010535.439769, "label": "ramp", "temp": 6.9, "power": 20, "target": 7}
+{"time": 1795010595.4473436, "label": "ramp", "temp": 5.9, "power": 21, "target": 6}
+{"time": 1795010655.4537194, "label": "ramp", "temp": 4.9, "power": 23, "target": 5}
+{"time": 1795010715.4599588, "label": "ramp", "temp": 3.9, "power": 25, "target": 4}
+{"time": 1795010775.4663644, "label": "ramp", "temp": 2.9, "power": 27, "target": 3}
+{"time": 1795010835.473639, "label": "ramp", "temp": 2.0, "power": 29, "target": 2}
+{"time": 1795010895.4803364, "label": "ramp", "temp": 0.9, "power": 31, "target": 1}
+{"time": 1795010955.4865656, "label": "ramp", "temp": 0.0, "power": 34, "target": 0}
+{"time": 1795011015.492839, "label": "ramp", "temp": -1.0, "power": 37, "target": -1}
+{"time": 1795011075.4996805, "label": "ramp", "temp": -2.0, "power": 39, "target": -2}
+{"time": 1795011135.505992, "label": "ramp", "temp": -3.0, "power": 42, "target": -3}
+{"time": 1795011195.513237, "label": "ramp", "temp": -4.0, "power": 45, "target": -4}
+{"time": 1795011255.5199108, "label": "ramp", "temp": -4.9, "power": 48, "target": -5}
+{"time": 1795011315.5257518, "label": "ramp", "temp": -6.0, "power": 51, "target": -6}
+{"time": 1795011375.533261, "label": "ramp", "temp": -6.9, "power": 54, "target": -7}
+{"time": 1795011435.5399299, "label": "ramp", "temp": -7.9, "power": 58, "target": -8}
+{"time": 1795011495.5461783, "label": "ramp", "temp": -8.8, "power": 63, "target": -9}
+{"time": 1795011555.5534027, "label": "ramp", "temp": -9.7, "power": 68, "target": -10}
+{"time": 1795011555.5537062, "label": "stabilize -10", "temp": -9.7, "power": 68, "target": -10}
+{"time": 1795011560.5541012, "label": "stabilize -10", "temp": -9.8, "power": 67, "target": -10}
+{"time": 1795011565.5555944, "label": "stabilize -10", "temp": -9.8, "power": 67, "target": -10}
+{"time": 1795011570.5563889, "label": "stabilize -10", "temp": -9.8, "power": 67, "target": -10}
+{"time": 1795011575.5577078, "label": "stabilize -10", "temp": -9.9, "power": 67, "target": -10}
+{"time": 1795011580.5585513, "label": "stabilize -10", "temp": -9.9, "power": 67, "target": -10}
+{"time": 1795011585.5598485, "label": "stabilize -10", "temp": -9.9, "power": 67, "target": -10}
+{"time": 1795015442.9230385, "label": "ramp", "temp": -9.8, "power": 52, "target": -9}
+{"time": 1795015502.9295626, "label": "ramp", "temp": -8.4, "power": 48, "target": -8}
+{"time": 1795015562.9360332, "label": "ramp", "temp": -7.2, "power": 44, "target": -7}
+{"time": 1795015622.943456, "label": "ramp", "temp": -6.1, "power": 42, "target": -6}
+{"time": 1795015682.9505358, "label": "ramp", "temp": -5.1, "power": 38, "target": -5}
+{"time": 1795015742.956474, "label": "ramp", "temp": -4.0, "power": 36, "target": -4}
+{"time": 1795015802.9625733, "label": "ramp", "temp": -3.0, "power": 33, "target": -3}
+{"time": 1795015862.9694307, "label": "ramp", "temp": -2.0, "power": 31, "target": -2}
+{"time": 1795015922.9766128, "label": "ramp", "temp": -1.0, "power": 28, "target": -1}
+{"time": 1795015982.9833379, "label": "ramp", "temp": -0.0, "power": 26, "target": 0}
+{"time": 1795016042.9902854, "label": "ramp", "temp": 1.0, "power": 24, "target": 1}
+{"time": 1795016102.9965968, "label": "ramp", "temp": 2.1, "power": 22, "target": 2}
+{"time": 1795016163.0029173, "label": "ramp", "temp": 3.1, "power": 20, "target": 3}
+{"time": 1795016223.009608, "label": "ramp", "temp": 4.1, "power": 18, "target": 4}
+{"time": 1795016283.0155215, "label": "ramp", "temp": 5.1, "power": 17, "target": 5}
+{"time": 1795016343.0220406, "label": "ramp", "temp": 6.1, "power": 15, "target": 6}
+{"time": 1795016403.0293791, "label": "ramp", "temp": 7.1, "power": 13, "target": 7}
+{"time": 1795016463.036233, "label": "ramp", "temp": 8.1, "power": 12, "target": 8}
+{"time": 1795016523.042911, "label": "ramp", "temp": 9.1, "power": 10, "target": 9}
+{"time": 1795016583.0495567, "label": "ramp", "temp": 10.1, "power": 9, "target": 10}
+{"time": 1795016643.0563297, "label": "ramp", "temp": 11.1, "power": 7, "target": 11}
+{"time": 1795016703.06342, "label": "ramp", "temp": 12.1, "power": 6, "target": 12}
+{"time": 1795016763.0689676, "label": "ramp", "temp": 13.1, "power": 5, "target": 13}
+{"time": 1795016823.0756083, "label": "ramp", "temp": 14.1, "power": 4, "target": 14}
+{"time": 1795016883.083058, "label": "ramp", "temp": 15.0, "power": 2, "target": 15}
+{"time": 1795016943.0900784, "label": "ramp", "temp": 15.9, "power": 1, "target": 16}
+{"time": 1795017003.0960815, "label": "ramp", "temp": 16.5, "power": 0, "target": 17}
