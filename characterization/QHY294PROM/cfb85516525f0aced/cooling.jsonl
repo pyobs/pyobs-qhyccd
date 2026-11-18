@@ -1,0 +1,732 @@
+{"time": 1794994216.8001683, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 24.5}
+{"time": 1794994221.8006055, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 23.2}
+{"time": 1794994226.8016157, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 22.0}
+{"time": 1794994231.8026383, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 20.9}
+{"time": 1794994236.803606, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 19.8}
+{"time": 1794994241.8045235, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 18.9}
+{"time": 1794994246.8050213, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 18.0}
+{"time": 1794994251.806086, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 17.0}
+{"time": 1794994256.8065922, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 16.3}
+{"time": 1794994261.8075018, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 15.5}
+{"time": 1794994266.808154, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 14.8}
+{"time": 1794994271.8090458, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 14.1}
+{"time": 1794994276.8096273, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 13.5}
+{"time": 1794994281.8105793, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 12.9}
+{"time": 1794994286.8116386, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 12.3}
+{"time": 1794994291.812989, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 11.6}
+{"time": 1794994296.8139627, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 11.1}
+{"time": 1794994301.8150454, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 10.6}
+{"time": 1794994306.8160732, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 10.1}
+{"time": 1794994311.8170815, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 9.7}
+{"time": 1794994316.8181064, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 9.2}
+{"time": 1794994321.8191102, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 8.8}
+{"time": 1794994326.8202517, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 8.4}
+{"time": 1794994331.821264, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 8.0}
+{"time": 1794994336.8220217, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 7.5}
+{"time": 1794994341.8231194, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 7.2}
+{"time": 1794994346.8236256, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 6.8}
+{"time": 1794994351.8245964, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 6.5}
+{"time": 1794994356.825595, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 6.2}
+{"time": 1794994361.8265567, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 5.9}
+{"time": 1794994366.8275409, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 5.6}
+{"time": 1794994371.828505, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 5.3}
+{"time": 1794994376.829525, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 5.1}
+{"time": 1794994381.8305464, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 4.7}
+{"time": 1794994386.831235, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 4.5}
+{"time": 1794994391.8322947, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 4.3}
+{"time": 1794994396.8327413, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 4.0}
+{"time": 1794994401.8337727, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 3.8}
+{"time": 1794994406.8344417, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 3.6}
+{"time": 1794994411.8355193, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 3.4}
+{"time": 1794994416.8365366, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 3.2}
+{"time": 1794994421.8375447, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 3.0}
+{"time": 1794994426.838328, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.8}
+{"time": 1794994431.8393633, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.6}
+{"time": 1794994436.8403368, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.4}
+{"time": 1794994441.8408775, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.3}
+{"time": 1794994446.8413901, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.1}
+{"time": 1794994451.8423963, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 2.0}
+{"time": 1794994456.843386, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.8}
+{"time": 1794994461.8438394, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.7}
+{"time": 1794994466.8448882, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.5}
+{"time": 1794994471.8459096, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.4}
+{"time": 1794994476.846897, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.3}
+{"time": 1794994481.8478758, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.1}
+{"time": 1794994486.8488944, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 1.0}
+{"time": 1794994491.8498874, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.9}
+{"time": 1794994496.8509266, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.8}
+{"time": 1794994501.851857, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.7}
+{"time": 1794994506.852786, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.6}
+{"time": 1794994511.853525, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.5}
+{"time": 1794994516.854432, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.4}
+{"time": 1794994521.8550236, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.3}
+{"time": 1794994526.8561525, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.2}
+{"time": 1794994531.8571641, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.1}
+{"time": 1794994536.8576775, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": 0.0}
+{"time": 1794994541.8582978, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.0}
+{"time": 1794994546.8592095, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.0}
+{"time": 1794994551.8598876, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.1}
+{"time": 1794994556.8610477, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.2}
+{"time": 1794994561.8620338, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.3}
+{"time": 1794994566.8629787, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.3}
+{"time": 1794994571.8640153, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.4}
+{"time": 1794994576.8646553, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.4}
+{"time": 1794994581.865396, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.5}
+{"time": 1794994586.865885, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.6}
+{"time": 1794994591.866283, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.6}
+{"time": 1794994596.8667355, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.7}
+{"time": 1794994601.8675268, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.8}
+{"time": 1794994606.8682115, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.8}
+{"time": 1794994611.8689835, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.8}
+{"time": 1794994616.8701282, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.9}
+{"time": 1794994621.8704922, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -0.9}
+{"time": 1794994626.871164, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.0}
+{"time": 1794994631.872107, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.0}
+{"time": 1794994636.8731565, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.1}
+{"time": 1794994641.8741543, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.1}
+{"time": 1794994646.8751137, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.2}
+{"time": 1794994651.8761141, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.2}
+{"time": 1794994656.876935, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.2}
+{"time": 1794994661.8774176, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.3}
+{"time": 1794994666.8784215, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.3}
+{"time": 1794994671.8795102, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.4}
+{"time": 1794994676.8805487, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.4}
+{"time": 1794994681.8815572, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.4}
+{"time": 1794994686.88259, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.5}
+{"time": 1794994691.8835912, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.5}
+{"time": 1794994696.8845866, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.5}
+{"time": 1794994701.8852584, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.5}
+{"time": 1794994706.8864129, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.6}
+{"time": 1794994711.8874428, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.6}
+{"time": 1794994716.888531, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.7}
+{"time": 1794994721.8895736, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.7}
+{"time": 1794994726.8906355, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.7}
+{"time": 1794994731.8917203, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.7}
+{"time": 1794994736.8927863, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.7}
+{"time": 1794994741.8938336, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.8}
+{"time": 1794994746.8948293, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.8}
+{"time": 1794994751.8958318, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.8}
+{"time": 1794994756.896867, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.8}
+{"time": 1794994761.8980498, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.8}
+{"time": 1794994766.8990219, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.9}
+{"time": 1794994771.900391, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.9}
+{"time": 1794994776.9013383, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.9}
+{"time": 1794994781.9022553, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -1.9}
+{"time": 1794994786.9035184, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994791.904547, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994796.90557, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994801.906593, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994806.9076002, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994811.9085078, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"time": 1794994816.9089482, "label": "pwm 100", "pwm_set": 100, "pwm_read": 100.0, "temp": -2.0}
+{"label": "result", "pwm": 100, "start_temp": 24.5, "outcome": "time", "time": 1794994816.9093075, "end_temp": -2.0, "lowest_temp": -2.0, "elapsed_s": 600.1094460487366, "attempt": 1}
+{"time": 1794994816.9098213, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -2.0}
+{"time": 1794994821.9101062, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -2.4}
+{"time": 1794994826.9105246, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -2.7}
+{"time": 1794994831.911441, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -3.0}
+{"time": 1794994836.9124236, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -3.3}
+{"time": 1794994841.9134457, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -3.5}
+{"time": 1794994846.9144304, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -3.7}
+{"time": 1794994851.9151726, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -3.9}
+{"time": 1794994856.9156156, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.2}
+{"time": 1794994861.9185221, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.3}
+{"time": 1794994866.9214194, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.5}
+{"time": 1794994871.9225898, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.6}
+{"time": 1794994876.923578, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.8}
+{"time": 1794994881.9245973, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -4.9}
+{"time": 1794994886.925684, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.1}
+{"time": 1794994891.9267142, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.2}
+{"time": 1794994896.9276788, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.3}
+{"time": 1794994901.9281034, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.4}
+{"time": 1794994906.9291716, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.5}
+{"time": 1794994911.9301357, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.6}
+{"time": 1794994916.9311645, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.7}
+{"time": 1794994921.9321806, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.8}
+{"time": 1794994926.9327695, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -5.9}
+{"time": 1794994931.9333525, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.0}
+{"time": 1794994936.9338617, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.1}
+{"time": 1794994941.934732, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.1}
+{"time": 1794994946.9353704, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.2}
+{"time": 1794994951.9360812, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.3}
+{"time": 1794994956.937132, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.3}
+{"time": 1794994961.9381642, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.4}
+{"time": 1794994966.9392529, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.4}
+{"time": 1794994971.9403198, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.5}
+{"time": 1794994976.9407146, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.5}
+{"time": 1794994981.9417305, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.6}
+{"time": 1794994986.9426632, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.6}
+{"time": 1794994991.9436874, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.7}
+{"time": 1794994996.944656, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.7}
+{"time": 1794995001.945661, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.7}
+{"time": 1794995006.9466636, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.8}
+{"time": 1794995011.947712, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.8}
+{"time": 1794995016.9487069, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.9}
+{"time": 1794995021.949821, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.9}
+{"time": 1794995026.9512272, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.9}
+{"time": 1794995031.9522796, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.9}
+{"time": 1794995036.9532137, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -6.9}
+{"time": 1794995041.9538667, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.0}
+{"time": 1794995046.9543293, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.0}
+{"time": 1794995051.955048, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.0}
+{"time": 1794995056.955664, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.1}
+{"time": 1794995061.9566426, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.1}
+{"time": 1794995066.9575799, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.1}
+{"time": 1794995071.9584565, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.1}
+{"time": 1794995076.9595041, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.1}
+{"time": 1794995081.9605207, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995086.9610379, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995091.962081, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995096.9633477, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995101.9644067, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995106.9655128, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995111.9660099, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995116.9667172, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995121.9677866, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.2}
+{"time": 1794995126.9682887, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995131.9689658, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995136.970134, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995141.9712012, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995146.9721982, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995151.972831, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995156.973263, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995161.9740674, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995166.9745867, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995171.9755228, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995176.9764276, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995181.9771192, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995186.9781902, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995191.9794428, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995196.9805717, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.3}
+{"time": 1794995201.981746, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995206.9827304, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995211.9837177, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995216.9848933, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995221.985877, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995226.9870336, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995231.9880986, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995236.989188, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995241.9901438, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995246.9908419, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995251.991832, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995256.9923854, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995261.9934652, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995266.9939623, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995271.9949312, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995276.9953449, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995281.9958296, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995286.997015, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995291.998063, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995296.999089, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995301.9995914, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995307.0003867, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995312.0009243, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995317.0019832, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995322.0029025, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995327.0034773, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995332.0040002, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995337.0046034, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995342.005623, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995347.006649, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995352.0071142, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995357.0076873, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995362.0083263, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995367.009348, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995372.0099068, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995377.0111675, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"time": 1794995382.0122502, "label": "pwm 140", "pwm_set": 140, "pwm_read": 140.0, "temp": -7.4}
+{"label": "result", "pwm": 140, "start_temp": -2.0, "outcome": "settled", "time": 1794995382.0131106, "end_temp": -7.4, "lowest_temp": -7.4, "elapsed_s": 565.1037228107452, "attempt": 1}
+{"time": 1794995382.0144947, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -7.4}
+{"time": 1794995387.0153666, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -7.6}
+{"time": 1794995392.016379, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -7.7}
+{"time": 1794995397.017388, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -7.9}
+{"time": 1794995402.0184503, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.0}
+{"time": 1794995407.0195136, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.2}
+{"time": 1794995412.020068, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.3}
+{"time": 1794995417.0205925, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.4}
+{"time": 1794995422.0210128, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.5}
+{"time": 1794995427.0220506, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.6}
+{"time": 1794995432.0230277, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.7}
+{"time": 1794995437.0235312, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.7}
+{"time": 1794995442.0241551, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.8}
+{"time": 1794995447.0251236, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -8.9}
+{"time": 1794995452.0262198, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.0}
+{"time": 1794995457.0271978, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.0}
+{"time": 1794995462.0276427, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.0}
+{"time": 1794995467.02839, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.1}
+{"time": 1794995472.0295064, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.2}
+{"time": 1794995477.0303967, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.2}
+{"time": 1794995482.0308511, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.3}
+{"time": 1794995487.0318134, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.3}
+{"time": 1794995492.0327978, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.3}
+{"time": 1794995497.0333316, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.4}
+{"time": 1794995502.034086, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.4}
+{"time": 1794995507.0345867, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.4}
+{"time": 1794995512.0355067, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.5}
+{"time": 1794995517.036589, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.5}
+{"time": 1794995522.0376685, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.5}
+{"time": 1794995527.0384953, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995532.0392559, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995537.0396938, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995542.0404673, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995547.041039, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995552.0420868, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995557.0432115, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.6}
+{"time": 1794995562.0436735, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995567.0447044, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995572.0456746, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995577.0462565, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995582.0472953, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995587.0483809, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995592.0494957, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995597.050005, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.7}
+{"time": 1794995602.0511184, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995607.0521545, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995612.0531318, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995617.0541186, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995622.05525, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995627.0557048, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995632.056758, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995637.057953, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995642.058936, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995647.0600479, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995652.061115, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995657.0617514, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995662.0628042, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995667.0640361, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995672.065042, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995677.0662425, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995682.0672872, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995687.068358, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995692.069406, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995697.070422, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995702.071443, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995707.0723794, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995712.072973, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995717.0740933, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995722.07508, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995727.0761304, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995732.0771961, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995737.0782773, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995742.0792758, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995747.0802631, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995752.0812948, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995757.0823898, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995762.0833986, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995767.08455, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995772.0854716, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995777.085964, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"time": 1794995782.0869737, "label": "pwm 170", "pwm_set": 170, "pwm_read": 170.0, "temp": -9.8}
+{"label": "result", "pwm": 170, "start_temp": -7.4, "outcome": "settled", "time": 1794995782.0878656, "end_temp": -9.8, "lowest_temp": -9.8, "elapsed_s": 400.0740396976471, "attempt": 1}
+{"time": 1794995782.0893197, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -9.8}
+{"time": 1794995787.0902026, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.0}
+{"time": 1794995792.0911922, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.1}
+{"time": 1794995797.092182, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.3}
+{"time": 1794995802.0931137, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.3}
+{"time": 1794995807.0941498, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.5}
+{"time": 1794995812.0951731, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.6}
+{"time": 1794995817.095975, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.7}
+{"time": 1794995822.0970547, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.7}
+{"time": 1794995827.0981286, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.8}
+{"time": 1794995832.0991595, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.8}
+{"time": 1794995837.100107, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -10.9}
+{"time": 1794995842.1011624, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.0}
+{"time": 1794995847.1022286, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.0}
+{"time": 1794995852.1032312, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.1}
+{"time": 1794995857.1042304, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.1}
+{"time": 1794995862.1053028, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.1}
+{"time": 1794995867.1063728, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.2}
+{"time": 1794995872.1072025, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.2}
+{"time": 1794995877.1082733, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.2}
+{"time": 1794995882.1092236, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.3}
+{"time": 1794995887.1102521, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.3}
+{"time": 1794995892.1111913, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.3}
+{"time": 1794995897.1118479, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.3}
+{"time": 1794995902.1129456, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.4}
+{"time": 1794995907.113995, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.4}
+{"time": 1794995912.1150043, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.4}
+{"time": 1794995917.1160653, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.4}
+{"time": 1794995922.1170866, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.4}
+{"time": 1794995927.1181378, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995932.119152, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995937.1202319, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995942.12069, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995947.1216326, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995952.1226313, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995957.1235812, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995962.124729, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995967.1257985, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995972.1268153, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995977.1279502, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995982.1291258, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995987.1302016, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995992.1313527, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794995997.1323564, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996002.1334026, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996007.1344423, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996012.1355288, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996017.1366007, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996022.137537, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996027.138605, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996032.1396277, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996037.1406057, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996042.1413546, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996047.1426122, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996052.1431537, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996057.1441238, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996062.1448796, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996067.1458871, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996072.1469307, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996077.1479356, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"time": 1794996082.1484077, "label": "pwm 200", "pwm_set": 200, "pwm_read": 200.0, "temp": -11.5}
+{"label": "result", "pwm": 200, "start_temp": -9.8, "outcome": "settled", "time": 1794996082.1492488, "end_temp": -11.5, "lowest_temp": -11.5, "elapsed_s": 300.0605466365814, "attempt": 1}
+{"time": 1794996082.1505299, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.5}
+{"time": 1794996087.1514418, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.6}
+{"time": 1794996092.152424, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.7}
+{"time": 1794996097.153398, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.7}
+{"time": 1794996102.1541243, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.8}
+{"time": 1794996107.1551383, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.9}
+{"time": 1794996112.15609, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -11.9}
+{"time": 1794996117.1572108, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.0}
+{"time": 1794996122.1578062, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.0}
+{"time": 1794996127.1587565, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996132.1597445, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996137.1607416, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996142.1618314, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996147.1628718, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996152.163939, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996157.165026, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996162.166087, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996167.1671479, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996172.167916, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996177.1689677, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996182.1699483, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996187.1709611, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996192.1720164, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996197.173026, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996202.173995, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996207.1750267, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996212.1756322, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996217.1765933, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996222.1776075, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996227.178698, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996232.1791286, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996237.180142, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996242.1810567, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996247.1817007, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996252.1826642, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996257.1832016, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996262.1841388, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996267.185171, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996272.1860855, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996277.187171, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996282.1881144, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996287.189107, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996292.1901577, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996297.1911712, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996302.1921988, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996307.1928732, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996312.193949, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996317.195002, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996322.1961598, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996327.1972153, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996332.1982436, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996337.1991494, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996342.2003915, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996347.201445, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.3}
+{"time": 1794996352.2021594, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996357.2028472, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996362.2039368, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996367.2046282, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996372.2056918, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996377.2067711, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996382.2075992, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996387.208601, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996392.2098382, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996397.2108786, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996402.2117102, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996407.2127233, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996412.2139666, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996417.214994, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996422.2160594, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996427.2172015, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996432.2183375, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996437.219424, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996442.2205143, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996447.221508, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996452.222128, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996457.223279, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996462.224022, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996467.2246776, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996472.225157, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996477.2255702, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996482.226143, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.2}
+{"time": 1794996487.2266028, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996492.2276514, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996497.228729, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996502.2299385, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996507.231, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996512.2321103, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996517.2331393, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996522.2341943, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996527.235215, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"time": 1794996532.2362332, "label": "pwm 220", "pwm_set": 220, "pwm_read": 220.0, "temp": -12.1}
+{"label": "result", "pwm": 220, "start_temp": -11.5, "outcome": "settled", "time": 1794996532.2370362, "end_temp": -12.1, "lowest_temp": -12.3, "elapsed_s": 450.0871388912201, "attempt": 1}
+{"time": 1794996532.2385192, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.1}
+{"time": 1794996537.2393827, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.2}
+{"time": 1794996542.240303, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.2}
+{"time": 1794996547.2408218, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.3}
+{"time": 1794996552.2418256, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794996557.2427466, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794996562.2431908, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794996567.2441957, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996572.244986, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996577.2461874, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996582.2471342, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996587.24826, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996592.2491596, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996597.249704, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996602.2507515, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996607.2517967, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996612.252337, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996617.253224, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996622.2537098, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996627.2545414, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996632.2555735, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996637.2566159, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996642.257631, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996647.258629, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996652.259503, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996657.2606037, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996662.2614799, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996667.2621093, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996672.2632313, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996677.2637386, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996682.2643635, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996687.2652352, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996692.2656524, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996697.266106, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996702.2665784, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996707.2675848, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996712.268519, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996717.2696505, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996722.2705932, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996727.2716894, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996732.2724314, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996737.2733748, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996742.2744193, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996747.2754285, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996752.2765362, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996757.2775793, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996762.2786427, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.8}
+{"time": 1794996767.2796495, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996772.280684, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996777.2817063, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996782.282715, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996787.2837648, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996792.2847197, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996797.2858517, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996802.2868123, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996807.2872913, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996812.2883198, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996817.2894216, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996822.290488, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996827.2916026, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996832.2926748, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996837.2954352, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996842.296531, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.7}
+{"time": 1794996847.2975414, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996852.2986171, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996857.2997117, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996862.3007972, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996867.3018382, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996872.3028245, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996877.303209, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996882.3036823, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996887.3041697, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996892.30464, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996897.3054981, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996902.306158, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996907.3071537, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996912.3081183, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996917.3092213, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996922.3102205, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996927.310931, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.6}
+{"time": 1794996932.3119218, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996937.3130655, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996942.3139572, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996947.3150454, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996952.3161447, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996957.3169627, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996962.3177571, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996967.3184536, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996972.3193605, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996977.3198698, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996982.32096, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996987.3220265, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996992.3227313, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794996997.3235807, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794997002.3245978, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794997007.32564, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794997012.326637, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794997017.3276942, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.5}
+{"time": 1794997022.3286052, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997027.3295956, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997032.3305848, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997037.3315027, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997042.3323061, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997047.3329935, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997052.334109, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997057.3349981, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997062.3360088, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997067.3369102, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997072.3381298, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997077.3391423, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997082.339652, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997087.3404806, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997092.3409822, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997097.3415875, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997102.3423467, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997107.3431644, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"time": 1794997112.344137, "label": "pwm 240", "pwm_set": 240, "pwm_read": 240.0, "temp": -12.4}
+{"label": "result", "pwm": 240, "start_temp": -12.1, "outcome": "settled", "time": 1794997112.344976, "end_temp": -12.4, "lowest_temp": -12.8, "elapsed_s": 580.1070973873138, "attempt": 1}
+{"time": 1794997112.3460357, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -12.4}
+{"time": 1794997117.3469758, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -9.7}
+{"time": 1794997122.3477995, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -7.7}
+{"time": 1794997127.3485947, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -5.9}
+{"time": 1794997132.3494315, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -4.4}
+{"time": 1794997137.3503118, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -2.9}
+{"time": 1794997142.3509872, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -1.6}
+{"time": 1794997147.3518286, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -0.3}
+{"time": 1794997152.352667, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 0.7}
+{"time": 1794997157.3534102, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 1.8}
+{"time": 1794997162.354217, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 3.0}
+{"time": 1794997167.3550258, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 3.9}
+{"time": 1794997172.355861, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 4.8}
+{"time": 1794997177.3565547, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 5.6}
+{"time": 1794997182.357258, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 6.4}
+{"time": 1794997187.358252, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.2}
+{"time": 1794997192.3593524, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.9}
+{"time": 1794997197.3602812, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 8.5}
+{"time": 1794997202.3611119, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.3}
+{"time": 1794997207.3616905, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.9}
+{"time": 1794997212.3623188, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 10.4}
+{"time": 1794997217.3631203, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.0}
+{"time": 1794997222.3639033, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.5}
+{"time": 1794997227.364844, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.9}
+{"time": 1794997232.3657458, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.4}
+{"time": 1794997237.3664978, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.8}
+{"time": 1794997242.3671155, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.2}
+{"time": 1794997247.3677135, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.7}
+{"time": 1794997252.3684056, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.0}
+{"time": 1794997257.3692386, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.4}
+{"time": 1794997262.3700497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.7}
+{"time": 1794997267.3705864, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.0}
+{"time": 1794997272.3713007, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.3}
+{"time": 1794997277.3720558, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.6}
+{"time": 1794997282.3728108, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.8}
+{"time": 1794997287.373622, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.1}
+{"time": 1794997292.3743818, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.4}
+{"time": 1794997297.3752558, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.6}
+{"time": 1794997302.3761654, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.8}
+{"time": 1794997307.3768866, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.0}
+{"time": 1794997312.3776598, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.2}
+{"time": 1794997317.3785462, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.4}
+{"time": 1794997322.3795516, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.6}
+{"time": 1794997327.3803797, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.7}
+{"time": 1794997332.3812926, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.9}
+{"time": 1794997337.3824039, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.1}
+{"time": 1794997342.3833158, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.2}
+{"time": 1794997347.3840046, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.3}
+{"time": 1794997352.384622, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.4}
+{"time": 1794997357.3851993, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.6}
+{"time": 1794997362.3861785, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.7}
+{"time": 1794997367.387199, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.8}
+{"time": 1794997372.3882174, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 18.9}
+{"time": 1794997377.3892868, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.0}
+{"time": 1794997382.3900812, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.1}
+{"time": 1794997387.3907669, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.2}
+{"time": 1794997392.3917072, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.3}
+{"time": 1794997397.3927705, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.3}
+{"time": 1794997402.3936942, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.4}
+{"time": 1794997407.394691, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.5}
+{"time": 1794997412.3956454, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.5}
+{"time": 1794997417.3966858, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.6}
+{"time": 1794997422.3976734, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.7}
+{"time": 1794997427.3983693, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.7}
+{"time": 1794997432.3990314, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.8}
+{"time": 1794997437.3998525, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.8}
+{"time": 1794997442.4002993, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.8}
+{"time": 1794997447.4009883, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.9}
+{"time": 1794997452.4021232, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 19.9}
+{"time": 1794997457.4030852, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.0}
+{"time": 1794997462.40379, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.0}
+{"time": 1794997467.4044182, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.0}
+{"time": 1794997472.406196, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.1}
+{"time": 1794997477.4069993, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.1}
+{"time": 1794997482.4084196, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.1}
+{"time": 1794997487.4094985, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.2}
+{"time": 1794997492.4104233, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.2}
+{"time": 1794997497.4113016, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.2}
+{"time": 1794997502.4127128, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.2}
+{"time": 1794997507.4133346, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.2}
+{"time": 1794997512.4140003, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997517.4146407, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997522.4150221, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997527.415413, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997532.4159296, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997537.4164257, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997542.4170802, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997547.4176104, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997552.4181597, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997557.4187505, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997562.4193835, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997567.4200583, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997572.4205794, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997577.4210503, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997582.4216878, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997587.4225326, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997592.423497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997597.4243348, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997602.4250543, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997607.4259927, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997612.4268708, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997617.4278913, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997622.4290333, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997627.4299414, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997632.4308577, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997637.4318316, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997642.4328911, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997647.433696, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997652.434258, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997657.4348218, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997662.4357119, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997667.4366643, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997672.4376411, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997677.438302, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997682.4386497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997687.4394078, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997692.4399571, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997697.440383, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997702.4410088, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997707.4420094, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997712.4428115, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997717.4434934, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997722.4441214, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997727.4448156, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997732.4454226, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997737.4461787, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997742.4469466, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997747.4477634, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.4}
+{"time": 1794997752.44866, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997757.449187, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997762.44997, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997767.45095, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997772.4518778, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997777.4526572, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997782.4535067, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997787.4543417, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997792.455207, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997797.4559855, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997802.4569356, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997807.4578388, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}
+{"time": 1794997812.4584231, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 20.3}

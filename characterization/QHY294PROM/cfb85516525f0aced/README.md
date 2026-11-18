@@ -2,8 +2,8 @@
 
 This report describes what was measured on one QHY294PRO-M (monochrome, cooled CMOS camera) with the characterization
 script of pyobs-qhyccd on 17 November 2026: bias, read noise versus gain and offset, readout time, pixel noise and dark
-current down to -12 °C. The cooler stopped working below that, see
-[Cooling collapse](#cooling-collapse-below-12-c). Notes that apply to every unit of the model are in the
+current down to -12 °C. The cooler stopped working at high drive on the first supply (1.5 A), see
+[Cooling and the power supply](#cooling-and-the-power-supply). Notes that apply to every unit of the model are in the
 [model notes](../README.md).
 
 Each statement is marked as **measured** (own data, linked below), **inferred** (a conclusion from the data that was not
@@ -17,8 +17,9 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. Below -5 °C it is 0.003 to 0.004 ADU/s, close
   to what the method can resolve. There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
-- **Cooling:** the sensor follows the setpoint down to -12 °C at 66% drive level (ambient 20 °C). Below that the cooler
-  stops working within one minute, with two different control methods (measured). Cause unknown.
+- **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
+  5 A supply it ran at full drive without trouble and reached -12.8 °C at 24.5 °C ambient (measured), which is about
+  the limit of the cooler. The cause was probably the supply (inferred).
 - **Not measured:** gain in e-/ADU, full well, linearity, short exposures, read mode 1.
 
 ## Setup
@@ -114,65 +115,49 @@ Data: [temperature.csv](temperature.csv), cooling log: [templog.csv](templog.csv
   exposure would both fit. Neither was checked.
 - The bias noise falls from 7.02 ADU at 10 °C to 6.74 ADU at -12 °C.
 
-## Cooling collapse below -12 °C
+## Cooling and the power supply
 
-**What was seen (measured).** Two series reached -10 and -12 °C and then lost the cooling:
+**Cause of the earlier collapse (inferred): the 1.5 A supply.** On 17 November the cooler stopped working at about
+-12 °C with two control methods (SDK auto mode and a PI controller on the manual PWM limited to 240), see the
+[temperature table](#dark-current-and-temperature-measured). The sensor went from -11.9 °C to +2.4 °C within a minute
+and then to ambient, with the PWM at 94%. On 18 November a sweep of fixed PWM levels from ambient showed the same with
+the 1.5 A supply, and no collapse with a 5 A supply.
 
-| Run | Control | What happened |
-|---|---|---|
-| 1 | SDK auto mode (`ControlQHYCCDTemp`, once per second) | Reached -10 °C at 55% drive level. At about -11.5 °C the sensor started to warm and ran to ambient, PWM near 100%. The script stopped the series. |
-| 2 | PI controller on the manual PWM, cap 240 | Reached -10 and -12 °C at 66%. Within one minute after the -12 °C darks the sensor went from -11.9 °C to +2.4 °C (about 14 °C in 60 s) while the PWM rose to 240 (94%), then 10.6, 16.5 and 19.6 °C. The script stopped with "cooler at 94% and sensor at 11.7 degC, target -15 degC". |
+Fixed PWM, ascending levels, each held for up to 10 min or until the sensor moved less than 0.1 °C in 3 min. Data:
+[cooling_1p5A_supply.jsonl](cooling_1p5A_supply.jsonl) and [cooling.jsonl](cooling.jsonl) (5 A). Ambient 23.3 °C (1.5 A)
+and 24.5 °C (5 A), lens capped, no exposures.
 
-- With the cooler still driven at 94%, the sensor did not recover; after switching the cooler off it returned to ambient
-  (19.8 °C) within minutes.
-- The PWM never exceeded 240 in run 2, so the PWM > 250 wrap that `QHYCCDCamera._update_cooling` works around cannot be
-  the only cause (the workaround assumes the wrap, see the [model notes](../README.md#cooling)).
-- The rate of 14 °C per minute is far faster than the cooling ever ran (about 1 °C per minute), so the cooler was most
-  likely not producing any cooling at that moment rather than just being overloaded (inferred).
-- Tim has seen the same behaviour on two different QHY cameras (reported, not measured here).
+| PWM | Drive level | 1.5 A supply, lowest [°C] | 5 A supply, lowest [°C] |
+|---|---|---|---|
+| 100 | 39% | -2.9 (not settled) | -2.0 (not settled) |
+| 140 | 55% | -7.9 | -7.4 |
+| 170 | 67% | -10.3 (settled for 10 min) | -9.8 |
+| 200 | 78% | -10.1, then **warming to 29.9 °C within 10 min** | -11.5 |
+| 220 | 86% | not run | -12.3 |
+| 240 | 94% | not run | -12.8 |
 
-**Hypotheses, none tested:**
+- With the 1.5 A supply the sensor warmed above ambient (23 °C) at PWM 200 and kept the PWM reading of 200. With no
+  supply connected at all (unplugged by mistake on 18 November) the sensor also warmed (23.3 to 24.7 °C in 150 s at
+  PWM 100, measured), so the electronics alone heat it. The cooler had probably lost its power, not just been overloaded
+  (inferred).
+- Levels up to 170 gave the same temperatures on both supplies within 0.5 °C. The old supply only failed at the
+  highest current. The first collapse was at about 66%, but after 20 min, with a warmer hot side (inferred: the
+  current depends on the temperature difference as well as on the drive level).
+- The 5 A supply is a different unit (voltage and polarity checked with a multimeter before connecting). The 1.5 A
+  supply had a rating of 1.5 A; the current of the camera at full drive was not measured, and the rated current of the
+  camera was not looked up.
+- Full drive reaches only 37 °C below ambient (-12.8 °C at 24.5 °C ambient). Each step of 20 PWM above 170 gains less
+  than 1 °C, so the cooler is near its limit (heat sink and fan, or the TEC itself). -15 °C needs a colder room or
+  better heat removal (inferred).
+- The qhyccd driver's workaround for "PWM above 250" (see the [model notes](../README.md#cooling)) was not tested
+  here. Whether the other QHY cameras that stop cooling are also on too small supplies is open.
 
-1. The firmware of the camera switches the cooler off when it sees a protection condition (current, temperature of the
-   hot side, a maximum temperature difference). A stuck state until the cooler is set to 0 and back would fit.
-2. The 12 V supply or the USB power cannot deliver the current at the drive level reached and the cooler drops out.
-3. The hot side (heat sink and fan, or the camera's own heat exchange) saturates, so the temperature difference to the
-   ambient is limited. This would make the sensor warm slowly, not 14 °C in a minute, and is the least likely.
+**Slow versus fast cooling.** The sweep jumped to each PWM level, so the sensor cooled at about 5 °C per minute at the start of a level. No collapse occurred on the 5 A supply, so the rate does not matter there.
 
-## Next step: fixed PWM sweep
-
-**Goal:** find out whether the collapse depends on the drive level or on the temperature, and what temperature each
-drive level reaches in equilibrium. This separates the hypotheses and shows if the camera can stay below -12 °C at all.
-
-**Plan (not done, waiting for the go-ahead):**
-
-1. Camera at ambient with the cooler off (PWM 0), lens capped.
-2. Add a `cooling` step to `tools/characterize.py` that sets a fixed PWM (no PI controller), for example 100, 140, 170,
-   200, 220, 240 in this order, and logs sensor temperature and PWM every 5 s (as `templog.jsonl`).
-3. Hold each level for 10 min or until the temperature changes by less than 0.1 °C in 3 min, whichever comes first.
-4. Stop the step at once and set the PWM to 0 if the sensor warms by 1 °C or more while the PWM is held (collapse).
-   Record the temperature, drive level and time at which it happens.
-5. Between levels do not warm up; go to the next higher level. After a collapse, wait for the sensor to reach ambient
-   and repeat that level once from ambient to see if it is reproducible.
-6. Measure the supply voltage at the camera connector during the sweep with a multimeter, if possible (rating of the
-   supply to be checked before).
-7. Afterwards, test the camera's own regulation with `SetQHYCCDParam(CONTROL_COOLER, target)` in place of the manual
-   PWM, with the same logging, to see whether it collapses at the same temperature.
-
-**Cost and risk:** about 1 to 1.5 h. One or two more collapses are likely. The camera is not at risk (it returned to
-ambient after both collapses), but nothing is known about long-term
-stress on the cooler. The sweep stops at the first sign of warming.
-
-**What each result would mean (inferred):**
-
-- Collapse at a similar drive level (about 66% to 70%) regardless of the temperature: current or supply limit.
-- Collapse at a similar temperature (about -12 °C) at higher drive levels only: a temperature-based protection.
-- No collapse at fixed PWM but collapse with the PI controller: an effect of the changing PWM (for example the
-  controller's steps), which the driver could avoid.
-- No collapse with `CONTROL_COOLER`: change the driver to that mode instead of `ControlQHYCCDTemp` park-and-retry.
-
-After the sweep, a separate proposal for the driver (`QHYCCDCamera._update_cooling`) follows. The driver was not
-changed.
+**Bug found in the sweep script.** The collapse check first required a 2 °C drop from the start of the level, which
+missed the failure at PWM 200 (the level started at -10.1 °C and never went lower), so the script ran the level for 10
+min and started PWM 220 at 30 °C. It was interrupted by hand. The check now needs only a rise of 1 °C above the lowest
+temperature of the level. The 1.5 A run in `cooling_1p5A_supply.jsonl` ends with the interrupted PWM 220 level.
 
 ## Not measured yet
 

@@ -60,14 +60,19 @@ Three ways to set the cooler exist in the SDK, and the pyobs-qhyccd driver uses 
 The "power" in the characterization logs is `PWM / 255 * 100`. It is the drive level, not an electrical power (the
 documentation does not say whether it is a duty cycle; not checked).
 
-**Known problem in the driver.** `QHYCCDCamera._update_cooling` works around a QHY bug where the cooler stops when the
-PWM exceeds 250: it parks the setpoint 5 °C above the sensor and ramps back. Tim has seen the same behaviour on two different
-QHY cameras.
+**Power supply.** Use a supply that can deliver much more than the 1.5 A that failed on this unit. The cooler stopped
+working at 66% to 78% drive level with a 1.5 A supply and held full drive with a 5 A supply. The rated current of the
+camera was not looked up (check its label or manual before choosing a supply). Verify the polarity with a multimeter
+before connecting a supply. See the [unit report](cfb85516525f0aced/README.md#cooling-and-the-power-supply).
 
-**Open problem: the cooler collapses at about -12 °C on this unit, also without PWM above 250.** See the
-[unit report](cfb85516525f0aced/README.md#cooling-collapse-below-12-c) for the data and the
-[planned next step](cfb85516525f0aced/README.md#next-step-fixed-pwm-sweep). Until it is understood, do not set this
-camera below -10 °C, and do not assume the cause is the PWM wrap in the SDK.
+**Possible cause of the cooling problem in the driver (unverified).** `QHYCCDCamera._update_cooling` works around a QHY
+bug where the cooler stops when the PWM exceeds 250: it parks the setpoint 5 °C above the sensor and ramps back. Tim has
+seen the same behaviour on two different QHY cameras. On this unit the collapse came at 78% or lower and went away with
+a bigger supply, so a supply that is too small may explain at least part of what the workaround covers. Not tested on the
+other cameras.
+
+**Reach.** With the 5 A supply at ambient 24.5 °C the camera reached -12.8 °C at PWM 240; PWM 200 gave -11.5 °C and PWM
+170 gave -9.8 °C.
 
 **Characterization script.** `tools/characterize.py` drives the cooler with a PI controller on the PWM (1 Hz, gains
 `PWM_KP` = 15, `PWM_KI` = 0.3 per second, PWM limited to 240, anti-windup). The target is stepped by 1 °C per minute

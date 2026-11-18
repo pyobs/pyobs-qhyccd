@@ -18,6 +18,9 @@ Steps (all on a central 2048x2048 window of the effective area, USB traffic as s
   sensor, so the cooler stays off (default) and the script waits until the temperature is stable.
 * ``temperature``: read noise, dark current and hot pixels vs. sensor temperature. The cooler target is moved in steps
   of at most 1 degC/min and the camera is warmed up again afterwards.
+* ``cooling``: fixed manual PWM levels from ambient, held in ascending order (``--pwms``), to find out where and why the
+  cooler stops working. Logs the sensor temperature every 5 s to ``cooling.jsonl``, stops a level as soon as the sensor
+  warms by 1 degC while the PWM is held, and repeats a level once from ambient.
 * ``flat``: photon transfer curve from pairs of frames of a steady, roughly uniform light source (e.g. a wall): gain in
   e-/ADU, read noise in e-, saturation and linearity. The bias level comes from the fit of level vs. exposure time.
 * ``short``: signal vs. exposure times from the minimum up to 100 ms with a steady light source, to find an offset in
@@ -88,6 +91,13 @@ OFFSETS = [0, 10, 50, 140, 200]
 GAIN_TEST_GAINS = [0, 100, 800]
 GAIN_TEST_EXPOSURES = [30.0, 100.0, 300.0]
 TEMPERATURES = [10, 5, 0, -5, -10, -15]
+SWEEP_PWMS = [100, 140, 170, 200, 220, 240]
+SWEEP_HOLD_S = 600.0  # longest hold of one fixed PWM level
+SWEEP_MIN_S = 240.0  # shortest hold before the temperature may count as settled
+SWEEP_SETTLE_S = 180.0  # the sensor counts as settled if it moved less than SWEEP_SETTLE_C in this time
+SWEEP_SETTLE_C = 0.1
+SWEEP_COLLAPSE_C = 1.0  # warming by this much above the lowest temperature of a level counts as a collapse
+SWEEP_COLLAPSE_AFTER_S = 60.0  # ignore warming in the first seconds of a level
 DARK_EXPOSURES = [60.0, 300.0]
 DEFAULT_GAIN = 10  # as in pyobs-qhyccd
 FULL_SCALE = 65535
@@ -635,6 +645,99 @@ def run_temperature(cam: Camera, out: Output, temperatures: list[int], gain: int
         warm_up(cam, out, ambient)
 
 
+def sweep_level(cam: Camera, out: Output, pwm: int, hold_s: float) -> dict[str, Any]:
+    """Hold a fixed PWM until the sensor settles, the time is up or the sensor warms up (collapse)."""
+    cam.set_param(CONTROL_MANULPWM, pwm)
+    start = time.time()
+    history: deque[tuple[float, float]] = deque()
+    lowest = cam.temperature()
+    result: dict[str, Any] = {"pwm": pwm, "start_temp": lowest, "outcome": "time"}
+    while True:
+        now, temp = time.time(), cam.temperature()
+        elapsed = now - start
+        out.write(
+            "cooling",
+            {
+                "time": now,
+                "label": f"pwm {pwm}",
+                "pwm_set": pwm,
+                "pwm_read": cam.get_param(CONTROL_CURPWM),
+                "temp": temp,
+            },
+        )
+        lowest = min(lowest, temp)
+        history.append((now, temp))
+        while history and now - history[0][0] > SWEEP_SETTLE_S + 5:
+            history.popleft()
+        if elapsed > SWEEP_COLLAPSE_AFTER_S and temp - lowest >= SWEEP_COLLAPSE_C:
+            result["outcome"] = "collapse"
+            break
+        temps = [t for _, t in history]
+        if (
+            elapsed >= SWEEP_MIN_S
+            and now - history[0][0] >= SWEEP_SETTLE_S * 0.9
+            and max(temps) - min(temps) < SWEEP_SETTLE_C
+        ):
+            result["outcome"] = "settled"
+            break
+        if elapsed >= hold_s:
+            break
+        print(f"  pwm {pwm}: T={temp:.1f} degC lowest={lowest:.1f} t={elapsed:.0f}s", flush=True)
+        time.sleep(POLL_S)
+    result.update(
+        {"time": time.time(), "end_temp": cam.temperature(), "lowest_temp": lowest, "elapsed_s": time.time() - start}
+    )
+    return result
+
+
+def sweep_warm_up(cam: Camera, out: Output, ambient: float, timeout_s: float = 1500.0) -> None:
+    """PWM 0 and wait until the sensor is within 3 degC of the ambient temperature."""
+    cam.set_param(CONTROL_MANULPWM, 0)
+    start = time.time()
+    while time.time() - start < timeout_s:
+        temp = cam.temperature()
+        out.write(
+            "cooling",
+            {
+                "time": time.time(),
+                "label": "warm",
+                "pwm_set": 0,
+                "pwm_read": cam.get_param(CONTROL_CURPWM),
+                "temp": temp,
+            },
+        )
+        if temp >= ambient - 3:
+            return
+        time.sleep(POLL_S)
+
+
+def run_cooling(cam: Camera, out: Output, pwms: list[int], hold_s: float) -> None:
+    """Fixed PWM levels in ascending order from ambient. A level that collapses is repeated once from ambient; a second
+    collapse ends the sweep."""
+    ambient = cam.temperature()
+    print(f"Ambient {ambient:.1f} degC, levels {pwms}", flush=True)
+    try:
+        for pwm in pwms:
+            for attempt in (1, 2):
+                print(f"PWM {pwm} ({pwm / 255 * 100:.0f}%), attempt {attempt}", flush=True)
+                result = sweep_level(cam, out, pwm, hold_s)
+                result["attempt"] = attempt
+                out.write("cooling", {"label": "result", **result})
+                print(
+                    f"  -> {result['outcome']}: lowest {result['lowest_temp']:.1f} degC, "
+                    f"end {result['end_temp']:.1f} degC after {result['elapsed_s']:.0f} s",
+                    flush=True,
+                )
+                if result["outcome"] != "collapse":
+                    break
+                sweep_warm_up(cam, out, ambient)
+            else:
+                print("Second collapse at the same level, stopping the sweep.", flush=True)
+                return
+    finally:
+        sweep_warm_up(cam, out, ambient)
+
+
 def run_short(cam: Camera, out: Output, gain: int, offset: int, reference_s: float = SHORT_REFERENCE_S) -> None:
     """Mean level of the central window vs. exposure time for short exposures, with a reference exposure between."""
     min_s = cam.min_exposure_us * 1e-6
@@ -1043,7 +1146,9 @@ def find_report_folder(root: Path) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("step", choices=["bias", "gain", "temperature", "flat", "short", "readout", "pixels", "report"])
+    parser.add_argument(
+        "step", choices=["bias", "gain", "temperature", "cooling", "flat", "short", "readout", "pixels", "report"]
+    )
     parser.add_argument("--sdk", default="/usr/local/lib/libqhyccd.so", help="path of libqhyccd.so")
     parser.add_argument("--read-mode", type=int, default=0, help="read mode of the camera, see meta.json")
     parser.add_argument("--usb-traffic", type=int, default=DEFAULT_USB_TRAFFIC)
@@ -1053,6 +1158,8 @@ def main() -> None:
     parser.add_argument("--offsets", type=int, nargs="+", help="offsets for the bias step")
     parser.add_argument("--exposures", type=float, nargs="+", help="exposure times in s for the gain step")
     parser.add_argument("--temperatures", type=int, nargs="+", default=TEMPERATURES)
+    parser.add_argument("--pwms", type=int, nargs="+", default=SWEEP_PWMS, help="PWM levels (0 to 255), cooling step")
+    parser.add_argument("--hold", type=float, default=SWEEP_HOLD_S, help="longest hold of one level in s, cooling step")
     parser.add_argument("--gain", type=int, default=DEFAULT_GAIN, help="gain for the temperature step")
     parser.add_argument("--offset", type=int, default=DEFAULT_OFFSET)
     parser.add_argument(
@@ -1104,6 +1211,8 @@ def main() -> None:
             run_pixels(cam, out, args.gain, args.offset, target)
         elif args.step == "temperature":
             run_temperature(cam, out, args.temperatures, args.gain, args.offset)
+        elif args.step == "cooling":
+            run_cooling(cam, out, args.pwms, args.hold)
     finally:
         cam.close()
 
