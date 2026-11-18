@@ -24,7 +24,8 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Read mode 1 (47M):** bias noise 23 ADU at gain 10 (3 times that of mode 0), 11.4 ADU from gain 200 up; readout 1.4 to
   1.5 s per frame; same share of noisy pixels as mode 0 but a fixed pattern of offset pixels (measured). Offset 0 clips
   98% of the pixels, use 10 or more.
-- **Not measured:** gain in e-/ADU, full well, linearity, short exposures.
+- **Not measured:** gain in e-/ADU (the dark shot noise method gave only 0.7 to 0.9 e-/ADU without a trend, so it is not
+  usable), full well, linearity, short exposures.
 
 ## Setup
 
@@ -179,6 +180,55 @@ for comparison (11.6 Mpixel, same settings):
 - The `range_over_45adu` column in `pixels.csv` counts nearly every pixel in mode 1 because the threshold of 45 ADU
   was chosen for the noise of mode 0. Ignore it here.
 
+### Cooled to -10 °C (read mode 0)
+
+The same measurement with the sensor held at -10.0 °C (5 A supply, PI controller). Data:
+[pixels.csv](pixels.csv) (the record with target -10).
+
+| Quantity | 20 °C | -10 °C |
+|---|---|---|
+| Median per-pixel noise [ADU] | 6.89 | 6.45 |
+| Mean / rms per-pixel noise [ADU] | 7.01 / 7.16 | 6.59 / 6.78 |
+| 99.9th percentile of the noise [ADU] | 27.7 | 29.2 |
+| Pixels with noise above 1.25x the median | 2.2% | 2.6% |
+| Pixels with noise above 3x the median | 0.21% | 0.28% |
+| Pixels with noise above 5x the median | 0.050% | 0.075% |
+| Noisy pixels in the sample on two levels | 6 of 47 | 9 of 80 |
+| Pixels whose 60-frame mean is 10 ADU above / below the level | 3734 / 166 | 5085 / 207 |
+
+- The typical pixel is 6% quieter when cold (6.89 to 6.45 ADU), as the bias noise of the frames (7.02 to 6.77 ADU) suggests.
+- The noisy tail does not go away with cooling: it is slightly larger, in share of pixels above 3x and 5x the median.
+  The median fell, but the tail did not, which fits random telegraph noise that does not depend on temperature much
+  (inferred, as in the pyobs-asi measurements). 11% of the noisy pixels of the sample sit on two levels, about as at
+  20 °C (13%).
+- The number of pixels more than 10 ADU away from the level is 36% higher at -10 °C (5085, against 3734 above). No dark
+  current is involved with these shortest exposures, so this is a fixed pattern of the readout that grows slightly with
+  cooling, or the same pixels counted against the smaller noise (not checked).
+
+### Cooled to -10 °C (read mode 1)
+
+Same as for mode 0, sensor at -9.9 °C, 49 noisy pixels in the sample. Data: [pixels.csv](../cfb85516525f0aced_mode1/pixels.csv).
+
+| Quantity | 20 °C | -10 °C |
+|---|---|---|
+| Median per-pixel noise [ADU] | 22.64 | 21.26 |
+| Mean / rms per-pixel noise [ADU] | 22.94 / 23.33 | 21.59 / 22.07 |
+| 99.9th percentile of the noise [ADU] | 79.7 | 84.2 |
+| Pixels with noise above 1.25x the median | 1.8% | 2.2% |
+| Pixels with noise above 3x the median | 0.14% | 0.18% |
+| Pixels with noise above 5x the median | 0.038% | 0.055% |
+| Noisy pixels in the sample on two levels | 3 of 39 | 4 of 49 |
+| Pixels whose 60-frame mean is 10 ADU above / below the level | 164851 / 515420 | 133534 / 216153 |
+| Pixels whose 60-frame mean is 40 ADU above / below the level | 3218 / 253 | 4485 / 351 |
+
+- The typical pixel is 6% quieter when cold (22.64 to 21.26 ADU), as in mode 0. The noisy tail grows slightly with
+  cooling, also as in mode 0 (0.038% to 0.055% above 5x the median).
+- The pixels with an offset of more than 10 ADU below the level fall from 515420 to 216153 (1.1% to 0.46%) when cold, and
+  those above fall from 164851 to 133534, but the counts above 20 and 40 ADU grow. So the fixed pattern of mode 1 seen
+  at 20 °C is partly temperature dependent. Its shape (rows, columns, single pixels) was not examined.
+- Compared with mode 0 at -10 °C, mode 1 has about the same noisy share (0.055% against 0.075% above 5x) and far more
+  offset pixels.
+
 ## Dark current and temperature (measured)
 
 At each target the cooler was held until the sensor was stable, then a pair of 60 s darks and a pair of 300 s darks
@@ -259,6 +309,30 @@ Same procedure as above (5 A supply, PI controller, gain 10, offset 140, 60 s an
   measured. In ADU/s per pixel at gain 10 it is the same.
 - The bias noise falls from 22.26 to 22.02 ADU between -5 and -10 °C (6.83 to 6.77 ADU in mode 0).
 
+## Gain from the dark shot noise, warm (measured, not usable)
+
+The `gain` step measures the variance of the difference of two dark frames against the mean dark signal (photon
+transfer without light, cooler off, sensor at 17.6 to 17.9 °C, offset 140, read mode 0). The slope of variance over signal
+is 1 / gain in e-/ADU. Exposures 30, 100 and 300 s. Data: [gain.jsonl](gain.jsonl), plot: [images/gain.png](images/gain.png).
+
+![Variance vs. signal of dark pairs](images/gain.png)
+
+| Gain | Mean signal at 30 / 100 / 300 s [ADU] | Variance at 30 / 100 / 300 s [ADU^2] | Slope [ADU^2/ADU] | e-/ADU | Intercept, noise [ADU] |
+|---|---|---|---|---|---|
+| 0 | 4.0 / 13.1 / 38.0 | 55.4 / 62.9 / 102.8 | 1.44 | 0.70 | 6.9 |
+| 100 | 4.1 / 13.5 / 39.6 | 58.4 / 67.7 / 97.4 | 1.11 | 0.90 | 7.3 |
+| 800 | 6.2 / 20.7 / 60.7 | 119.0 / 181.9 / 207.1 | 1.41 | 0.71 | 11.3 |
+
+- The intercepts agree with the bias noise (7.15, 7.43 and 10.5 ADU at gains 0, 100 and 800), so the read noise part
+  of the fit is right.
+- **The gain values are not trustworthy.** 0.70, 0.90 and 0.71 e-/ADU for gains 0, 100 and 800 do not fall with
+  gain as they should, and the 800 value should be clearly lower than the gain 0 one (the read noise grows only 1.5 times
+  in ADU). The dark signal is only 4 to 60 ADU, the fit uses three points, and hot pixels and noisy pixels add
+  variance that is not shot noise (inferred). The scatter between gains (0.7 to 0.9) is the uncertainty of this method.
+- Earlier I estimated roughly 0.2 to 0.4 e-/ADU at gain 10 from the cold dark noise. That is not consistent with these
+  numbers (0.7 to 0.9), which confirms that neither estimate is reliable.
+- The real gain needs a flat field (the `flat` step with a steady, uniform light source).
+
 ## Cooling and the power supply
 
 **Cause of the earlier collapse (inferred): the 1.5 A supply.** On 17 November the cooler stopped working at about
@@ -335,8 +409,8 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
 
 ## Not measured yet
 
-- **Gain** (`gain` step, warm, about 1 h): e-/ADU, read noise in e- and full well per gain, including the step near
-  gain 1600. Because dark current is so small, a flat field (`flat` step) is the more reliable source.
+- **Gain** (flat field, `flat` step): e-/ADU, read noise in e- and full well per gain, including the step near gain 1600.
+  The dark shot noise method was tried (see above) and does not work for this camera.
 - **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
   short exposures.
 - **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
