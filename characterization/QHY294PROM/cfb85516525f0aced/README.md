@@ -14,8 +14,8 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Bias noise** is 7.2 ADU at gain 10 and offset 140 (measured). It grows to 8.4 ADU at gain 400 and 10.5 ADU at gain
   800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. Gain in e-/ADU and read noise in e- are not
   measured yet.
-- **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. Below -5 °C it is 0.003 to 0.004 ADU/s, close
-  to what the method can resolve. There is no sign of amp glow in the mean (mean only; no images checked by eye).
+- **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. Below -5 °C it is at most 0.003 to 0.004 ADU/s,
+  close to what the method can resolve. There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
 - **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
   5 A supply it ran at full drive without trouble and reached -12.8 °C at 24.5 °C ambient (measured), which is about
@@ -90,30 +90,46 @@ less salt-and-pepper noise (different sensor, different measurement date; inferr
 
 ## Dark current and temperature (measured)
 
-Ambient 20 °C. At each target the cooler was held for a few minutes, then a pair of 60 s darks and a pair of 300 s darks
-were taken at gain 10, offset 140. The dark current is the mean of the pixels over time, in ADU/s (bias subtracted).
-Data: [temperature.csv](temperature.csv), cooling log: [templog.csv](templog.csv), plot:
-[images/temperature.png](images/temperature.png).
+At each target the cooler was held until the sensor was stable, then a pair of 60 s darks and a pair of 300 s darks
+were taken at gain 10, offset 140. The dark current is the mean over all pixels, in ADU/s, with the mean of a bias pair
+subtracted. The pair is taken before the darks. Two series exist:
 
-| Setpoint [°C] | Drive level | Dark 60 s [ADU/s] | Dark 300 s [ADU/s] | Bias noise [ADU] |
-|---|---|---|---|---|
-| 10 | 10% | 0.045 | 0.043 | 7.02 |
-| 5 | 18% | 0.021 | 0.022 | 6.96 |
-| 0 | 26% | 0.010 | 0.011 | 6.88 |
-| -5 | 40% | 0.0038 | 0.0062 | 6.83 |
-| -10 (SDK auto mode) | 55% | 0.0026 | 0.0038 | 6.76 |
-| -10 (PI controller, sensor -10.7 to -11.0 °C) | 59% to 61% | 0.0042 | 0.0040 | 6.78 |
-| -12 (PI controller, sensor -11.9 to -12.2 °C) | 65% to 66% | 0.0002 | 0.0028 | 6.74 |
+- 10, 5, 0, -5, -10 and -12 °C on the 1.5 A supply (17 November, ambient 20 °C, PI controller or SDK auto mode as noted):
+  [temperature_1p5A_supply.csv](temperature_1p5A_supply.csv), cooling log [templog_1p5A_supply.csv](templog_1p5A_supply.csv),
+  plot [images/temperature_1p5A_supply.png](images/temperature_1p5A_supply.png).
+- -5, -10 and -12 °C on the 5 A supply (18 November, PI controller): [temperature.csv](temperature.csv), cooling log
+  [templog.csv](templog.csv), plot [images/temperature.png](images/temperature.png).
 
-- Above 0 °C the dark current halves every 5 °C (from 10 to 5 °C 0.045 to 0.021 ADU/s, from 5 to 0 °C to 0.010). The
-  conversion to e- is missing until the gain is measured.
-- The dark current flattens below -5 °C. The differences there (0.0002 to 0.006 ADU/s) are probably at the resolution
-  of the method, since a 300 s dark collects only about 1 ADU per pixel (inferred).
-- **Unexplained:** the 300 s darks give a higher rate than the 60 s darks at -5, -10 and -12 °C (for example 0.0028
-  versus 0.0002 ADU/s at -12 °C), and the two -10 °C runs differ (0.0042 versus 0.0026 for 60 s). A residual bias
-  drift (the bias is subtracted from a pair taken before the dark) or a warm-up in the first seconds of a long
-  exposure would both fit. Neither was checked.
-- The bias noise falls from 7.02 ADU at 10 °C to 6.74 ADU at -12 °C.
+The supply does not change the dark current at the temperatures where both worked (compare the rows below).
+
+| Setpoint [°C] | Supply | Sensor [°C] | Drive level | Dark 60 s [ADU/s] | Dark 300 s [ADU/s] | Bias noise [ADU] |
+|---|---|---|---|---|---|---|
+| 10 | 1.5 A | 10.0 | 10% | 0.045 | 0.043 | 7.02 |
+| 5 | 1.5 A | 5.0 | 18% | 0.021 | 0.022 | 6.96 |
+| 0 | 1.5 A | 0.0 | 26% | 0.010 | 0.011 | 6.88 |
+| -5 | 1.5 A | -5.1 / -5.0 | 40% | 0.0038 | 0.0062 | 6.83 |
+| -5 | 5 A | -5.7 / -6.7 | 44% / 38% | 0.0065 | 0.0064 | 6.83 |
+| -10 | 1.5 A (SDK auto mode) | -10.0 / -10.1 | 55% | 0.0026 | 0.0038 | 6.76 |
+| -10 | 1.5 A (PI) | -10.7 / -11.0 | 59% to 61% | 0.0042 | 0.0040 | 6.78 |
+| -10 | 5 A | -10.1 / -9.9 | 58% / 59% | 0.0026 | 0.0038 | 6.76 |
+| -12 | 1.5 A (PI) | -12.2 / -11.9 | 65% to 66% | 0.0002 | 0.0028 | 6.74 |
+| -12 | 5 A | -12.0 / -11.8 | 68% / 69% | 0.0010 | 0.0030 | 6.74 |
+
+- Above 0 °C the dark current halves every 5 °C (0.045, 0.021 and 0.010 ADU/s at 10, 5 and 0 °C). The conversion to e-
+  is missing until the gain is measured.
+- Below -5 °C it flattens at about 0.003 to 0.004 ADU/s (300 s darks). That is close to what the method can resolve:
+  a 300 s dark collects about 1 ADU per pixel, and the median pixel shows 0.000 ADU/s everywhere, so the mean comes
+  from a small share of pixels (hot fraction 1e-4 to 3e-4, defined as 20 sigma above the median). Treat 0.003 to
+  0.004 ADU/s as an upper bound (inferred).
+- The 60 s darks give lower rates than the 300 s darks at -10 and -12 °C, on both supplies, so the supply is not the
+  reason. A line through both exposure times gives a rate of about 0.004 ADU/s and an offset of -0.09 ADU at -10 °C and
+  0.0035 ADU/s and -0.15 ADU at -12 °C (5 A data), and no offset at -5 °C. An offset of 0.1 ADU between the bias pair and
+  the dark frames would explain it, and would hide the real rate in the 60 s darks (inferred, not checked). Longer
+  darks (900 s or more) at one or two temperatures would settle it.
+- The bias noise falls from 7.02 ADU at 10 °C to 6.74 ADU at -12 °C. The noise of the 300 s darks is 7.1 ADU, against
+  6.8 ADU for the 60 s darks (5 A data, -5 to -12 °C).
+- The sensor ran 0.7 to 1.7 °C below the setpoint during the -5 °C darks on the 5 A supply (PI controller overshoot),
+  so that point is not at -5.0 °C.
 
 ## Cooling and the power supply
 
@@ -166,8 +182,11 @@ temperature of the level. The 1.5 A run in `cooling_1p5A_supply.jsonl` ends with
 - **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
   short exposures.
 - **Bin 4 readout** at a low offset, and the whole characterization in **read mode 1** (47M, `--read-mode 1`).
-- **Temperature below -12 °C**, if the cooling collapse is solved.
-- The long-exposure rate differences described under [Dark current](#dark-current-and-temperature-measured).
+- **Temperature below -13 °C:** not reachable at 20 to 25 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
+- **Dark current below -5 °C** with longer darks (900 s or more), to settle the 60 s versus 300 s difference described
+  under [Dark current](#dark-current-and-temperature-measured).
+- **The SDK's own cooling control** (`ControlQHYCCDTemp`, `CONTROL_COOLER`) on the 5 A supply. All measurements here
+  used the PI controller on the manual PWM, so the driver's park-and-retry workaround is not yet judged.
 
 ## Notes on the script
 
@@ -176,5 +195,4 @@ temperature of the level. The 1.5 A run in `cooling_1p5A_supply.jsonl` ends with
 - The temperature ramp starts from the sensor temperature if the cooler has no target or the sensor is more than 2 °C
   above the setpoint. The warm-up after a `CoolerLimit` stop used to fail with a second `CoolerLimit` from a stale
   target; fixed in this session (not tested on a camera that stopped cooling again).
-- `frames/` holds FITS cutouts. pyobs-qhyccd has no `.gitignore` entry for them yet (pyobs-asi ignores `frames/` and
-  `*.log` under `characterization/`); add one before committing.
+- `frames/` holds FITS cutouts and is ignored by git, like `*.log` under `characterization/` (`.gitignore`).

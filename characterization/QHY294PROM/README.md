@@ -31,7 +31,8 @@ probably not filled for this model). The 4.63 µm is from the documentation, not
 
 ## Recommended use
 
-Preliminary, from the warm bias and readout runs and the dark runs down to -12 °C of one unit:
+Preliminary, from the warm bias and readout runs and the dark runs down to -12 °C of one unit (5 A supply for the
+cooling numbers):
 
 - Offset 140 (the pyobs-qhyccd default) clips nothing at any gain tested (every offset from 10 up is clean). Offset 0
   clips about 0.2% of the pixels at gain 0 to 100 and 0.4% at gain 1600. Offset 200 leaves 12800 ADU of bias, which
@@ -43,8 +44,11 @@ Preliminary, from the warm bias and readout runs and the dark runs down to -12 �
   bins are added, not averaged) at the same offset. Use a lower offset when binning.
 - A full read of the effective area takes 0.6 s with USB traffic 0 and 60, and 0.71 s with 150. Binning does not make
   it faster. USB traffic 60 costs nothing measurable here.
-- Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and about
+- Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and at most about
   0.003 to 0.004 ADU/s below -5 °C (see the unit report).
+- Cooling target: about 10 °C below ambient is easy (55% drive level); the cooler reaches about 37 °C below ambient at
+  full drive and gains less than 1 °C per 20 PWM above 170, so do not plan for more than about -10 to -12 °C in a room at
+  20 to 25 °C.
 
 ## Cooling
 
