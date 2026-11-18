@@ -7,6 +7,7 @@ notes are based on one unit so far. The measurements are per unit:
 | Serial number | Measured | Report |
 |---|---|---|
 | cfb85516525f0aced | November 2026 | [cfb85516525f0aced/README.md](cfb85516525f0aced/README.md) |
+| cfb85516525f0aced, read mode 1 | November 2026 | [cfb85516525f0aced_mode1/README.md](cfb85516525f0aced_mode1/README.md) |
 
 ## Camera properties
 
@@ -16,7 +17,7 @@ From the SDK (full list in [meta.json](cfb85516525f0aced/meta.json)):
 |---|---|
 | Sensor | 19.5 x 13.2 mm, pixel 4.63 µm (pixel size not read from the SDK, see below), 16 bit |
 | Read mode 0 | "11M MODE", 4164 x 2822 |
-| Read mode 1 | "47M MODE", 8336 x 5648 (not measured yet) |
+| Read mode 1 | "47M MODE", 8336 x 5648, effective area x 80, y 0, 8336 x 5622; about 3 times the bias noise of mode 0 at low gain, see [mode 1 report](cfb85516525f0aced_mode1/README.md) |
 | Effective area | x 36, y 28, 4164 x 2795 (read mode 0) |
 | Binning | 1, 2, 4 |
 | Exposure | 1 µs to 3600 s |
@@ -40,8 +41,9 @@ cooling numbers):
 - Gain 10 and offset 140 give a bias noise of 7.2 ADU. The noise rises slowly to 8.4 ADU at gain 400 and 10.5 ADU at
   gain 800, drops to 7.6 ADU at gain 1600 and jumps to 19 ADU at gain 3000. The step at gain 1600 looks like a switch
   of the conversion gain (inferred, not checked with photon transfer).
-- Do not use bin 4 with offset 140 and gain 10: the frames are saturated at 65535. Bin 2 has a bias of 35930 ADU (the
-  bins are added, not averaged) at the same offset. Use a lower offset when binning.
+- Binning in the camera adds the pixels (bias 4x at bin 2, 16x at bin 4) and the read noise grows with the square root of
+  the number of pixels, so it gives no noise advantage over software binning. With offset 140 and gain 10, bin 4 is
+  saturated at 65535; use offset 10 or less when binning (bin 4 then has a bias of 10600 ADU and 30.6 ADU noise).
 - A full read of the effective area takes 0.6 s with USB traffic 0 and 60, and 0.71 s with 150. Binning does not make
   it faster. USB traffic 60 costs nothing measurable here.
 - Dark current is low enough to be hard to measure: 0.045 ADU/s at 10 °C, halving about every 5 °C, and at most about

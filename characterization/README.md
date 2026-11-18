@@ -5,7 +5,7 @@ unit of that model, and one subfolder per unit, named after its serial number, w
 
 | Model | Units |
 |---|---|
-| [QHY294PRO-M](QHY294PROM/README.md) | [cfb85516525f0aced](QHY294PROM/cfb85516525f0aced/README.md) |
+| [QHY294PRO-M](QHY294PROM/README.md) | [cfb85516525f0aced](QHY294PROM/cfb85516525f0aced/README.md), [read mode 1](QHY294PROM/cfb85516525f0aced_mode1/README.md) |
 
 ## Layout
 

@@ -21,6 +21,10 @@ Steps (all on a central 2048x2048 window of the effective area, USB traffic as s
 * ``cooling``: fixed manual PWM levels from ambient, held in ascending order (``--pwms``), to find out where and why the
   cooler stops working. Logs the sensor temperature every 5 s to ``cooling.jsonl``, stops a level as soon as the sensor
   warms by 1 degC while the PWM is held, and repeats a level once from ambient.
+* ``sdkcool``: the SDK's own cooler control instead of the PI controller: ``--sdk-mode temp`` calls
+  ``ControlQHYCCDTemp`` once per second, ``--sdk-mode cooler`` sets ``CONTROL_COOLER`` once. The target
+  (``--cool-target``) is reached in steps of 1 degC/min or, with ``--jump``, in one step. Logs the PWM the SDK chooses
+  to ``sdkcool.jsonl`` and stops on a collapse (sensor 1 degC above its lowest value).
 * ``flat``: photon transfer curve from pairs of frames of a steady, roughly uniform light source (e.g. a wall): gain in
   e-/ADU, read noise in e-, saturation and linearity. The bias level comes from the fit of level vs. exposure time.
 * ``short``: signal vs. exposure times from the minimum up to 100 ms with a steady light source, to find an offset in
@@ -132,6 +136,7 @@ class Camera:
         lib.GetQHYCCDParam.restype = ctypes.c_double
         lib.GetQHYCCDParam.argtypes = [ctypes.c_void_p, ctypes.c_int]
         lib.SetQHYCCDParam.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_double]
+        lib.ControlQHYCCDTemp.argtypes = [ctypes.c_void_p, ctypes.c_double]
         lib.OpenQHYCCD.restype = ctypes.c_void_p
         lib.OpenQHYCCD.argtypes = [ctypes.c_char_p]
         lib.GetQHYCCDParamMinMaxStep.argtypes = [ctypes.c_void_p, ctypes.c_int] + [ctypes.POINTER(ctypes.c_double)] * 3
@@ -598,7 +603,9 @@ def run_flat(cam: Camera, out: Output, gains: list[int], offset: int) -> None:
         out.save_cutout(f"flat_g{gain}_high", pairs[-1][1], gain=gain, offset=offset, exptime=pairs[-1][0])
 
 
-def run_temperature(cam: Camera, out: Output, temperatures: list[int], gain: int, offset: int) -> None:
+def run_temperature(
+    cam: Camera, out: Output, temperatures: list[int], gain: int, offset: int, exposures: list[float] | None = None
+) -> None:
     ambient = round(cam.temperature())
     try:
         for target in temperatures:
@@ -611,7 +618,7 @@ def run_temperature(cam: Camera, out: Output, temperatures: list[int], gain: int
                 out.write("temperature", {"time": time.time(), "target": target, "limit": str(e)})
                 break
             _, _, bias = bias_pair(cam, gain, offset)
-            for exposure in DARK_EXPOSURES:
+            for exposure in exposures or DARK_EXPOSURES:
                 cam.grab(exposure, gain, offset)  # discard
                 da = cam.grab(exposure, gain, offset)
                 db = cam.grab(exposure, gain, offset)
@@ -690,14 +697,14 @@ def sweep_level(cam: Camera, out: Output, pwm: int, hold_s: float) -> dict[str, 
     return result
 
 
-def sweep_warm_up(cam: Camera, out: Output, ambient: float, timeout_s: float = 1500.0) -> None:
+def sweep_warm_up(cam: Camera, out: Output, ambient: float, timeout_s: float = 1500.0, log: str = "cooling") -> None:
     """PWM 0 and wait until the sensor is within 3 degC of the ambient temperature."""
     cam.set_param(CONTROL_MANULPWM, 0)
     start = time.time()
     while time.time() - start < timeout_s:
         temp = cam.temperature()
         out.write(
-            "cooling",
+            log,
             {
                 "time": time.time(),
                 "label": "warm",
@@ -736,6 +743,91 @@ def run_cooling(cam: Camera, out: Output, pwms: list[int], hold_s: float) -> Non
                 return
     finally:
         sweep_warm_up(cam, out, ambient)
+
+
+def run_sdkcool(
+    cam: Camera, out: Output, mode: str, target: int, jump: bool, ambient: float, hold_s: float = 900.0
+) -> None:
+    """Cool with the SDK's own control ("temp": ControlQHYCCDTemp once per second, "cooler": CONTROL_COOLER once per
+    change of the target). Stops on a collapse (sensor warms by 1 degC above its lowest value)."""
+    run = f"{mode}_{'jump' if jump else 'ramp'}_{target}"
+    print(f"SDK cooling {run}", flush=True)
+    cam.set_param(CONTROL_MANULPWM, 0)
+    time.sleep(2)
+    start = time.time()
+    lowest = cam.temperature()
+    current = target if jump else round(lowest)
+    last_step, hold_start, last_log = start, None, 0.0
+    outcome = "time"
+
+    def apply(value: int) -> None:
+        if mode == "temp":
+            cam.lib.ControlQHYCCDTemp(cam.handle, float(value))
+        else:
+            cam.set_param(CONTROL_COOLER, float(value))
+
+    try:
+        apply(current)
+        while True:
+            now = time.time()
+            if mode == "temp":
+                apply(current)
+            if not jump and current > target and now - last_step >= RAMP_STEP_S:
+                current -= 1
+                last_step = now
+                apply(current)
+            if current <= target and hold_start is None:
+                hold_start = now
+            temp = cam.temperature()
+            lowest = min(lowest, temp)
+            if now - last_log >= POLL_S:
+                last_log = now
+                out.write(
+                    "sdkcool",
+                    {
+                        "time": now,
+                        "run": run,
+                        "label": "cool",
+                        "target": current,
+                        "temp": temp,
+                        "pwm_read": cam.get_param(CONTROL_CURPWM),
+                        "cooler_param": cam.get_param(CONTROL_COOLER),
+                    },
+                )
+                print(f"  {run}: T={temp:.1f} target={current} pwm={cam.get_param(CONTROL_CURPWM):.0f}", flush=True)
+            if now - start > 60 and temp - lowest >= SWEEP_COLLAPSE_C and temp - current >= SWEEP_COLLAPSE_C:
+                outcome = "collapse"
+                break
+            if hold_start is not None and now - hold_start >= hold_s:
+                break
+            time.sleep(1.0)
+    finally:
+        out.write(
+            "sdkcool",
+            {
+                "time": time.time(),
+                "run": run,
+                "label": "result",
+                "outcome": outcome,
+                "lowest_temp": lowest,
+                "end_temp": cam.temperature(),
+                "elapsed_s": time.time() - start,
+            },
+        )
+        print(f"  -> {outcome}: lowest {lowest:.1f} degC, end {cam.temperature():.1f} degC", flush=True)
+        cam.set_param(CONTROL_MANULPWM, 0)
+        time.sleep(5)
+        out.write(
+            "sdkcool",
+            {
+                "time": time.time(),
+                "run": run,
+                "label": "off",
+                "pwm_read": cam.get_param(CONTROL_CURPWM),
+                "temp": cam.temperature(),
+            },
+        )
+        sweep_warm_up(cam, out, ambient, log="sdkcool")
 
 
 def run_short(cam: Camera, out: Output, gain: int, offset: int, reference_s: float = SHORT_REFERENCE_S) -> None:
@@ -1113,6 +1205,10 @@ def make_report(out: Output) -> None:
 
     cooling_sets = [(n, out.read(n)) for n in sorted(f.stem for f in out.folder.glob("cooling*.jsonl"))]
     cooling_sets = [(n, [r for r in rows if "temp" in r and "pwm_set" in r]) for n, rows in cooling_sets]
+    sdk_rows = out.read("sdkcool") if (out.folder / "sdkcool.jsonl").exists() else []
+    for run in dict.fromkeys(r["run"] for r in sdk_rows):
+        rows = [dict(r, pwm_set=r["pwm_read"]) for r in sdk_rows if r["run"] == run and "temp" in r and "pwm_read" in r]
+        cooling_sets.append((f"sdkcool {run}", rows))
     cooling_sets = [(n, rows) for n, rows in cooling_sets if rows]
     if cooling_sets:
         fig, axs = plt.subplots(len(cooling_sets), 1, figsize=(10, 3.5 * len(cooling_sets)), squeeze=False)
@@ -1166,7 +1262,8 @@ def find_report_folder(root: Path) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
-        "step", choices=["bias", "gain", "temperature", "cooling", "flat", "short", "readout", "pixels", "report"]
+        "step",
+        choices=["bias", "gain", "temperature", "cooling", "sdkcool", "flat", "short", "readout", "pixels", "report"],
     )
     parser.add_argument("--sdk", default="/usr/local/lib/libqhyccd.so", help="path of libqhyccd.so")
     parser.add_argument("--read-mode", type=int, default=0, help="read mode of the camera, see meta.json")
@@ -1175,9 +1272,16 @@ def main() -> None:
     parser.add_argument("--folder", type=Path, help="unit folder for the report step, if there is more than one")
     parser.add_argument("--gains", type=int, nargs="+", help="gains for the bias or gain step")
     parser.add_argument("--offsets", type=int, nargs="+", help="offsets for the bias step")
-    parser.add_argument("--exposures", type=float, nargs="+", help="exposure times in s for the gain step")
+    parser.add_argument(
+        "--exposures", type=float, nargs="+", help="exposure times in s for the gain or temperature step"
+    )
     parser.add_argument("--temperatures", type=int, nargs="+", default=TEMPERATURES)
     parser.add_argument("--pwms", type=int, nargs="+", default=SWEEP_PWMS, help="PWM levels (0 to 255), cooling step")
+    parser.add_argument("--sdk-mode", choices=["temp", "cooler"], default="temp", help="sdkcool step")
+    parser.add_argument("--cool-target", type=int, default=-10, help="target in degC, sdkcool step")
+    parser.add_argument("--jump", action="store_true", help="sdkcool step: go to the target in one step")
+    parser.add_argument("--ambient", type=float, default=20.0, help="ambient temperature in degC, sdkcool step")
+    parser.add_argument("--frames", type=int, default=PIXEL_FRAMES, help="frames for the pixels step")
     parser.add_argument("--hold", type=float, default=SWEEP_HOLD_S, help="longest hold of one level in s, cooling step")
     parser.add_argument("--gain", type=int, default=DEFAULT_GAIN, help="gain for the temperature step")
     parser.add_argument("--offset", type=int, default=DEFAULT_OFFSET)
@@ -1227,12 +1331,15 @@ def main() -> None:
             run_readout(cam, out, args.gain, args.offset)
         elif args.step == "pixels":
             target = None if args.no_cooling else args.target_temp
-            run_pixels(cam, out, args.gain, args.offset, target)
+            run_pixels(cam, out, args.gain, args.offset, target, args.frames)
         elif args.step == "temperature":
-            run_temperature(cam, out, args.temperatures, args.gain, args.offset)
+            run_temperature(cam, out, args.temperatures, args.gain, args.offset, args.exposures)
+        elif args.step == "sdkcool":
+            run_sdkcool(cam, out, args.sdk_mode, args.cool_target, args.jump, args.ambient)
         elif args.step == "cooling":
             run_cooling(cam, out, args.pwms, args.hold)
     finally:
+        cam.set_param(CONTROL_MANULPWM, 0)  # never leave the cooler driven when the script ends
         cam.close()
 
 

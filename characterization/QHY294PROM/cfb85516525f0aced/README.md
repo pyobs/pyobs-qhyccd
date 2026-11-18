@@ -69,10 +69,23 @@ Full effective area read at gain 10, offset 140. Data: [readout.csv](readout.csv
 | 60 | 0.60 | 0.63 | 0.60 |
 | 150 | 0.71 | 0.75 | 0.73 |
 
-- Binning is done on the sensor or in the SDK without a speed gain; the time is the same.
-- At bin 2 the pixel values are the sum of four pixels (bias 35930 ADU, noise 14.5 ADU, twice the bin 1 noise).
-- **Bin 4 is invalid:** the frames are all 65535 ADU, so its noise of 0.0 is not a measurement. Run again with a low
-  offset.
+- Binning gives no speed gain; the time is the same.
+- Binning adds the pixels, it does not average them (inferred from the bias level): with offset 140 the bias is 8983
+  ADU unbinned, 35930 at bin 2 (4x) and more than 65535 at bin 4 (16x, all pixels saturated). The first run at bin 4 with
+  offset 140 is therefore invalid (noise 0.0). A rerun with offset 10 gave valid values (below).
+- Noise at gain 10, offset 10 (bias level 662 ADU unbinned, 2650 at bin 2, 10600 at bin 4):
+
+| Bin | Noise [ADU] | Ratio to bin 1 | Square root of the number of pixels |
+|---|---|---|---|
+| 1 | 7.13 | 1 | 1 |
+| 2 | 14.45 | 2.03 | 2 |
+| 4 | 30.6 | 4.3 | 4 |
+
+  The noise grows with the square root of the number of pixels (bin 4 is 7% above that), so binning in the camera
+  has no read-noise advantage over binning afterwards in software (inferred). It also limits the signal range: a 16 bit
+  value saturates at 65535, which is at 1/16 of the unbinned full scale for bin 4.
+- The first rows of the readout table above are with offset 140; offset 10 gives the same times (0.56 to 0.71 s).
+  Data (both offsets): [readout.csv](readout.csv).
 
 ## Pixels at 20 °C (measured)
 
@@ -189,13 +202,34 @@ missed the failure at PWM 200 (the level started at -10.1 °C and never went low
 min and started PWM 220 at 30 °C. It was interrupted by hand. The check now needs only a rise of 1 °C above the lowest
 temperature of the level. The 1.5 A run in `cooling_1p5A_supply.jsonl` ends with the interrupted PWM 220 level.
 
+## SDK cooling control (5 A supply)
+
+The PI controller of the script and the fixed PWM sweep drive the cooler through `CONTROL_MANULPWM`. The SDK has two
+controls of its own: `ControlQHYCCDTemp` (called once per second by the caller) and `SetQHYCCDParam(CONTROL_COOLER,
+target)` (set once, the camera regulates). The `sdkcool` step runs each of them to -10 °C, once in steps of 1 °C per minute
+("ramp") and once with the target set to -10 °C at once ("jump"), then holds 15 min. It logs the PWM that the SDK chooses
+(`CONTROL_CURPWM`) and stops on a collapse (sensor 1 °C above its lowest value). Data: [sdkcool.jsonl](sdkcool.jsonl),
+[sdkcool.csv](sdkcool.csv).
+
+| Run | Result |
+|---|---|
+| `CONTROL_COOLER`, ramp | **Inconclusive.** The run started at 17.4 °C and stopped after 60 s because the script flagged a collapse: the sensor had dropped to 14.2 °C in 15 s (PWM 31 read once), the camera then set the PWM to 0 and the sensor warmed to 16.7 °C, towards the target of 17 °C. That is what a regulator does when the sensor is below the target, so the collapse flag was wrong (the check did not compare with the target). Fixed in the script; to be repeated. |
+| `ControlQHYCCDTemp`, ramp | Reached -10 °C after 31 min and held -10.0 °C for 15 min (lowest -10.3 °C). PWM rose from 5 at 19 °C to 159 at the end of the ramp and settled at 171 to 179 (67% to 70%). No collapse. |
+
+- On the ramp the SDK followed the target within about 1 °C (sensor 0.8 to 1 °C above the target while ramping). The PWM
+  was never close to 250. The reading of 255 in the first sample of each run is the unset `CONTROL_CURPWM` (it reads
+  garbage until the first PWM is set), not a drive level.
+- The SDK needs a higher PWM at -10 °C (about 177) than the PI controller (58% to 59%, about 150) and than the fixed sweep
+  (170 gives -9.8 °C). Why is not known; the PWM that `CONTROL_CURPWM` reports may not have the same scale as the manual PWM
+  (not checked).
+
 ## Not measured yet
 
 - **Gain** (`gain` step, warm, about 1 h): e-/ADU, read noise in e- and full well per gain, including the step near
   gain 1600. Because dark current is so small, a flat field (`flat` step) is the more reliable source.
 - **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
   short exposures.
-- **Bin 4 readout** at a low offset, and the whole characterization in **read mode 1** (47M, `--read-mode 1`).
+- The whole characterization in **read mode 1** (47M, `--read-mode 1`).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current below -5 °C** with longer darks (900 s or more), to settle the 60 s versus 300 s difference described
   under [Dark current](#dark-current-and-temperature-measured).
