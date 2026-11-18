@@ -1,10 +1,11 @@
 # QHY294PRO-M, serial number cfb85516525f0aced
 
 This report describes what was measured on one QHY294PRO-M (monochrome, cooled CMOS camera) with the characterization
-script of pyobs-qhyccd on 17 November 2026: bias, read noise versus gain and offset, readout time, pixel noise and dark
-current down to -12 °C. The cooler stopped working at high drive on the first supply (1.5 A), see
-[Cooling and the power supply](#cooling-and-the-power-supply). Notes that apply to every unit of the model are in the
-[model notes](../README.md).
+script of pyobs-qhyccd in November 2026, in both read modes of the camera: mode 0 ("11M MODE", 4164 x 2822) and mode 1
+("47M MODE", 8336 x 5648). Mode 0 is the main body; the results of mode 1 follow in a subsection of each topic. Notes
+that apply to every unit of the model are in the [model notes](../README.md). Data of mode 0 are in this folder, data of
+mode 1 in [../cfb85516525f0aced_mode1/](../cfb85516525f0aced_mode1/) (the script writes `_mode1` for read mode 1). The
+report is filled in as measurements finish; parts marked "pending" are still to be measured.
 
 Each statement is marked as **measured** (own data, linked below), **inferred** (a conclusion from the data that was not
 checked separately) or **from the SDK**. All numbers are for this unit.
@@ -20,7 +21,10 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
   5 A supply it ran at full drive without trouble and reached -12.8 °C at an ambient of about 20 °C (measured), which is about
   the limit of the cooler. The cause was probably the supply (inferred).
-- **Not measured:** gain in e-/ADU, full well, linearity, short exposures, read mode 1.
+- **Read mode 1 (47M):** bias noise 23 ADU at gain 10 (3 times that of mode 0), 11.4 ADU from gain 200 up; readout 1.4 to
+  1.5 s per frame; same share of noisy pixels as mode 0 but a fixed pattern of offset pixels (measured). Offset 0 clips
+  98% of the pixels, use 10 or more.
+- **Not measured:** gain in e-/ADU, full well, linearity, short exposures.
 
 ## Setup
 
@@ -59,6 +63,33 @@ of 2. Data: [bias.csv](bias.csv).
 - The noise at gain 1600 is lower than at gain 800. A conversion gain switch would explain it (inferred, no photon
   transfer yet).
 
+### Read mode 1 (47M mode)
+
+Same method as in read mode 0. Data: [bias.csv](../cfb85516525f0aced_mode1/bias.csv).
+
+![Bias noise and level vs. gain and offset, read mode 1](../cfb85516525f0aced_mode1/images/bias.png)
+
+| Gain | Noise [ADU] | Clipped at offset 0 |
+|---|---|---|
+| 0 | 22.97 | 98% |
+| 10 | 23.28 | 98% |
+| 50 | 24.48 | 98% |
+| 100 | 26.2 | 98% |
+| 200 | 11.4 | 99.8% |
+| 400 | 11.8 | 99.8% |
+| 800 | 12.7 | 99.8% |
+| 1600 | 15.7 | 99.8% |
+| 3000 | 38.4 | 99.9% |
+
+- The noise falls from 26 to 11.4 ADU between gain 100 and gain 200. That is the switch of the conversion gain (inferred;
+  in read mode 0 the corresponding step is between gain 800 and 1600). A photon transfer measurement would give the noise
+  in e-.
+- The bias level is `offset * 64 - 38` ADU (602 at offset 10, 8922 at offset 140, 12762 at offset 200), a little below the
+  `offset * 64 + 24` of read mode 0. It falls by about 85 ADU from gain 0 to gain 3000 (8922 to 8837).
+- **Offset 0 is unusable in read mode 1:** 98% to 99.9% of the pixels are clipped at zero (in mode 0 about 0.2%). Use
+  offset 10 or higher.
+- The noise does not depend on the offset (offset 10 to 200).
+
 ## Readout (measured)
 
 Full effective area read at gain 10, offset 140. Data: [readout.csv](readout.csv).
@@ -87,6 +118,24 @@ Full effective area read at gain 10, offset 140. Data: [readout.csv](readout.csv
 - The first rows of the readout table above are with offset 140; offset 10 gives the same times (0.56 to 0.71 s).
   Data (both offsets): [readout.csv](readout.csv).
 
+### Read mode 1 (47M mode)
+
+Full effective area (8336 x 5622) read at gain 10 and offset 10 (offset 140 would saturate at bin 4, see mode 0). Data:
+[readout.csv](../cfb85516525f0aced_mode1/readout.csv).
+
+| USB traffic | Bin 1 [s] | Bin 2 [s] | Bin 4 [s] | Noise bin 1 / 2 / 4 [ADU] |
+|---|---|---|---|---|
+| 0 | 1.40 | 1.48 | 1.45 | 23.3 / 46.7 / 95.0 |
+| 60 | 1.52 | 1.52 | 1.55 | 23.3 / 46.5 / 95.1 |
+| 150 | 1.88 | 1.93 | 1.87 | 23.3 / 46.7 / 95.4 |
+
+- A full frame takes 1.4 to 1.5 s at USB traffic 0 and 60, about 2.5 times the 0.6 s of read mode 0 for four times the
+  pixels (mode 0: 0.6 s). USB traffic 150 costs 25% more.
+- Binning does not make the readout faster, as in mode 0. The noise is 2.0x at bin 2 and 4.1x at bin 4, so the pixels
+  are added and the noise grows with the square root of their number, as in mode 0.
+- The bias level at offset 10 differs by 10 ADU between the rows (607, 602, 597 at bin 1). It follows the order of the
+  runs, not the USB traffic, so it may be a slow drift of the camera (inferred, not checked).
+
 ## Pixels at 20 °C (measured)
 
 60 bias frames (shortest exposure) at gain 10, offset 140, sensor at 20 °C (cooler off). Standard deviation per pixel over the
@@ -102,6 +151,33 @@ Full effective area read at gain 10, offset 140. Data: [readout.csv](readout.csv
 
 There is a small tail of noisy pixels. The pyobs-asi camera has about 1% above 5x for comparison, so this camera shows
 less salt-and-pepper noise (different sensor, different measurement date; inferred).
+
+### Read mode 1 (47M mode)
+
+60 bias frames (shortest exposure) of the whole effective area (8336 x 5622 = 46.9 Mpixel) at gain 10, offset 140, sensor
+at 20.2 °C (cooler off). Standard deviation per pixel over the 60 frames. Data: [pixels.csv](../cfb85516525f0aced_mode1/pixels.csv). Read mode 0
+for comparison (11.6 Mpixel, same settings):
+
+| Quantity | Mode 1 | Mode 0 |
+|---|---|---|
+| Median per-pixel noise [ADU] | 22.64 | 6.89 |
+| Mean / rms per-pixel noise [ADU] | 22.94 / 23.33 | 7.01 / 7.16 |
+| 99.9th percentile of the noise [ADU] | 79.7 | 27.7 |
+| Pixels with noise above 1.25x the median | 1.8% | 2.2% |
+| Pixels with noise above 3x the median | 0.14% | 0.21% |
+| Pixels with noise above 5x the median | 0.038% | 0.050% |
+| Noisy pixels in the sample on two levels | 3 of 39 | 6 of 47 |
+| Pixels whose 60-frame mean is 10 ADU above / below the level | 0.35% / 1.1% | 0.032% / 0.0014% |
+| Pixels whose 60-frame mean is 40 ADU above / below the level | 3218 / 253 | 4 / 0 |
+
+- The share of noisy pixels is about the same as in mode 0 (a little lower), so the tail of noisy pixels is not worse
+  in the larger mode.
+- The 60-frame means scatter more than the noise alone explains. With 22.6 ADU noise the mean of 60 frames has 2.9 ADU
+  scatter, so 10 ADU is 3.4 sigma and 0.03% would be expected on each side. Mode 1 has 0.35% above and 1.1% below the
+  level, and 3218 pixels more than 40 ADU above it. So there is a fixed pattern (rows, columns or single pixels were not
+  examined) that mode 0 does not have in this size. Not checked further.
+- The `range_over_45adu` column in `pixels.csv` counts nearly every pixel in mode 1 because the threshold of 45 ADU
+  was chosen for the noise of mode 0. Ignore it here.
 
 ## Dark current and temperature (measured)
 
@@ -153,6 +229,10 @@ The supply does not change the dark current at the temperatures where both worke
   6.8 ADU for the 60 s darks (5 A data, -5 to -12 °C).
 - The sensor ran 0.7 to 1.7 °C below the setpoint during the -5 °C darks on the 5 A supply (PI controller overshoot),
   so that point is not at -5.0 °C.
+
+### Read mode 1 (47M mode): pending
+
+The temperature series in read mode 1 has not finished yet.
 
 ## Cooling and the power supply
 
@@ -214,6 +294,7 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
 | Run | Result |
 |---|---|
 | `CONTROL_COOLER`, ramp | **Inconclusive.** The run started at 17.4 °C and stopped after 60 s because the script flagged a collapse: the sensor had dropped to 14.2 °C in 15 s (PWM 31 read once), the camera then set the PWM to 0 and the sensor warmed to 16.7 °C, towards the target of 17 °C. That is what a regulator does when the sensor is below the target, so the collapse flag was wrong (the check did not compare with the target). Fixed in the script; to be repeated. |
+| `ControlQHYCCDTemp`, jump to -10 °C | Sensor went from 17.4 °C to -11.6 °C in 4.5 min while the SDK drove the PWM at 217 to 255 (85% to 100%). It overshot to -11.6 °C and rose to -10.6 °C, so the script flagged a collapse and stopped at 5 min. That was wrong: the sensor was still below the target (the check at that time looked only at the rise from the lowest value). **Inconclusive for the hold, but at PWM 255 the cooler kept cooling for at least 2 minutes (inferred from -8.9 to -11.6 °C at 255 and 233).** To be repeated with the fixed check. |
 | `ControlQHYCCDTemp`, ramp | Reached -10 °C after 31 min and held -10.0 °C for 15 min (lowest -10.3 °C). PWM rose from 5 at 19 °C to 159 at the end of the ramp and settled at 171 to 179 (67% to 70%). No collapse. |
 
 - On the ramp the SDK followed the target within about 1 °C (sensor 0.8 to 1 °C above the target while ramping). The PWM
@@ -229,7 +310,7 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
   gain 1600. Because dark current is so small, a flat field (`flat` step) is the more reliable source.
 - **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
   short exposures.
-- The whole characterization in **read mode 1** (47M, `--read-mode 1`).
+- **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current below -5 °C** with longer darks (900 s or more), to settle the 60 s versus 300 s difference described
   under [Dark current](#dark-current-and-temperature-measured).

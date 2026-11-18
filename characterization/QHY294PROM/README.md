@@ -7,7 +7,6 @@ notes are based on one unit so far. The measurements are per unit:
 | Serial number | Measured | Report |
 |---|---|---|
 | cfb85516525f0aced | November 2026 | [cfb85516525f0aced/README.md](cfb85516525f0aced/README.md) |
-| cfb85516525f0aced, read mode 1 | November 2026 | [cfb85516525f0aced_mode1/README.md](cfb85516525f0aced_mode1/README.md) |
 
 ## Camera properties
 
@@ -17,7 +16,7 @@ From the SDK (full list in [meta.json](cfb85516525f0aced/meta.json)):
 |---|---|
 | Sensor | 19.5 x 13.2 mm, pixel 4.63 µm (pixel size not read from the SDK, see below), 16 bit |
 | Read mode 0 | "11M MODE", 4164 x 2822 |
-| Read mode 1 | "47M MODE", 8336 x 5648, effective area x 80, y 0, 8336 x 5622; about 3 times the bias noise of mode 0 at low gain, see [mode 1 report](cfb85516525f0aced_mode1/README.md) |
+| Read mode 1 | "47M MODE", 8336 x 5648, effective area x 80, y 0, 8336 x 5622; about 3 times the bias noise of mode 0 at low gain, see [unit report](cfb85516525f0aced/README.md#read-mode-1-47m-mode) |
 | Effective area | x 36, y 28, 4164 x 2795 (read mode 0) |
 | Binning | 1, 2, 4 |
 | Exposure | 1 µs to 3600 s |

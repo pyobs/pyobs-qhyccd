@@ -5,7 +5,7 @@ unit of that model, and one subfolder per unit, named after its serial number, w
 
 | Model | Units |
 |---|---|
-| [QHY294PRO-M](QHY294PROM/README.md) | [cfb85516525f0aced](QHY294PROM/cfb85516525f0aced/README.md), [read mode 1](QHY294PROM/cfb85516525f0aced_mode1/README.md) |
+| [QHY294PRO-M](QHY294PROM/README.md) | [cfb85516525f0aced](QHY294PROM/cfb85516525f0aced/README.md) |
 
 ## Layout
 
@@ -54,5 +54,6 @@ It redraws the plots in `images/` and writes a CSV file next to every `.jsonl` f
 uv run python tools/characterize.py report --folder characterization/QHY294PROM/cfb85516525f0aced
 ```
 
-Not done yet for this camera: `gain`, `flat`, `short`, read mode 1 (`--read-mode 1`) and bin 4 at a low offset. See
-the [unit report](QHY294PROM/cfb85516525f0aced/README.md#not-measured-yet).
+Read mode 1 is measured with `--read-mode 1` and written to `<serial number>_mode1`; the report of the unit covers
+both modes. Not done yet for this camera: `flat`, `short` and the gain measurement. See the
+[unit report](QHY294PROM/cfb85516525f0aced/README.md#not-measured-yet).
