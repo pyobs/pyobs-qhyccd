@@ -388,7 +388,8 @@ controls of its own: `ControlQHYCCDTemp` (called once per second by the caller) 
 target)` (set once, the camera regulates). The `sdkcool` step runs each of them to -10 °C, once in steps of 1 °C per minute
 ("ramp") and once with the target set to -10 °C at once ("jump"), then holds 15 min. It logs the PWM that the SDK chooses
 (`CONTROL_CURPWM`) and stops on a collapse (sensor 1 °C above its lowest value). Data: [sdkcool.jsonl](sdkcool.jsonl),
-[sdkcool.csv](sdkcool.csv).
+[sdkcool.csv](sdkcool.csv). The panels `sdkcool ...` in [images/cooling.png](images/cooling.png) (shown
+[above](#cooling-and-the-power-supply)) show these runs.
 
 | Run | Result |
 |---|---|
@@ -406,6 +407,25 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
 - The SDK needs a higher PWM at -10 °C (about 177) than the PI controller (58% to 59%, about 150) and than the fixed sweep
   (170 gives -9.8 °C). Why is not known; the PWM that `CONTROL_CURPWM` reports may not have the same scale as the manual PWM
   (not checked).
+
+## Driver test: pyobs-qhyccd module (reworked, uncommitted)
+
+The `driver` step of `tools/characterize.py` runs the pyobs-qhyccd module `QHYCCDCamera` itself (not the ctypes wrapper)
+on the camera: open, `set_cooling(True, -5)`, hold 10 min, read the setpoint and power back through the module,
+`set_cooling(False)` (the module ramps up and switches off), and check PWM 0. This tests the reworked cooling code
+(`cooling_control="cooler"`, no PWM workaround, setpoint read back, PWM 0 for off) that has not been committed yet.
+Data: [driver.jsonl](driver.jsonl), the checks are in its last record of each run. The bottom panel of
+[images/cooling.png](images/cooling.png) shows the run: the PWM comes in a burst at every 1 °C step of the setpoint, which
+is why the PWM trace is a sawtooth during the ramps.
+
+| Run | Result |
+|---|---|
+| `cooling_control="cooler"` (default), -5 °C | **All checks passed.** After opening, the idle camera read setpoint none and PWM 0. The module ramped the setpoint at 1 °C/min (16.7 °C to -5 °C in 22 min), the sensor followed 0.3 to 2 °C behind during the ramp and held -5.0 to -5.1 °C for the 10 min hold at PWM 117 to 119 (46%). The read-back setpoint (-5.0 °C), the commanded setpoint and the published `ICooling` state agreed throughout. Cooling off: the setpoint ramped up at 1 °C/min to 19 °C, the camera stopped driving the cooler at about 14 °C (PWM 0, sensor above the setpoint), and at the end PWM read 0, `enabled` was false and the sensor was at 19.2 °C. Total 57 min. |
+
+- The PWM peaked at 229 in the first seconds (the camera regulates hard when the setpoint is first moved) and then fell to
+  59; the workaround for PWM above 250 would not have triggered.
+- A restart of the module with the cooler on was not tested (the read-back of the setpoint is tested, not the restart).
+- Pending: the same with `cooling_control="temperature"` (step 15) and repeats of the SDK runs.
 
 ## Not measured yet
 

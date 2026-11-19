@@ -1349,7 +1349,7 @@ def make_report(out: Output) -> None:
     cooling_sets = [(n, out.read(n)) for n in sorted(f.stem for f in out.folder.glob("cooling*.jsonl"))]
     cooling_sets = [(n, [r for r in rows if "temp" in r and "pwm_set" in r]) for n, rows in cooling_sets]
     for source in ("sdkcool", "driver"):
-        sdk_rows = out.read(source)
+        sdk_rows = [r for r in out.read(source) if "run" in r]  # warm-up rows of the sdkcool step have no run
         for run in dict.fromkeys(r["run"] for r in sdk_rows):
             rows = [
                 dict(r, pwm_set=r["pwm_read"]) for r in sdk_rows if r["run"] == run and "temp" in r and "pwm_read" in r
