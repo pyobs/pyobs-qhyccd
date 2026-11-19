@@ -13,8 +13,9 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 ## Summary
 
 - **Bias noise** is 7.2 ADU at gain 10 and offset 140 (measured). It grows to 8.4 ADU at gain 400 and 10.5 ADU at gain
-  800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. Gain in e-/ADU and read noise in e- are not
-  measured yet.
+  800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. The conversion gain is 1.01 e-/ADU at gain 0,
+  0.97 at 100, 0.83 at 400, 0.52 at 1000 and 0.18 at 2000, so the read noise is about 7.1 e- at gains 0 to 400
+  (flat fields, four runs agree to 2%, see [Gain and linearity](#gain-and-linearity-from-flat-fields-measured)).
 - **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. At -10 °C it is about 0.0037 ADU/s (300 s and
   900 s darks), and at -5 °C about 0.006 ADU/s (measured). There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
@@ -24,8 +25,11 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Read mode 1 (47M):** bias noise 23 ADU at gain 10 (3 times that of mode 0), 11.4 ADU from gain 200 up; readout 1.4 to
   1.5 s per frame; same share of noisy pixels as mode 0 but a fixed pattern of offset pixels (measured). Offset 0 clips
   98% of the pixels, use 10 or more.
-- **Not measured:** gain in e-/ADU (the dark shot noise method gave only 0.7 to 0.9 e-/ADU without a trend, so it is not
-  usable), full well, linearity, short exposures.
+- **Linearity and short exposures:** linear within about 1 to 3% from 3000 ADU of signal up (flat fields) and linear in
+  exposure time down to 5 ms; times of 1 ms and shorter carry about 0.1 ms of extra signal at most (measured, light
+  source not steady to better than about 1%).
+- **Not measured:** the real full well (only the ADC full scale in e-), gain of read mode 1, the gain between 1000 and
+  3000 in detail.
 
 ## Setup
 
@@ -331,7 +335,57 @@ is 1 / gain in e-/ADU. Exposures 30, 100 and 300 s. Data: [gain.jsonl](gain.json
   variance that is not shot noise (inferred). The scatter between gains (0.7 to 0.9) is the uncertainty of this method.
 - Earlier I estimated roughly 0.2 to 0.4 e-/ADU at gain 10 from the cold dark noise. That is not consistent with these
   numbers (0.7 to 0.9), which confirms that neither estimate is reliable.
-- The real gain needs a flat field (the `flat` step with a steady, uniform light source).
+- The real gain came from flat fields, see the next section.
+
+## Gain and linearity from flat fields (measured)
+
+The `flat` step takes pairs of frames at 12 exposure times that cover 3% to 85% of the full scale, at five gains (offset
+140, read mode 0, 2048 x 2048 window, cooler off, sensor at about 14 to 18 °C). Pairs are drift corrected (the second
+frame is scaled by the ratio of the means) and the noise variance of one frame is the variance of the difference over
+two. The slope of variance over signal is 1 / gain in e-/ADU. Pairs with more than 2% drift, saturated pairs and signal
+above 45000 ADU are left out of the fit. Light source: a wall in daylight with the room lights on and a tissue over the
+lens. Data: [flat.jsonl](flat.jsonl), plot: [images/flat.png](images/flat.png).
+
+![Photon transfer and linearity from flats](images/flat.png)
+
+| Gain | e-/ADU (final run) | e-/ADU, four runs | Pairs used | Max. nonlinearity | Read noise [e-] | ADC full scale [ke-] |
+|---|---|---|---|---|---|---|
+| 0 | 1.013 | 1.00 to 1.03 | 12 of 12 | 4.9% | 7.2 | 66 |
+| 100 | 0.969 | 0.97 to 0.98 | 10 of 12 | 2.0% | 7.2 | 64 |
+| 400 | 0.831 | 0.82 to 0.83 | 11 of 12 | 1.7% | 7.0 | 54 |
+| 1000 | 0.520 | 0.515 to 0.52 | 12 of 12 | 2.9% | not measured | 34 |
+| 2000 | 0.182 | 0.176 to 0.182 | 12 of 12 | 4.0% | not measured | 12 |
+
+- Read noise in e- is the bias noise in ADU (7.15, 7.43 and 8.43 ADU at offset 140) times the conversion gain. It is
+  about 7 e- at gains 0 to 400 (inferred from two separate measurements).
+- "ADC full scale" is 65535 ADU times the conversion gain. It is not the full well of the pixels, which was not measured
+  (the sensor saturates at 65535 ADU in these runs, which was not checked against a true full well).
+- Four runs with different light (lamps on, daylight only, brighter, with the tissue) gave the same gains to about 2%.
+  Gains 0 to 1000 are solid. The 0.18 e-/ADU at gain 2000 repeats, but the fitted variance at zero signal is 890 ADU^2
+  (too high for read noise alone), so I would not rely on it (the gain step near 1600 lies between 1000 and 2000).
+- Nonlinearity in the right panel is the deviation of the level from a straight line against exposure time. It is within
+  about 1 to 3% above 3000 ADU and reaches up to 5% at the shortest exposures, where the pair drift and the light source are
+  the likely cause (not separated). The earlier runs with a brighter light had up to 13% at 1 to 2 ms.
+- **The light source was the limit.** The scene brightened by 13% per minute in a daylight-only test with the room lights
+  off (all exposures together, correlation 1.00), and by 0.5 to 1.8% between frames with the lamps on. Frame scatter did
+  not depend on exposure time, so it was not 100 Hz flicker (measured, 30 to 40 frames per exposure).
+
+## Short exposures (measured)
+
+The `short` step reads the mean level of the central window at exposure times from 1 µs to 100 ms with a 10 ms reference
+exposure between them. Gain 10 and offset 140 (the defaults of the step); the light was a wall with the room lights on. Data:
+[short.jsonl](short.jsonl), plot: [images/short.png](images/short.png).
+
+![Level vs. exposure time](images/short.png)
+
+- A line fitted to 5 ms and longer gives 260000 ADU/s (the light source) with an intercept of -31 ADU, which is 0.12 ms
+  of exposure time. The points at 0.2 to 2 ms lie about 20 to 30 ADU (0.1 ms) above that line.
+- The signal starts between 50 and 200 µs (8986 ADU at 1 µs and 50 µs, 9001 ADU at 100 µs, 9031 ADU at 200 µs).
+- The reference exposure drifted by 10% in the run (light). The 5 ms and longer points scatter around the line by up to
+  30 ADU (0.1 to 2.5% of their signal), which is as large as the offset, so an extra exposure time of at most about 0.1 ms
+  is inferred, not measured precisely.
+- The earlier guess that the nonlinearity at the shortest flat exposures came from a fixed overhead in the camera is not
+  supported by this run.
 
 ## Cooling and the power supply
 
@@ -429,10 +483,10 @@ is why the PWM trace is a sawtooth during the ramps.
 
 ## Not measured yet
 
-- **Gain** (flat field, `flat` step): e-/ADU, read noise in e- and full well per gain, including the step near gain 1600.
-  The dark shot noise method was tried (see above) and does not work for this camera.
-- **Flat and short** exposures (`flat`, `short`): need a uniform light source. Linearity and the real exposure time of
-  short exposures.
+- **Gain in the range 1000 to 3000** in finer steps (the step near gain 1600) and the read noise in e- there, plus the
+  gain of read mode 1.
+- **The real full well** (only the ADC full scale in e- is known), and flats with a steadier light source (an LED panel
+  or a closed box) to tighten the nonlinearity below 1%.
 - **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current** with 900 s darks at 0 and -5 °C and at -12 °C (only -10 °C was done).
