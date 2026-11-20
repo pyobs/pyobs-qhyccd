@@ -845,9 +845,8 @@ def run_driver(
     """
     import asyncio
 
-    from pyobs_qhyccd.qhyccddriver import Control, QHYCCDDriver  # type: ignore[import-untyped]
-
-    from pyobs_qhyccd import QHYCCDCamera  # type: ignore[import-untyped]
+    from pyobs_qhyccd import QHYCCDCamera
+    from pyobs_qhyccd.qhyccddriver import Control, QHYCCDDriver
 
     devices = QHYCCDDriver.list_devices()
     if not devices:
@@ -869,6 +868,7 @@ def run_driver(
 
         async def sample(label: str) -> dict[str, Any]:
             driver = camera._driver
+            assert driver is not None
             hw_enabled, hw_setpoint, hw_power = await camera._get_cooling_hardware()
             state = published.get("ICooling")
             record = {

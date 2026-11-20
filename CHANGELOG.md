@@ -9,6 +9,39 @@ Entries for releases before this file existed were generated from commit subject
 
 ## [Unreleased]
 
+- Cooling: the setpoint is written to `CONTROL_COOLER` (the camera regulates by itself) instead of calling
+  `ControlQHYCCDTemp` once per ramp step. `cooling_control="temperature"` keeps the old SDK call and now repeats it
+  every second, as the SDK asks. Cooling off writes PWM 0 to the manual PWM control.
+- The park-and-ramp-back workaround for a cooler PWM above 250 is now off by default (`pwm_wrap_workaround=True` turns
+  it on). On a QHY294PRO-M with a 5 A supply a PWM of 255 for minutes did no harm; the collapse seen earlier came
+  from a 1.5 A supply. Use a supply that can deliver the current of the cooler.
+- The camera's setpoint is read back (`GetQHYCCDParam(CONTROL_COOLER)`), so a ramp after a restart of the module
+  starts from the real setpoint. The cooler drive level is clamped to 0 to 255, and on connect PWM 0 is written to an
+  idle camera so that it reads a defined value (it reads garbage until a PWM was set).
+- GUI: a read mode selector (the camera is opened again in the chosen mode; refused while the cooler is on), gain and
+  offset spin boxes with the ranges from the SDK, and a cooler control with target, current temperature and drive level
+  (setpoint written to `CONTROL_COOLER` and ramped at 1 degC/min, with a warm-up offer on close, like asi-gui). The window
+  size follows the read mode (47M mode: 8336x5648).
+- GUI: the pixel size is left out of the FITS header if the SDK returns garbage (QHY294PRO-M), and the header test now
+  uses a pixel size in um as the SDK reports it.
+- Driver: `QHYCCDDriver.open(read_mode=...)`, `get_read_modes()` and `get_param_limits()`.
+- Driver: `QHYCCDDriver` is now written with ctypes and loads the shared library of the SDK
+  (`/usr/local/lib/libqhyccd.so`, or the path in the environment variable `QHYCCD_SDK`, or the new `sdk` parameter of
+  `QHYCCDCamera` and `QHYCCDVideo`; `qhyccd-gui` takes it as its first argument), like pyobs-asi. The Cython extension
+  with the statically linked SDK is gone, and so are the CMake build, `cibuildwheel` and the system packages
+  `libusb-1.0-0-dev` and `libcfitsio-dev` for building. The package is a pure Python wheel (hatchling) and needs the SDK
+  installed on the machine (see the README). A missing library gives an error that says where it was looked for.
+  `get_single_frame` returns 8 bit data in 8 bit mode, `close()` of a closed camera does nothing, and calls on a
+  camera that is not open raise `ValueError` instead of passing a null handle to the SDK. The calls into the SDK are
+  serialized by the driver (ctypes releases the GIL, the Cython code held it).
+- Driver: `close()` no longer calls `CloseQHYCCD` (set `QHYCCD_CALL_CLOSE=1` to call it), only `ReleaseQHYCCDResource`.
+  `CloseQHYCCD` of SDK 25.9.29.10 joins a thread handle that it never set, so it worked, hung or segfaulted depending on
+  the heap contents (reproducible with `MALLOC_PERTURB_=165`); this was the hang when a module stopped and the freeze of
+  the GUI when switching read mode. The handle is leaked until the process ends.
+- Build: removed the unused `cython` development dependency and the static copy of the SDK (`lib/usr/local/lib/libqhyccd.a`,
+  25 MB); the rest of `lib/` (SDK install script, firmware, udev rules, headers) stays as the source for installing the
+  SDK, like `sdk/` in pyobs-asi, and is not part of the sdist.
+
 ## [2.3.0] - 2026-11-17
 
 - The GUI writes a FITS header into the frames it saves (it was empty). `QHYCCDCamera`, `QHYCCDVideo` and the GUI build

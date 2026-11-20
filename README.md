@@ -4,11 +4,19 @@ QHYCCD module for *pyobs*
 This is a [pyobs](https://www.pyobs.org) module for QHYCCD cameras.
 
 
-System dependencies
---------------------
-On Debian/Ubuntu, plus the QHYCCD driver:
+QHYCCD SDK
+----------
+The module talks to the camera through the shared library of the QHYCCD SDK (`libqhyccd.so`) with ctypes. The
+`lib/` folder holds the SDK 25.9.29.10 for Linux x86-64 as published by QHYCCD, with the firmware, the udev rules and an
+install script (see https://www.qhyccd.com/ for the official download and newer versions). On Debian/Ubuntu, install
+the dependencies of the SDK and the SDK itself (as root):
 
-    sudo apt install build-essential python3-dev libusb-1.0-0-dev libcfitsio-dev
+    sudo apt install libusb-1.0-0 libudev1
+    cd lib && sudo ./install.sh
+
+then reconnect the camera, so that the firmware is loaded by the udev rules. The library is expected at
+`/usr/local/lib/libqhyccd.so`. Another path can be given in the environment variable `QHYCCD_SDK` or the `sdk`
+parameter of the camera (see below).
 
 
 Install *pyobs-qhyccd*
@@ -37,6 +45,9 @@ The *QHYCCDCamera* class is derived from *BaseCamera* (see *pyobs* documentation
         The cooling temperature setpoint in degrees Celsius (default: -10).
     params:
         Optional dictionary of additional QHYCCD control values to set on connect.
+    sdk:
+        Path to libqhyccd.so of the QHYCCD SDK (default: environment variable QHYCCD_SDK, else
+        /usr/local/lib/libqhyccd.so).
     cooling_rate_cool / cooling_rate_warm:
         Maximum rate in degC/min when lowering / raising the setpoint (default: 1.0 / 1.0). Warming up
         (raising the setpoint or switching cooling off) is ramped at cooling_rate_warm before the cooler is
@@ -59,7 +70,7 @@ For testing a camera without a full *pyobs* setup, install the optional `gui` ex
 
 and run:
 
-    uv run qhyccd-gui
+    uv run qhyccd-gui [path/to/libqhyccd.so]
 
 
 Dependencies

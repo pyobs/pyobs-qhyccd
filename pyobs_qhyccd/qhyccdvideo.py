@@ -29,7 +29,7 @@ from pyobs.utils.enums import ImageFormat, ImageType
 from pyobs.utils.frameheader import FrameSettings, make_frame_header
 
 from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
-from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
+from .qhyccddriver import Control, QHYCCDDriver, set_log_level, set_sdk_path
 
 log = logging.getLogger(__name__)
 
@@ -72,6 +72,7 @@ class QHYCCDVideo(BlockingSdkMixin, BaseVideo, IExposureTime, IGain, IWindow, IB
         offset: float = 140,
         image_format: ImageFormat | str = ImageFormat.INT16,
         usb_traffic: int | None = 60,
+        sdk: str | None = None,
         **kwargs: Any,
     ):
         """Initializes a new QHYCCDVideo.
@@ -84,7 +85,10 @@ class QHYCCDVideo(BlockingSdkMixin, BaseVideo, IExposureTime, IGain, IWindow, IB
             image_format: Initial image format (int8 or int16), also restored by reset().
             usb_traffic: Value for the camera's USB traffic control, if it has one. Higher values
                 lower the frame rate but make transfers more reliable. None leaves it untouched.
+            sdk: Path of libqhyccd.so of the QHYCCD SDK. None uses the environment variable QHYCCD_SDK, else
+                /usr/local/lib/libqhyccd.so.
         """
+        set_sdk_path(sdk)
         BaseVideo.__init__(self, **kwargs)
 
         self._device = device

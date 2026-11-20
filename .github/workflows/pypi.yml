@@ -4,24 +4,8 @@ on:
     tags:
     - 'v*'
 jobs:
-  build-wheels:
-    name: Build wheels
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v4.2.0
-
-      - name: Upload wheels
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels
-          path: wheelhouse/*.whl
-
-  build-sdist:
-    name: Build sdist
+  build-n-publish:
+    name: Build and publish package to PyPI
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -33,33 +17,10 @@ jobs:
           enable-cache: true
           python-version: "3.13"
 
-      - name: Build sdist
-        run: uv build --sdist
-
-      - name: Upload sdist
-        uses: actions/upload-artifact@v4
-        with:
-          name: sdist
-          path: dist/*.tar.gz
-
-  publish:
-    name: Publish to PyPI
-    needs: [build-wheels, build-sdist]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: dist
-          merge-multiple: true
-
-      - name: Set up Python
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: false
-          python-version: "3.13"
+      - name: Build
+        run: uv build
 
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.pypi_password }}
-        run: uv publish --token $PYPI_TOKEN dist/*
+        run: uv publish --token $PYPI_TOKEN

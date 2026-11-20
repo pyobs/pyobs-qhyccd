@@ -1,9 +1,9 @@
 """Smoke tests: import the driver and instantiate it without hardware, asserting the
 interfaces it claims.
 
-The Cython extension (qhyccddriver) links the vendored QHYCCD static library during
-install, but device enumeration/opening only happens inside open(), so instantiation
-is safe with no QHYCCD hardware attached.
+The driver (qhyccddriver) loads the QHYCCD SDK with ctypes on first use, and device
+enumeration/opening only happens inside open(), so instantiation and import are safe
+with no QHYCCD hardware or SDK installed.
 """
 
 from pyobs.interfaces import (

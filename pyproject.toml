@@ -30,32 +30,22 @@ dev = [
     "ruff>=0.9.0",
     "pyrefly>=1.1.1",
     "pre-commit>=4.2.0,<5",
-    "cython>=3.0.0,<4",
     "pytest>=8.0.0",
     "pytest-asyncio>=0.24.0",
 ]
 
-[tool.setuptools]
-py-modules = []
-
 [project.scripts]
 qhyccd-gui = 'pyobs_qhyccd.gui:main'
 
-[tool.scikit-build]
-wheel.packages = ["pyobs_qhyccd"]
-
-[tool.cibuildwheel]
-build = "cp311-* cp312-* cp313-* cp314-*"
-skip = "*-musllinux_* *-manylinux_i686"
-archs = ["x86_64"]
-
-[tool.cibuildwheel.linux]
-manylinux-x86_64-image = "manylinux_2_28"
-before-all = "dnf install -y epel-release && dnf install -y cfitsio-devel libusbx-devel"
-
 [build-system]
-requires = ["scikit_build_core>=0.12", "cython>=3.0", "cython-cmake", "numpy>=2.0"]
-build-backend = "scikit_build_core.build"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyobs_qhyccd"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["lib", "characterization"]
 
 [tool.black]
 line-length = 120

@@ -12,6 +12,7 @@ from unittest.mock import AsyncMock, MagicMock
 import numpy as np
 import pytest
 from pyobs.interfaces import IBinning, ICooling, IWindow
+from pyobs_qhyccd.qhyccddriver import Control  # type: ignore
 
 from pyobs_qhyccd import QHYCCDCamera
 
@@ -78,19 +79,42 @@ async def test_set_cooling_queues_a_ramp_and_keeps_wanted_setpoint() -> None:
 
 
 @pytest.mark.asyncio
-async def test_set_cooling_hardware_writes_setpoint() -> None:
+async def test_set_cooling_hardware_writes_setpoint_to_cooler_control() -> None:
     camera = QHYCCDCamera()
     driver = MagicMock()
     camera._driver = driver
 
     await camera._set_cooling_hardware(True, -12.0)
 
-    driver.set_temperature.assert_called_once_with(-12.0)
+    driver.set_param.assert_called_once_with(Control.CONTROL_COOLER, -12.0)
+    driver.set_temperature.assert_not_called()
     assert camera._cooling_off is False
 
 
 @pytest.mark.asyncio
-async def test_set_cooling_hardware_off_does_not_write_and_publishes_disabled() -> None:
+async def test_set_cooling_hardware_temperature_control_uses_controlqhyccdtemp() -> None:
+    camera = QHYCCDCamera(cooling_control="temperature")
+    driver = MagicMock()
+    camera._driver = driver
+
+    await camera._set_cooling_hardware(True, -12.0)
+
+    driver.set_temperature.assert_called_once_with(-12.0)
+    driver.set_param.assert_not_called()
+
+
+def test_cooling_control_is_validated() -> None:
+    with pytest.raises(ValueError):
+        QHYCCDCamera(cooling_control="pwm")
+
+
+def test_pwm_wrap_workaround_is_off_by_default() -> None:
+    assert QHYCCDCamera()._pwm_wrap_workaround is False
+    assert QHYCCDCamera(pwm_wrap_workaround=True)._pwm_wrap_workaround is True
+
+
+@pytest.mark.asyncio
+async def test_set_cooling_hardware_off_writes_pwm_zero_and_publishes_disabled() -> None:
     camera = QHYCCDCamera()
     camera.comm.set_state = AsyncMock()  # type: ignore[method-assign]
     driver = MagicMock()
@@ -99,10 +123,63 @@ async def test_set_cooling_hardware_off_does_not_write_and_publishes_disabled() 
     await camera._set_cooling_hardware(False, None)
     await camera._publish_cooling(50, cooler_available=True)
 
+    driver.set_param.assert_called_once_with(Control.CONTROL_MANULPWM, 0)
     driver.set_temperature.assert_not_called()
     interface, state = camera.comm.set_state.await_args.args  # type: ignore[union-attr]
     assert interface is ICooling
     assert (state.setpoint, state.power, state.enabled) == (None, 50, False)
+
+
+def _driver_with(cooler: float, pwm: float) -> MagicMock:
+    driver = MagicMock()
+    values = {Control.CONTROL_COOLER: cooler, Control.CONTROL_CURPWM: pwm}
+    driver.get_param.side_effect = lambda control: values.get(control, 0.0)
+    return driver
+
+
+@pytest.mark.asyncio
+async def test_get_cooling_hardware_reads_target_and_power() -> None:
+    camera = QHYCCDCamera()
+    camera._driver = _driver_with(-10.0, 178.5)
+
+    assert await camera._get_cooling_hardware() == (True, -10.0, 70)
+
+
+@pytest.mark.asyncio
+async def test_get_cooling_hardware_has_no_setpoint_when_off_or_unset() -> None:
+    camera = QHYCCDCamera()
+    camera._driver = _driver_with(-100.0, 0.0)  # the camera reports -100 if no target was ever set
+    assert await camera._get_cooling_hardware() == (True, None, 0)
+
+    camera._driver = _driver_with(-10.0, 0.0)  # the last target stays readable after switching off
+    camera._cooling_off = True
+    assert await camera._get_cooling_hardware() == (False, None, 0)
+
+
+def test_pwm_percent_is_clamped_to_the_pwm_range() -> None:
+    assert QHYCCDCamera._pwm_percent(255.0) == 100.0
+    assert QHYCCDCamera._pwm_percent(300.0) == 100.0  # garbage before the first PWM was set
+    assert QHYCCDCamera._pwm_percent(-5.0) == 0.0
+
+
+def test_init_cooling_state_idle_camera_writes_pwm_zero() -> None:
+    camera = QHYCCDCamera()
+    driver = _driver_with(-100.0, 77.0)
+
+    camera._init_cooling_state(driver)
+
+    driver.set_param.assert_called_once_with(Control.CONTROL_MANULPWM, 0)
+    assert camera._cooling_off is True
+
+
+def test_init_cooling_state_keeps_a_cooler_that_was_left_running() -> None:
+    camera = QHYCCDCamera()
+    driver = _driver_with(-10.0, 170.0)
+
+    camera._init_cooling_state(driver)
+
+    driver.set_param.assert_not_called()
+    assert camera._cooling_off is False
 
 
 @pytest.mark.asyncio
@@ -121,16 +198,32 @@ async def test_publish_cooling_reports_commanded_setpoint_and_target() -> None:
 @pytest.mark.asyncio
 async def test_ramp_starts_from_sensor_temperature_and_steps_down() -> None:
     camera = QHYCCDCamera()
-    driver = MagicMock()
-    driver.get_param.return_value = 0.0
+    driver = _driver_with(-100.0, 0.0)  # idle camera
     camera._driver = driver
+    camera._cooling_off = True
     camera._current_temperature = 3.0
     await camera.set_cooling(True, 1.0)
 
     await camera._cooling_tick()  # enables at the sensor temperature, then steps once
     await camera._cooling_tick()
 
-    assert [c.args[0] for c in driver.set_temperature.call_args_list] == [3.0, 2.0, 1.0]
+    writes = [c.args for c in driver.set_param.call_args_list if c.args[0] == Control.CONTROL_COOLER]
+    assert [value for _, value in writes] == [3.0, 2.0, 1.0]
+
+
+@pytest.mark.asyncio
+async def test_ramp_continues_from_the_setpoint_the_camera_reports() -> None:
+    camera = QHYCCDCamera()
+    driver = _driver_with(-4.0, 100.0)  # cooler left at -4 degC by an earlier session
+    camera._driver = driver
+    camera._current_temperature = -3.5
+    await camera.set_cooling(True, -6.0)
+
+    await camera._cooling_tick()
+    await camera._cooling_tick()
+
+    writes = [c.args for c in driver.set_param.call_args_list if c.args[0] == Control.CONTROL_COOLER]
+    assert [value for _, value in writes] == [-5.0, -6.0]
 
 
 @pytest.mark.asyncio

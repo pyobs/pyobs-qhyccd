@@ -30,9 +30,16 @@ from pyobs.utils.frameheader import FrameSettings, make_frame_header
 from pyobs.utils.parallel import event_wait
 
 from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
-from .qhyccddriver import Control, QHYCCDDriver, set_log_level  # type: ignore
+from .qhyccddriver import Control, QHYCCDDriver, set_log_level, set_sdk_path
 
 log = logging.getLogger(__name__)
+
+# GetQHYCCDParam(CONTROL_COOLER) returns the last target that was set, and -100 if none was set since the camera was
+# powered up (measured on a QHY294PRO-M)
+_COOLER_UNSET = -99.0
+# CONTROL_CURPWM and CONTROL_MANULPWM range
+_PWM_MAX = 255.0
+_COOLING_CONTROLS = ("cooler", "temperature")
 
 
 class QHYCCDCamera(
@@ -50,6 +57,9 @@ class QHYCCDCamera(
         cooling_wait: float | None = None,
         default_gain: float = 10,
         default_offset: float = 140,
+        cooling_control: str = "cooler",
+        pwm_wrap_workaround: bool = False,
+        sdk: str | None = None,
         **kwargs: Any,
     ):
         """Initializes a new QHYCCDCamera.
@@ -65,7 +75,20 @@ class QHYCCDCamera(
                 exposes a gain control.
             default_offset: Offset applied on connect and restored by reset(), if the camera
                 exposes an offset control.
+            cooling_control: How the setpoint is given to the camera. "cooler" (default) writes it to CONTROL_COOLER
+                once per ramp step and the camera regulates by itself. "temperature" uses the SDK's
+                ControlQHYCCDTemp, which the SDK wants to be called about once per second, so it is repeated every
+                second with the commanded setpoint.
+            pwm_wrap_workaround: Park the setpoint 5 degC above the sensor and ramp back when the cooler PWM is read
+                above 250. This worked around a QHY bug where the cooler is reported to stop at high PWM, but on a
+                QHY294PRO-M with a sufficient power supply a PWM of 255 for several minutes did no harm, and a supply
+                that is too small gives the same symptom. Off by default; check the supply before enabling it.
+            sdk: Path of libqhyccd.so of the QHYCCD SDK. None uses the environment variable QHYCCD_SDK, else
+                /usr/local/lib/libqhyccd.so.
         """
+        set_sdk_path(sdk)
+        if cooling_control not in _COOLING_CONTROLS:
+            raise ValueError(f"cooling_control must be one of {_COOLING_CONTROLS}, not {cooling_control!r}.")
         if cooling_step is not None or cooling_wait is not None:
             step = cooling_step if cooling_step is not None else 1.0
             wait = cooling_wait if cooling_wait is not None else 60.0
@@ -83,6 +106,8 @@ class QHYCCDCamera(
         self._binning = (1, 1)
         self._effective_area = (0, 0, 0, 0)
         self._params = params
+        self._cooling_control = cooling_control
+        self._pwm_wrap_workaround = pwm_wrap_workaround
         self._wanted_setpoint = setpoint
         self._cooling_off = False
         self._current_temperature: float = 0.0
@@ -118,6 +143,8 @@ class QHYCCDCamera(
 
             if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
                 self._driver.set_bits_mode(16)
+
+            self._init_cooling_state(self._driver)
 
             chip = self._driver.get_chip_info()
             log.info("Chip  size:     %.3fx%.3f [mm]", chip[0], chip[1])
@@ -155,6 +182,18 @@ class QHYCCDCamera(
         gain, offset = await self._run_blocking_or_raise(_get_gain_offset)
         self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
+
+    def _init_cooling_state(self, driver: QHYCCDDriver) -> None:
+        """Find out whether the cooler was left running (blocking).
+
+        The camera reports the last cooler target it was given, and -100 if none. Without a target the cooler is idle,
+        and PWM 0 is written so that CONTROL_CURPWM reads a defined value (it reads garbage until a PWM was set).
+        """
+        if not driver.is_control_available(Control.CONTROL_COOLER):
+            return
+        if float(driver.get_param(Control.CONTROL_COOLER)) <= _COOLER_UNSET:
+            driver.set_param(Control.CONTROL_MANULPWM, 0)
+            self._cooling_off = True
 
     async def reset(self, **kwargs: Any) -> None:
         """Reset gain and offset to their configured defaults."""
@@ -335,14 +374,19 @@ class QHYCCDCamera(
             log.error("Timed out cancelling QHYCCD exposure after %.1fs.", SDK_CALL_TIMEOUT)
 
     async def _get_cooling_power(self) -> float:
+        """Cooler drive level in percent (CONTROL_CURPWM is 0 to 255)."""
         if self._driver is None:
             raise ValueError("No camera driver.")
         driver = self._driver
 
         def _get() -> float:
-            return float(driver.get_param(Control.CONTROL_CURPWM)) / 255 * 100  # TODO:
+            return self._pwm_percent(float(driver.get_param(Control.CONTROL_CURPWM)))
 
         return await self._run_blocking_or_raise(_get)
+
+    @staticmethod
+    def _pwm_percent(pwm: float) -> float:
+        return min(max(pwm, 0.0), _PWM_MAX) / _PWM_MAX * 100
 
     async def set_cooling(self, enabled: bool, setpoint: float, **kwargs: Any) -> None:
         """Enables/disables cooling and sets setpoint, see CoolingRampMixin."""
@@ -354,6 +398,13 @@ class QHYCCDCamera(
         """Setpoint last written to the camera, or the configured one if nothing was written yet."""
         return self._cooling_commanded if self._cooling_commanded is not None else self._setpoint
 
+    def _write_setpoint(self, driver: QHYCCDDriver, setpoint: float) -> None:
+        """Give the setpoint to the camera (blocking)."""
+        if self._cooling_control == "cooler":
+            driver.set_param(Control.CONTROL_COOLER, setpoint)
+        else:
+            driver.set_temperature(setpoint)
+
     async def _set_cooling_hardware(self, enabled: bool, setpoint: float | None) -> None:
         if self._driver is None:
             raise ValueError("No camera driver.")
@@ -361,16 +412,23 @@ class QHYCCDCamera(
 
         self._cooling_off = not enabled
         if enabled and setpoint is not None:
-            await self._run_blocking_or_raise(lambda: driver.set_temperature(setpoint))
+            await self._run_blocking_or_raise(lambda: self._write_setpoint(driver, setpoint))
         else:
-            # The wrapper has no verified way to switch the cooler off. The warm-up ramp has already raised the
-            # setpoint, so the cooler is idle by now; only the published state changes.
-            log.info("Cooling disabled, setpoint left at its last value.")
+            # PWM 0 stops the cooler, and a later setpoint takes over again (measured on a QHY294PRO-M)
+            await self._run_blocking_or_raise(lambda: driver.set_param(Control.CONTROL_MANULPWM, 0))
 
     async def _get_cooling_hardware(self) -> tuple[bool, float | None, int | None]:
-        # the camera cannot report its setpoint, so the ramp starts from the sensor temperature
-        power = round(await self._get_cooling_power()) if self._driver is not None else None
-        return not self._cooling_off, None, power
+        if self._driver is None:
+            return not self._cooling_off, None, None
+        driver = self._driver
+
+        def _read() -> tuple[float, float]:
+            return float(driver.get_param(Control.CONTROL_COOLER)), float(driver.get_param(Control.CONTROL_CURPWM))
+
+        target, pwm = await self._run_blocking_or_raise(_read)
+        # the camera keeps reporting the last target after the cooler was switched off
+        setpoint = target if not self._cooling_off and target > _COOLER_UNSET else None
+        return not self._cooling_off, setpoint, round(self._pwm_percent(pwm))
 
     async def _get_sensor_temperature(self) -> float | None:
         return self._current_temperature if self._driver is not None else None
@@ -392,31 +450,30 @@ class QHYCCDCamera(
             try:
                 await asyncio.sleep(1.0)
 
-                def _poll() -> tuple[float, float, bool, bool]:
+                def _poll() -> tuple[float, float, bool]:
                     current_temp = float(driver.get_param(Control.CONTROL_CURTEMP))
                     power_raw = float(driver.get_param(Control.CONTROL_CURPWM))
                     cooler_available = driver.is_control_available(Control.CONTROL_COOLER)
-                    # bug: QHY PWM wraps above 250 -- checked with a fresh read, same as the
-                    # separate driver.get_param() call the original code made for this check
-                    pwm_over_250 = float(driver.get_param(Control.CONTROL_CURPWM)) > 250
-                    return current_temp, power_raw, cooler_available, pwm_over_250
+                    # ControlQHYCCDTemp has to be called about once per second
+                    commanded = self._cooling_commanded
+                    if self._cooling_control == "temperature" and not self._cooling_off and commanded is not None:
+                        driver.set_temperature(commanded)
+                    return current_temp, power_raw, cooler_available
 
-                self._current_temperature, power_raw, cooler_available, pwm_over_250 = (
-                    await self._run_blocking_or_raise(_poll)
-                )
+                self._current_temperature, power_raw, cooler_available = await self._run_blocking_or_raise(_poll)
 
                 # publish live temperatures and cooling state
                 await self.comm.set_state(
                     ITemperatures,
                     TemperaturesState(readings=[SensorReading(name="CCD", value=self._current_temperature)]),
                 )
-                await self._publish_cooling(round(power_raw / 255 * 100), cooler_available)
+                await self._publish_cooling(round(self._pwm_percent(power_raw)), cooler_available)
 
-                if pwm_over_250 and not self._cooling_off:
+                if self._pwm_wrap_workaround and power_raw > 250 and not self._cooling_off:
                     # Park the setpoint above the sensor to stop the cooler, then ramp back to the wanted setpoint.
                     log.warning(
-                        "Cooling power seems to be bugged. Setting temperature to %.2f°C. "
-                        "Current temperature is %.2f°C.",
+                        "Cooler PWM is %.0f. Setting temperature to %.2f°C. Current temperature is %.2f°C.",
+                        power_raw,
                         self._current_temperature + 5.0,
                         self._current_temperature,
                     )
