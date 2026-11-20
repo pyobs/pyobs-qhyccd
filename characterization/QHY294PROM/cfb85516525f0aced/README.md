@@ -447,27 +447,33 @@ target)` (set once, the camera regulates). The `sdkcool` step runs each of them 
 
 | Run | Result |
 |---|---|
-| `CONTROL_COOLER`, ramp | **Inconclusive.** The run started at 17.4 °C and stopped after 60 s because the script flagged a collapse: the sensor had dropped to 14.2 °C in 15 s (PWM 31 read once), the camera then set the PWM to 0 and the sensor warmed to 16.7 °C, towards the target of 17 °C. That is what a regulator does when the sensor is below the target, so the collapse flag was wrong (the check did not compare with the target). Fixed in the script; to be repeated. |
-| `ControlQHYCCDTemp`, jump to -10 °C | Sensor went from 17.4 °C to -11.6 °C in 4.5 min while the SDK drove the PWM at 217 to 255 (85% to 100%). It overshot to -11.6 °C and rose to -10.6 °C, so the script flagged a collapse and stopped at 5 min. That was wrong: the sensor was still below the target (the check at that time looked only at the rise from the lowest value). **Inconclusive for the hold, but at PWM 255 the cooler kept cooling for at least 2 minutes (inferred from -8.9 to -11.6 °C at 255 and 233).** To be repeated with the fixed check. |
+| `CONTROL_COOLER`, ramp (first run) | **Inconclusive, repeated below.** Stopped after 60 s because the script flagged a collapse: the sensor had dropped to 14.2 °C in 15 s, the camera set the PWM to 0 and the sensor warmed towards the target of 17 °C. That is a regulator at work, the collapse flag was wrong (the check did not compare with the target) and was fixed in the script. |
+| `CONTROL_COOLER`, ramp (repeat, 20 Nov) | **Worked.** The sensor followed the 1 °C/min ramp, reached -10.0 °C after 29 min (lowest -10.3 °C) and held -10.3 to -10.0 °C for 15 min at PWM 157 to 181 (62% to 71%). The PWM never reached 250 (maximum 183). No collapse. |
+| `ControlQHYCCDTemp`, jump to -10 °C (first run) | Stopped at 5 min because of a wrong collapse flag (the check looked only at the rise from the lowest value, sensor still below the target). At PWM 255 and 233 the cooler kept cooling from -8.9 to -11.6 °C. **Inconclusive for the hold, repeated below.** |
+| `ControlQHYCCDTemp`, jump to -10 °C (repeat, 20 Nov) | **Worked.** The sensor went from 17.2 °C to -10 °C in 3.2 min and overshot to -11.8 °C (after 4 min), with the SDK at PWM 255 for about 3.7 min in total (44 of 181 samples at 5 s). It settled at -10.0 °C after 5 min and held -10.2 to -9.8 °C for 10 min at PWM 157 to 187 (62% to 73%). No collapse. |
 | `CONTROL_COOLER`, jump to -10 °C | **Worked.** The camera regulated by itself: the sensor went from 17.4 °C to -11.5 °C in 4.5 min at PWM 225 to 255 (100% for about 2 min), overshot by 1.5 °C, settled at -10.1 °C after 7 min and held it for 15 min. The PWM fell slowly from 195 to 183 (72%) during the hold. No collapse. |
 | `ControlQHYCCDTemp`, ramp | Reached -10 °C after 31 min and held -10.0 °C for 15 min (lowest -10.3 °C). PWM rose from 5 at 19 °C to 159 at the end of the ramp and settled at 171 to 179 (67% to 70%). No collapse. |
 
-- `CONTROL_COOLER` regulates by itself, so it needs no call per second and is the simpler choice for the driver (inferred
-  from one run). In the jump runs the PWM stayed at 255 for about 2 min while the sensor cooled from 0 to -11 °C and
-  nothing stopped: with the 5 A supply the supposed wrap above 250 did not appear (inferred, only these runs).
+- `CONTROL_COOLER` regulates by itself, so it needs no call per second and is the simpler choice for the driver. Both
+  SDK controls cool to -10 °C by ramp or by jump and hold it without a collapse (all four combinations of control and
+  ramp or jump, two of them repeated). In the jump runs the PWM stayed at 255 for 2 to 4 min while the sensor cooled from 0 to
+  -11 °C and nothing stopped: with the 5 A supply the supposed wrap above 250 did not appear (measured here, not on the
+  other cameras).
+- A jump overshoots by 1.5 to 1.8 °C (to -11.5 and -11.8 °C) and settles within about 5 to 7 min; the ramp does not
+  overshoot (lowest -10.3 °C).
 - On the ramp the SDK followed the target within about 1 °C (sensor 0.8 to 1 °C above the target while ramping). The PWM
   was never close to 250. The reading of 255 in the first sample of each run is the unset `CONTROL_CURPWM` (it reads
   garbage until the first PWM is set), not a drive level.
-- The SDK needs a higher PWM at -10 °C (about 177) than the PI controller (58% to 59%, about 150) and than the fixed sweep
+- The SDK needs a higher PWM at -10 °C (about 160 to 180) than the PI controller (58% to 59%, about 150) and than the fixed sweep
   (170 gives -9.8 °C). Why is not known; the PWM that `CONTROL_CURPWM` reports may not have the same scale as the manual PWM
   (not checked).
 
-## Driver test: pyobs-qhyccd module (reworked, uncommitted)
+## Driver test: pyobs-qhyccd module (reworked)
 
 The `driver` step of `tools/characterize.py` runs the pyobs-qhyccd module `QHYCCDCamera` itself (not the ctypes wrapper)
 on the camera: open, `set_cooling(True, -5)`, hold 10 min, read the setpoint and power back through the module,
 `set_cooling(False)` (the module ramps up and switches off), and check PWM 0. This tests the reworked cooling code
-(`cooling_control="cooler"`, no PWM workaround, setpoint read back, PWM 0 for off) that has not been committed yet.
+(`cooling_control="cooler"`, no PWM workaround, setpoint read back, PWM 0 for off).
 Data: [driver.jsonl](driver.jsonl), the checks are in its last record of each run. The bottom panel of
 [images/cooling.png](images/cooling.png) shows the run: the PWM comes in a burst at every 1 °C step of the setpoint, which
 is why the PWM trace is a sawtooth during the ramps.
@@ -479,7 +485,10 @@ is why the PWM trace is a sawtooth during the ramps.
 - The PWM peaked at 229 in the first seconds (the camera regulates hard when the setpoint is first moved) and then fell to
   59; the workaround for PWM above 250 would not have triggered.
 - A restart of the module with the cooler on was not tested (the read-back of the setpoint is tested, not the restart).
-- Pending: the same with `cooling_control="temperature"` (step 15) and repeats of the SDK runs.
+- `cooling_control="temperature"` (step 15, -5 °C): the sensor reached -5.0 °C after 24 min and held -5.1 to -5.0 °C for
+  10 min at PWM 117 to 127 (46% to 50%), maximum PWM 143. The read-back setpoint (-5.0 °C), `power` and the `ICooling`
+  state agreed with the camera. The warm-up was stopped by hand at 13.9 °C (stopped on purpose), so the
+  PWM 0 check after cooling off was not recorded for this mode (it was in the `cooler` run).
 
 ## Not measured yet
 
@@ -490,8 +499,8 @@ is why the PWM trace is a sawtooth during the ramps.
 - **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current** with 900 s darks at 0 and -5 °C and at -12 °C (only -10 °C was done).
-- **The SDK's own cooling control** (`ControlQHYCCDTemp`, `CONTROL_COOLER`) on the 5 A supply. All measurements here
-  used the PI controller on the manual PWM, so the driver's park-and-retry workaround is not yet judged.
+- **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY
+  cameras: not tested; on this unit with the 5 A supply it was not needed.
 
 ## Notes on the script
 

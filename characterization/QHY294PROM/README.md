@@ -56,7 +56,7 @@ cooling numbers):
 Three ways to set the cooler exist in the SDK, and the pyobs-qhyccd driver uses the first:
 
 1. `ControlQHYCCDTemp(handle, target)`: the SDK's own loop, which has to be called about once per second.
-2. `SetQHYCCDParam(CONTROL_COOLER, target)`: the camera regulates (not tested here).
+2. `SetQHYCCDParam(CONTROL_COOLER, target)`: the camera regulates (tested to -10 °C, ramp and jump).
 3. `SetQHYCCDParam(CONTROL_MANULPWM, 0..255)`: a fixed cooler drive level. PWM 0 stops the cooling.
 
 `GetQHYCCDParam(CONTROL_COOLER)` returns the last target that was set, so the setpoint can be read back.
@@ -82,8 +82,10 @@ other cameras.
 **Characterization script.** `tools/characterize.py` drives the cooler with a PI controller on the PWM (1 Hz, gains
 `PWM_KP` = 15, `PWM_KI` = 0.3 per second, PWM limited to 240, anti-windup). The target is stepped by 1 °C per minute
 and the series stops with `CoolerLimit` if the cooler is above 90% for 2 minutes and the sensor is more than 1 °C from
-the target. The auto mode of the SDK pegged the PWM at 255 for a large temperature error and warmed the sensor, which is
-why the steps are small.
+the target. The first runs of the SDK's own cooler control were flagged as a collapse by a wrong check in the script; the
+repeats with the fixed check show that the SDK controls cool to -10 °C by ramp or jump and hold it (see the
+[unit report](cfb85516525f0aced/README.md#sdk-cooling-control-5-a-supply)). The earlier statement that the SDK auto mode
+warmed the sensor is not supported by these runs; the small steps of the script are kept.
 
 ## Software notes
 
@@ -95,5 +97,8 @@ rules is not enough: replug the camera.
 controls through the Cython driver hung once; the script reads only the controls it needs, with timeouts. The Cython
 driver (`QHYCCDDriver`) does not expose min/max/step of the controls or the read modes; the script uses ctypes for that.
 
-**Not done yet:** the driver was not changed, and the read mode selection and the cooling workaround have not been
-tested against the camera in this session.
+**Driver.** `QHYCCDDriver` is now written with ctypes (no Cython, SDK installed on the machine). `CloseQHYCCD` of SDK
+25.9.29.10 joins a thread handle that it never sets (with `MALLOC_PERTURB_=165` the handle is 0x5A5A5A5A5A5A5A5A and the
+process segfaults in `pthread_join`), so it worked, hung or crashed depending on the heap, and importing pycares
+changed the heap enough to trigger it. The driver does not call it by default (`QHYCCD_CALL_CLOSE=1` does). Not yet
+reported to QHY.

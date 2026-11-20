@@ -933,3 +933,821 @@
 {"time": 1795009916.1589582, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.8}
 {"time": 1795009921.1598902, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.9}
 {"time": 1795009926.160855, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.1}
+{"time": 1795175741.8644733, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 255.0, "cooler_param": 19.0}
+{"time": 1795175746.866356, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175751.8691204, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175756.8719306, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175761.8744555, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175766.8775988, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175771.8803709, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175776.8829737, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175781.8861132, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175786.8889647, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175791.8915174, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175796.8946679, "run": "cooler_ramp_-10", "label": "cool", "target": 19, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 19.0}
+{"time": 1795175801.897183, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175806.9000254, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175811.9029438, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175816.9052942, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175821.9076624, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175826.910061, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175831.912842, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175836.9154396, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175841.9183545, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175846.9211514, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175851.9234922, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175856.9263637, "run": "cooler_ramp_-10", "label": "cool", "target": 18, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 18.0}
+{"time": 1795175861.9293666, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 19.3, "pwm_read": 0.0, "cooler_param": 17.0}
+{"time": 1795175866.932305, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 19.2, "pwm_read": 35.0, "cooler_param": 17.0}
+{"time": 1795175871.9350648, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 18.4, "pwm_read": 49.0, "cooler_param": 17.0}
+{"time": 1795175876.9377186, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 17.9, "pwm_read": 45.0, "cooler_param": 17.0}
+{"time": 1795175881.9405203, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 17.2, "pwm_read": 35.0, "cooler_param": 17.0}
+{"time": 1795175886.9439547, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 17.0, "pwm_read": 29.0, "cooler_param": 17.0}
+{"time": 1795175891.9468956, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.8, "pwm_read": 23.0, "cooler_param": 17.0}
+{"time": 1795175896.9496932, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.7, "pwm_read": 11.0, "cooler_param": 17.0}
+{"time": 1795175901.953019, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.8, "pwm_read": 9.0, "cooler_param": 17.0}
+{"time": 1795175906.9560716, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.8, "pwm_read": 7.0, "cooler_param": 17.0}
+{"time": 1795175911.9588344, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.9, "pwm_read": 9.0, "cooler_param": 17.0}
+{"time": 1795175916.9621878, "run": "cooler_ramp_-10", "label": "cool", "target": 17, "temp": 16.9, "pwm_read": 7.0, "cooler_param": 17.0}
+{"time": 1795175921.964685, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 16.9, "pwm_read": 7.0, "cooler_param": 16.0}
+{"time": 1795175926.9676661, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 16.5, "pwm_read": 53.0, "cooler_param": 16.0}
+{"time": 1795175931.9702532, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 16.1, "pwm_read": 33.0, "cooler_param": 16.0}
+{"time": 1795175936.9729881, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.7, "pwm_read": 23.0, "cooler_param": 16.0}
+{"time": 1795175941.9753273, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.7, "pwm_read": 17.0, "cooler_param": 16.0}
+{"time": 1795175946.9784865, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.7, "pwm_read": 11.0, "cooler_param": 16.0}
+{"time": 1795175951.981232, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.8, "pwm_read": 11.0, "cooler_param": 16.0}
+{"time": 1795175956.9836717, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.8, "pwm_read": 9.0, "cooler_param": 16.0}
+{"time": 1795175961.9862707, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.9, "pwm_read": 9.0, "cooler_param": 16.0}
+{"time": 1795175966.988333, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.9, "pwm_read": 11.0, "cooler_param": 16.0}
+{"time": 1795175971.9909978, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.9, "pwm_read": 11.0, "cooler_param": 16.0}
+{"time": 1795175976.9941843, "run": "cooler_ramp_-10", "label": "cool", "target": 16, "temp": 15.9, "pwm_read": 11.0, "cooler_param": 16.0}
+{"time": 1795175981.9969184, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 15.9, "pwm_read": 13.0, "cooler_param": 15.0}
+{"time": 1795175986.9997597, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 15.5, "pwm_read": 49.0, "cooler_param": 15.0}
+{"time": 1795175992.0026677, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.9, "pwm_read": 39.0, "cooler_param": 15.0}
+{"time": 1795175997.0057251, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.7, "pwm_read": 29.0, "cooler_param": 15.0}
+{"time": 1795176002.0085466, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.7, "pwm_read": 17.0, "cooler_param": 15.0}
+{"time": 1795176007.0111775, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.7, "pwm_read": 13.0, "cooler_param": 15.0}
+{"time": 1795176012.0132139, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.8, "pwm_read": 13.0, "cooler_param": 15.0}
+{"time": 1795176017.0157204, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.8, "pwm_read": 13.0, "cooler_param": 15.0}
+{"time": 1795176022.0187325, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.9, "pwm_read": 13.0, "cooler_param": 15.0}
+{"time": 1795176027.0214717, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.9, "pwm_read": 15.0, "cooler_param": 15.0}
+{"time": 1795176032.024082, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.9, "pwm_read": 15.0, "cooler_param": 15.0}
+{"time": 1795176037.0272005, "run": "cooler_ramp_-10", "label": "cool", "target": 15, "temp": 14.9, "pwm_read": 15.0, "cooler_param": 15.0}
+{"time": 1795176042.0299807, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 14.9, "pwm_read": 13.0, "cooler_param": 14.0}
+{"time": 1795176047.032491, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 14.8, "pwm_read": 59.0, "cooler_param": 14.0}
+{"time": 1795176052.0356193, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 14.1, "pwm_read": 53.0, "cooler_param": 14.0}
+{"time": 1795176057.0385244, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.8, "pwm_read": 31.0, "cooler_param": 14.0}
+{"time": 1795176062.0411935, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.7, "pwm_read": 27.0, "cooler_param": 14.0}
+{"time": 1795176067.0446413, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.7, "pwm_read": 21.0, "cooler_param": 14.0}
+{"time": 1795176072.0467887, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.7, "pwm_read": 17.0, "cooler_param": 14.0}
+{"time": 1795176077.0486815, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.8, "pwm_read": 15.0, "cooler_param": 14.0}
+{"time": 1795176082.051178, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.9, "pwm_read": 17.0, "cooler_param": 14.0}
+{"time": 1795176087.0536082, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.9, "pwm_read": 17.0, "cooler_param": 14.0}
+{"time": 1795176092.056438, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.9, "pwm_read": 17.0, "cooler_param": 14.0}
+{"time": 1795176097.0595965, "run": "cooler_ramp_-10", "label": "cool", "target": 14, "temp": 13.9, "pwm_read": 17.0, "cooler_param": 14.0}
+{"time": 1795176102.0621023, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 14.0, "pwm_read": 17.0, "cooler_param": 13.0}
+{"time": 1795176107.065195, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 13.6, "pwm_read": 63.0, "cooler_param": 13.0}
+{"time": 1795176112.068511, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 13.0, "pwm_read": 47.0, "cooler_param": 13.0}
+{"time": 1795176117.0714576, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.8, "pwm_read": 35.0, "cooler_param": 13.0}
+{"time": 1795176122.0738547, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.7, "pwm_read": 31.0, "cooler_param": 13.0}
+{"time": 1795176127.0770147, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.7, "pwm_read": 21.0, "cooler_param": 13.0}
+{"time": 1795176132.079312, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.7, "pwm_read": 19.0, "cooler_param": 13.0}
+{"time": 1795176137.081504, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.8, "pwm_read": 19.0, "cooler_param": 13.0}
+{"time": 1795176142.084724, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.9, "pwm_read": 21.0, "cooler_param": 13.0}
+{"time": 1795176147.0874379, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.9, "pwm_read": 19.0, "cooler_param": 13.0}
+{"time": 1795176152.0900028, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.9, "pwm_read": 19.0, "cooler_param": 13.0}
+{"time": 1795176157.093119, "run": "cooler_ramp_-10", "label": "cool", "target": 13, "temp": 12.9, "pwm_read": 23.0, "cooler_param": 13.0}
+{"time": 1795176162.0958855, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 12.9, "pwm_read": 21.0, "cooler_param": 12.0}
+{"time": 1795176167.098333, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 12.8, "pwm_read": 67.0, "cooler_param": 12.0}
+{"time": 1795176172.1011693, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 12.3, "pwm_read": 61.0, "cooler_param": 12.0}
+{"time": 1795176177.103908, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.9, "pwm_read": 49.0, "cooler_param": 12.0}
+{"time": 1795176182.106589, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.7, "pwm_read": 33.0, "cooler_param": 12.0}
+{"time": 1795176187.1097152, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.7, "pwm_read": 29.0, "cooler_param": 12.0}
+{"time": 1795176192.1121182, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.7, "pwm_read": 25.0, "cooler_param": 12.0}
+{"time": 1795176197.1143384, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.8, "pwm_read": 23.0, "cooler_param": 12.0}
+{"time": 1795176202.117448, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.8, "pwm_read": 23.0, "cooler_param": 12.0}
+{"time": 1795176207.1204495, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.9, "pwm_read": 23.0, "cooler_param": 12.0}
+{"time": 1795176212.123132, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.9, "pwm_read": 25.0, "cooler_param": 12.0}
+{"time": 1795176217.1261365, "run": "cooler_ramp_-10", "label": "cool", "target": 12, "temp": 11.9, "pwm_read": 25.0, "cooler_param": 12.0}
+{"time": 1795176222.128371, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 11.9, "pwm_read": 25.0, "cooler_param": 11.0}
+{"time": 1795176227.1314838, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 11.8, "pwm_read": 69.0, "cooler_param": 11.0}
+{"time": 1795176232.134564, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 11.2, "pwm_read": 63.0, "cooler_param": 11.0}
+{"time": 1795176237.1372802, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.8, "pwm_read": 45.0, "cooler_param": 11.0}
+{"time": 1795176242.1396031, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.7, "pwm_read": 39.0, "cooler_param": 11.0}
+{"time": 1795176247.1423066, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.7, "pwm_read": 33.0, "cooler_param": 11.0}
+{"time": 1795176252.1446319, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.7, "pwm_read": 27.0, "cooler_param": 11.0}
+{"time": 1795176257.1472256, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.8, "pwm_read": 27.0, "cooler_param": 11.0}
+{"time": 1795176262.1503062, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.8, "pwm_read": 27.0, "cooler_param": 11.0}
+{"time": 1795176267.1528652, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.9, "pwm_read": 25.0, "cooler_param": 11.0}
+{"time": 1795176272.1554964, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.9, "pwm_read": 29.0, "cooler_param": 11.0}
+{"time": 1795176277.158616, "run": "cooler_ramp_-10", "label": "cool", "target": 11, "temp": 10.9, "pwm_read": 27.0, "cooler_param": 11.0}
+{"time": 1795176282.1616948, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 11.0, "pwm_read": 29.0, "cooler_param": 10.0}
+{"time": 1795176287.164314, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 10.6, "pwm_read": 69.0, "cooler_param": 10.0}
+{"time": 1795176292.1675577, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 10.0, "pwm_read": 57.0, "cooler_param": 10.0}
+{"time": 1795176297.1717026, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.8, "pwm_read": 51.0, "cooler_param": 10.0}
+{"time": 1795176302.174236, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.7, "pwm_read": 43.0, "cooler_param": 10.0}
+{"time": 1795176307.1775947, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.7, "pwm_read": 35.0, "cooler_param": 10.0}
+{"time": 1795176312.1803334, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.7, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176317.182696, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.8, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176322.1859953, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.9, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176327.19059, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.9, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176332.193423, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 9.9, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176337.1966422, "run": "cooler_ramp_-10", "label": "cool", "target": 10, "temp": 10.0, "pwm_read": 31.0, "cooler_param": 10.0}
+{"time": 1795176342.199042, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 10.0, "pwm_read": 31.0, "cooler_param": 9.0}
+{"time": 1795176347.2020998, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 9.9, "pwm_read": 77.0, "cooler_param": 9.0}
+{"time": 1795176352.2050593, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 9.4, "pwm_read": 73.0, "cooler_param": 9.0}
+{"time": 1795176357.2078805, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.9, "pwm_read": 63.0, "cooler_param": 9.0}
+{"time": 1795176362.2102537, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.7, "pwm_read": 47.0, "cooler_param": 9.0}
+{"time": 1795176367.2130787, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.7, "pwm_read": 43.0, "cooler_param": 9.0}
+{"time": 1795176372.2162197, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.7, "pwm_read": 39.0, "cooler_param": 9.0}
+{"time": 1795176377.2185311, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.7, "pwm_read": 35.0, "cooler_param": 9.0}
+{"time": 1795176382.2210996, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.8, "pwm_read": 33.0, "cooler_param": 9.0}
+{"time": 1795176387.2242267, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.9, "pwm_read": 33.0, "cooler_param": 9.0}
+{"time": 1795176392.2266576, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.9, "pwm_read": 33.0, "cooler_param": 9.0}
+{"time": 1795176397.2295535, "run": "cooler_ramp_-10", "label": "cool", "target": 9, "temp": 8.9, "pwm_read": 35.0, "cooler_param": 9.0}
+{"time": 1795176402.2319407, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 9.0, "pwm_read": 37.0, "cooler_param": 8.0}
+{"time": 1795176407.2350783, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 8.6, "pwm_read": 81.0, "cooler_param": 8.0}
+{"time": 1795176412.2378926, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 8.2, "pwm_read": 67.0, "cooler_param": 8.0}
+{"time": 1795176417.240723, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.8, "pwm_read": 59.0, "cooler_param": 8.0}
+{"time": 1795176422.2432938, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.7, "pwm_read": 53.0, "cooler_param": 8.0}
+{"time": 1795176427.2461784, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.7, "pwm_read": 47.0, "cooler_param": 8.0}
+{"time": 1795176432.2491248, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.7, "pwm_read": 41.0, "cooler_param": 8.0}
+{"time": 1795176437.2514966, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.7, "pwm_read": 39.0, "cooler_param": 8.0}
+{"time": 1795176442.2545106, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.8, "pwm_read": 39.0, "cooler_param": 8.0}
+{"time": 1795176447.2588882, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.9, "pwm_read": 39.0, "cooler_param": 8.0}
+{"time": 1795176452.2615564, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.9, "pwm_read": 39.0, "cooler_param": 8.0}
+{"time": 1795176457.2646298, "run": "cooler_ramp_-10", "label": "cool", "target": 8, "temp": 7.9, "pwm_read": 39.0, "cooler_param": 8.0}
+{"time": 1795176462.267054, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 7.9, "pwm_read": 39.0, "cooler_param": 7.0}
+{"time": 1795176467.269748, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 7.6, "pwm_read": 81.0, "cooler_param": 7.0}
+{"time": 1795176472.2727153, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 7.1, "pwm_read": 71.0, "cooler_param": 7.0}
+{"time": 1795176477.2755694, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.9, "pwm_read": 63.0, "cooler_param": 7.0}
+{"time": 1795176482.2782483, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.7, "pwm_read": 57.0, "cooler_param": 7.0}
+{"time": 1795176487.2820427, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.7, "pwm_read": 49.0, "cooler_param": 7.0}
+{"time": 1795176492.2845402, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.7, "pwm_read": 45.0, "cooler_param": 7.0}
+{"time": 1795176497.287138, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.8, "pwm_read": 43.0, "cooler_param": 7.0}
+{"time": 1795176502.2896564, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.8, "pwm_read": 41.0, "cooler_param": 7.0}
+{"time": 1795176507.2920644, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.9, "pwm_read": 43.0, "cooler_param": 7.0}
+{"time": 1795176512.294496, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.9, "pwm_read": 41.0, "cooler_param": 7.0}
+{"time": 1795176517.2976942, "run": "cooler_ramp_-10", "label": "cool", "target": 7, "temp": 6.9, "pwm_read": 43.0, "cooler_param": 7.0}
+{"time": 1795176522.3003147, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 7.0, "pwm_read": 45.0, "cooler_param": 6.0}
+{"time": 1795176527.30312, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 6.9, "pwm_read": 87.0, "cooler_param": 6.0}
+{"time": 1795176532.3059435, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 6.2, "pwm_read": 85.0, "cooler_param": 6.0}
+{"time": 1795176537.308383, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 6.0, "pwm_read": 69.0, "cooler_param": 6.0}
+{"time": 1795176542.3106453, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.8, "pwm_read": 63.0, "cooler_param": 6.0}
+{"time": 1795176547.3133755, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.7, "pwm_read": 57.0, "cooler_param": 6.0}
+{"time": 1795176552.3158255, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.7, "pwm_read": 53.0, "cooler_param": 6.0}
+{"time": 1795176557.3180249, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.7, "pwm_read": 49.0, "cooler_param": 6.0}
+{"time": 1795176562.3214135, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.8, "pwm_read": 47.0, "cooler_param": 6.0}
+{"time": 1795176567.3242657, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.8, "pwm_read": 47.0, "cooler_param": 6.0}
+{"time": 1795176572.3267968, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.9, "pwm_read": 47.0, "cooler_param": 6.0}
+{"time": 1795176577.3300898, "run": "cooler_ramp_-10", "label": "cool", "target": 6, "temp": 5.9, "pwm_read": 47.0, "cooler_param": 6.0}
+{"time": 1795176582.3329785, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 5.9, "pwm_read": 47.0, "cooler_param": 5.0}
+{"time": 1795176587.3353376, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 5.6, "pwm_read": 89.0, "cooler_param": 5.0}
+{"time": 1795176592.3385556, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 5.3, "pwm_read": 81.0, "cooler_param": 5.0}
+{"time": 1795176597.341575, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.9, "pwm_read": 75.0, "cooler_param": 5.0}
+{"time": 1795176602.3441541, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.8, "pwm_read": 67.0, "cooler_param": 5.0}
+{"time": 1795176607.3469944, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.7, "pwm_read": 59.0, "cooler_param": 5.0}
+{"time": 1795176612.3494742, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.7, "pwm_read": 55.0, "cooler_param": 5.0}
+{"time": 1795176617.3517268, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.7, "pwm_read": 53.0, "cooler_param": 5.0}
+{"time": 1795176622.3546007, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.8, "pwm_read": 51.0, "cooler_param": 5.0}
+{"time": 1795176627.3572445, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.8, "pwm_read": 51.0, "cooler_param": 5.0}
+{"time": 1795176632.3596728, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.9, "pwm_read": 51.0, "cooler_param": 5.0}
+{"time": 1795176637.3625395, "run": "cooler_ramp_-10", "label": "cool", "target": 5, "temp": 4.9, "pwm_read": 51.0, "cooler_param": 5.0}
+{"time": 1795176642.3654869, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 5.0, "pwm_read": 53.0, "cooler_param": 4.0}
+{"time": 1795176647.368483, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 4.6, "pwm_read": 93.0, "cooler_param": 4.0}
+{"time": 1795176652.3709838, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 4.1, "pwm_read": 85.0, "cooler_param": 4.0}
+{"time": 1795176657.373913, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.9, "pwm_read": 79.0, "cooler_param": 4.0}
+{"time": 1795176662.3762605, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.8, "pwm_read": 69.0, "cooler_param": 4.0}
+{"time": 1795176667.3791213, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.7, "pwm_read": 63.0, "cooler_param": 4.0}
+{"time": 1795176672.3820124, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.7, "pwm_read": 59.0, "cooler_param": 4.0}
+{"time": 1795176677.3845134, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.8, "pwm_read": 59.0, "cooler_param": 4.0}
+{"time": 1795176682.3876474, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.8, "pwm_read": 55.0, "cooler_param": 4.0}
+{"time": 1795176687.3898034, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.9, "pwm_read": 55.0, "cooler_param": 4.0}
+{"time": 1795176692.392292, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.9, "pwm_read": 57.0, "cooler_param": 4.0}
+{"time": 1795176697.3956068, "run": "cooler_ramp_-10", "label": "cool", "target": 4, "temp": 3.9, "pwm_read": 57.0, "cooler_param": 4.0}
+{"time": 1795176702.3985193, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 3.9, "pwm_read": 57.0, "cooler_param": 3.0}
+{"time": 1795176707.401613, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 3.9, "pwm_read": 97.0, "cooler_param": 3.0}
+{"time": 1795176712.4047837, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 3.3, "pwm_read": 97.0, "cooler_param": 3.0}
+{"time": 1795176717.4073992, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 3.1, "pwm_read": 85.0, "cooler_param": 3.0}
+{"time": 1795176722.4096432, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.8, "pwm_read": 79.0, "cooler_param": 3.0}
+{"time": 1795176727.4125829, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.7, "pwm_read": 75.0, "cooler_param": 3.0}
+{"time": 1795176732.415641, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.7, "pwm_read": 67.0, "cooler_param": 3.0}
+{"time": 1795176737.4180424, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.7, "pwm_read": 65.0, "cooler_param": 3.0}
+{"time": 1795176742.421071, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.7, "pwm_read": 61.0, "cooler_param": 3.0}
+{"time": 1795176747.4239554, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.8, "pwm_read": 61.0, "cooler_param": 3.0}
+{"time": 1795176752.426358, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.8, "pwm_read": 61.0, "cooler_param": 3.0}
+{"time": 1795176757.4295824, "run": "cooler_ramp_-10", "label": "cool", "target": 3, "temp": 2.9, "pwm_read": 61.0, "cooler_param": 3.0}
+{"time": 1795176762.4324563, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 2.9, "pwm_read": 61.0, "cooler_param": 2.0}
+{"time": 1795176767.4353602, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 2.6, "pwm_read": 101.0, "cooler_param": 2.0}
+{"time": 1795176772.4379823, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 2.2, "pwm_read": 97.0, "cooler_param": 2.0}
+{"time": 1795176777.441019, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 2.0, "pwm_read": 91.0, "cooler_param": 2.0}
+{"time": 1795176782.443521, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.8, "pwm_read": 85.0, "cooler_param": 2.0}
+{"time": 1795176787.4464486, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.7, "pwm_read": 75.0, "cooler_param": 2.0}
+{"time": 1795176792.449418, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.7, "pwm_read": 71.0, "cooler_param": 2.0}
+{"time": 1795176797.4520068, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.7, "pwm_read": 71.0, "cooler_param": 2.0}
+{"time": 1795176802.4549348, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.8, "pwm_read": 67.0, "cooler_param": 2.0}
+{"time": 1795176807.458228, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.8, "pwm_read": 65.0, "cooler_param": 2.0}
+{"time": 1795176812.4608057, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.9, "pwm_read": 65.0, "cooler_param": 2.0}
+{"time": 1795176817.4642334, "run": "cooler_ramp_-10", "label": "cool", "target": 2, "temp": 1.9, "pwm_read": 65.0, "cooler_param": 2.0}
+{"time": 1795176822.4669077, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 1.9, "pwm_read": 67.0, "cooler_param": 1.0}
+{"time": 1795176827.4698224, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 1.9, "pwm_read": 107.0, "cooler_param": 1.0}
+{"time": 1795176832.4726975, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 1.5, "pwm_read": 107.0, "cooler_param": 1.0}
+{"time": 1795176837.4756396, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 1.1, "pwm_read": 103.0, "cooler_param": 1.0}
+{"time": 1795176842.4777737, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.9, "pwm_read": 91.0, "cooler_param": 1.0}
+{"time": 1795176847.481134, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.8, "pwm_read": 87.0, "cooler_param": 1.0}
+{"time": 1795176852.4841812, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.7, "pwm_read": 81.0, "cooler_param": 1.0}
+{"time": 1795176857.4866006, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.7, "pwm_read": 77.0, "cooler_param": 1.0}
+{"time": 1795176862.4897244, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.7, "pwm_read": 73.0, "cooler_param": 1.0}
+{"time": 1795176867.493045, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.8, "pwm_read": 73.0, "cooler_param": 1.0}
+{"time": 1795176872.4956937, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.8, "pwm_read": 71.0, "cooler_param": 1.0}
+{"time": 1795176877.4985743, "run": "cooler_ramp_-10", "label": "cool", "target": 1, "temp": 0.9, "pwm_read": 71.0, "cooler_param": 1.0}
+{"time": 1795176882.5014484, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": 0.9, "pwm_read": 71.0, "cooler_param": 0.0}
+{"time": 1795176887.5041664, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": 0.8, "pwm_read": 117.0, "cooler_param": 0.0}
+{"time": 1795176892.5072777, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": 0.3, "pwm_read": 115.0, "cooler_param": 0.0}
+{"time": 1795176897.5106425, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.0, "pwm_read": 107.0, "cooler_param": 0.0}
+{"time": 1795176902.5130754, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.1, "pwm_read": 101.0, "cooler_param": 0.0}
+{"time": 1795176907.5161853, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.3, "pwm_read": 97.0, "cooler_param": 0.0}
+{"time": 1795176912.519103, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.3, "pwm_read": 87.0, "cooler_param": 0.0}
+{"time": 1795176917.5212903, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.3, "pwm_read": 83.0, "cooler_param": 0.0}
+{"time": 1795176922.5245245, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.3, "pwm_read": 81.0, "cooler_param": 0.0}
+{"time": 1795176927.5278401, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.3, "pwm_read": 77.0, "cooler_param": 0.0}
+{"time": 1795176932.5303044, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.2, "pwm_read": 75.0, "cooler_param": 0.0}
+{"time": 1795176937.5336595, "run": "cooler_ramp_-10", "label": "cool", "target": 0, "temp": -0.1, "pwm_read": 77.0, "cooler_param": 0.0}
+{"time": 1795176942.5357985, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -0.1, "pwm_read": 77.0, "cooler_param": -1.0}
+{"time": 1795176947.5376813, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -0.3, "pwm_read": 117.0, "cooler_param": -1.0}
+{"time": 1795176952.5406792, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -0.8, "pwm_read": 115.0, "cooler_param": -1.0}
+{"time": 1795176957.5437758, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -0.9, "pwm_read": 109.0, "cooler_param": -1.0}
+{"time": 1795176962.5463293, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.1, "pwm_read": 105.0, "cooler_param": -1.0}
+{"time": 1795176967.5491567, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.2, "pwm_read": 97.0, "cooler_param": -1.0}
+{"time": 1795176972.5524786, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.3, "pwm_read": 93.0, "cooler_param": -1.0}
+{"time": 1795176977.554959, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.3, "pwm_read": 89.0, "cooler_param": -1.0}
+{"time": 1795176982.5576982, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.3, "pwm_read": 85.0, "cooler_param": -1.0}
+{"time": 1795176987.5605533, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.2, "pwm_read": 83.0, "cooler_param": -1.0}
+{"time": 1795176992.5627317, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.2, "pwm_read": 83.0, "cooler_param": -1.0}
+{"time": 1795176997.5658357, "run": "cooler_ramp_-10", "label": "cool", "target": -1, "temp": -1.1, "pwm_read": 83.0, "cooler_param": -1.0}
+{"time": 1795177002.5687854, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -1.1, "pwm_read": 83.0, "cooler_param": -2.0}
+{"time": 1795177007.5711317, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -1.1, "pwm_read": 121.0, "cooler_param": -2.0}
+{"time": 1795177012.5740845, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -1.5, "pwm_read": 123.0, "cooler_param": -2.0}
+{"time": 1795177017.5770502, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -1.8, "pwm_read": 121.0, "cooler_param": -2.0}
+{"time": 1795177022.579597, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.1, "pwm_read": 113.0, "cooler_param": -2.0}
+{"time": 1795177027.5826085, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.2, "pwm_read": 107.0, "cooler_param": -2.0}
+{"time": 1795177032.5856025, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.2, "pwm_read": 105.0, "cooler_param": -2.0}
+{"time": 1795177037.5877688, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.3, "pwm_read": 97.0, "cooler_param": -2.0}
+{"time": 1795177042.5901587, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.3, "pwm_read": 95.0, "cooler_param": -2.0}
+{"time": 1795177047.5931675, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.3, "pwm_read": 93.0, "cooler_param": -2.0}
+{"time": 1795177052.595652, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.2, "pwm_read": 89.0, "cooler_param": -2.0}
+{"time": 1795177057.5981586, "run": "cooler_ramp_-10", "label": "cool", "target": -2, "temp": -2.2, "pwm_read": 89.0, "cooler_param": -2.0}
+{"time": 1795177062.6009908, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -2.1, "pwm_read": 89.0, "cooler_param": -3.0}
+{"time": 1795177067.6035938, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -2.4, "pwm_read": 127.0, "cooler_param": -3.0}
+{"time": 1795177072.6066868, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -2.6, "pwm_read": 127.0, "cooler_param": -3.0}
+{"time": 1795177077.6096277, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -2.9, "pwm_read": 123.0, "cooler_param": -3.0}
+{"time": 1795177082.612177, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.0, "pwm_read": 119.0, "cooler_param": -3.0}
+{"time": 1795177087.6242468, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.2, "pwm_read": 115.0, "cooler_param": -3.0}
+{"time": 1795177092.6273541, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.2, "pwm_read": 109.0, "cooler_param": -3.0}
+{"time": 1795177097.6293483, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.3, "pwm_read": 105.0, "cooler_param": -3.0}
+{"time": 1795177102.6321137, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.3, "pwm_read": 101.0, "cooler_param": -3.0}
+{"time": 1795177107.635369, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.3, "pwm_read": 97.0, "cooler_param": -3.0}
+{"time": 1795177112.6376636, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.2, "pwm_read": 97.0, "cooler_param": -3.0}
+{"time": 1795177117.6404185, "run": "cooler_ramp_-10", "label": "cool", "target": -3, "temp": -3.2, "pwm_read": 95.0, "cooler_param": -3.0}
+{"time": 1795177122.6436074, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -3.1, "pwm_read": 95.0, "cooler_param": -4.0}
+{"time": 1795177127.6459267, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -3.3, "pwm_read": 135.0, "cooler_param": -4.0}
+{"time": 1795177132.6489155, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -3.7, "pwm_read": 131.0, "cooler_param": -4.0}
+{"time": 1795177137.6513805, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -3.9, "pwm_read": 129.0, "cooler_param": -4.0}
+{"time": 1795177142.6536317, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.1, "pwm_read": 123.0, "cooler_param": -4.0}
+{"time": 1795177147.6566246, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.2, "pwm_read": 119.0, "cooler_param": -4.0}
+{"time": 1795177152.6594799, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.3, "pwm_read": 115.0, "cooler_param": -4.0}
+{"time": 1795177157.6615148, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.3, "pwm_read": 111.0, "cooler_param": -4.0}
+{"time": 1795177162.6645815, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.3, "pwm_read": 107.0, "cooler_param": -4.0}
+{"time": 1795177167.6673965, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.2, "pwm_read": 107.0, "cooler_param": -4.0}
+{"time": 1795177172.670605, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.2, "pwm_read": 105.0, "cooler_param": -4.0}
+{"time": 1795177177.673191, "run": "cooler_ramp_-10", "label": "cool", "target": -4, "temp": -4.2, "pwm_read": 103.0, "cooler_param": -4.0}
+{"time": 1795177182.6761727, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -4.2, "pwm_read": 101.0, "cooler_param": -5.0}
+{"time": 1795177187.680601, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -4.2, "pwm_read": 141.0, "cooler_param": -5.0}
+{"time": 1795177192.6836715, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -4.6, "pwm_read": 141.0, "cooler_param": -5.0}
+{"time": 1795177197.6864955, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -4.8, "pwm_read": 137.0, "cooler_param": -5.0}
+{"time": 1795177202.6888485, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.0, "pwm_read": 133.0, "cooler_param": -5.0}
+{"time": 1795177207.6920147, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.1, "pwm_read": 131.0, "cooler_param": -5.0}
+{"time": 1795177212.694655, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.2, "pwm_read": 127.0, "cooler_param": -5.0}
+{"time": 1795177217.6970942, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.3, "pwm_read": 121.0, "cooler_param": -5.0}
+{"time": 1795177222.7000287, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.3, "pwm_read": 119.0, "cooler_param": -5.0}
+{"time": 1795177227.7023327, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.3, "pwm_read": 115.0, "cooler_param": -5.0}
+{"time": 1795177232.7043693, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.3, "pwm_read": 111.0, "cooler_param": -5.0}
+{"time": 1795177237.7076268, "run": "cooler_ramp_-10", "label": "cool", "target": -5, "temp": -5.2, "pwm_read": 111.0, "cooler_param": -5.0}
+{"time": 1795177242.7106273, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -5.2, "pwm_read": 111.0, "cooler_param": -6.0}
+{"time": 1795177247.713192, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -5.4, "pwm_read": 147.0, "cooler_param": -6.0}
+{"time": 1795177252.7160094, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -5.6, "pwm_read": 147.0, "cooler_param": -6.0}
+{"time": 1795177257.7192318, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -5.9, "pwm_read": 145.0, "cooler_param": -6.0}
+{"time": 1795177262.7215836, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.0, "pwm_read": 141.0, "cooler_param": -6.0}
+{"time": 1795177267.7246006, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.1, "pwm_read": 135.0, "cooler_param": -6.0}
+{"time": 1795177272.7274883, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.3, "pwm_read": 133.0, "cooler_param": -6.0}
+{"time": 1795177277.7297444, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.3, "pwm_read": 129.0, "cooler_param": -6.0}
+{"time": 1795177282.7329433, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.3, "pwm_read": 125.0, "cooler_param": -6.0}
+{"time": 1795177287.7353644, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.3, "pwm_read": 121.0, "cooler_param": -6.0}
+{"time": 1795177292.7373574, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.2, "pwm_read": 119.0, "cooler_param": -6.0}
+{"time": 1795177297.7405124, "run": "cooler_ramp_-10", "label": "cool", "target": -6, "temp": -6.2, "pwm_read": 119.0, "cooler_param": -6.0}
+{"time": 1795177302.7432456, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -6.1, "pwm_read": 119.0, "cooler_param": -7.0}
+{"time": 1795177307.7456574, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -6.5, "pwm_read": 157.0, "cooler_param": -7.0}
+{"time": 1795177312.7483401, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -6.7, "pwm_read": 155.0, "cooler_param": -7.0}
+{"time": 1795177317.7514577, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -6.9, "pwm_read": 153.0, "cooler_param": -7.0}
+{"time": 1795177322.7539806, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.0, "pwm_read": 149.0, "cooler_param": -7.0}
+{"time": 1795177327.7570045, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.2, "pwm_read": 145.0, "cooler_param": -7.0}
+{"time": 1795177332.7600548, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.2, "pwm_read": 143.0, "cooler_param": -7.0}
+{"time": 1795177337.7623334, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.3, "pwm_read": 139.0, "cooler_param": -7.0}
+{"time": 1795177342.7651374, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.3, "pwm_read": 133.0, "cooler_param": -7.0}
+{"time": 1795177347.7680526, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.3, "pwm_read": 131.0, "cooler_param": -7.0}
+{"time": 1795177352.7704172, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.3, "pwm_read": 129.0, "cooler_param": -7.0}
+{"time": 1795177357.7731428, "run": "cooler_ramp_-10", "label": "cool", "target": -7, "temp": -7.2, "pwm_read": 125.0, "cooler_param": -7.0}
+{"time": 1795177362.775926, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -7.2, "pwm_read": 125.0, "cooler_param": -8.0}
+{"time": 1795177367.778393, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -7.2, "pwm_read": 159.0, "cooler_param": -8.0}
+{"time": 1795177372.7813628, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -7.5, "pwm_read": 163.0, "cooler_param": -8.0}
+{"time": 1795177377.7845478, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -7.7, "pwm_read": 163.0, "cooler_param": -8.0}
+{"time": 1795177382.787045, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -7.9, "pwm_read": 161.0, "cooler_param": -8.0}
+{"time": 1795177387.7899451, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.0, "pwm_read": 159.0, "cooler_param": -8.0}
+{"time": 1795177392.7927048, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.2, "pwm_read": 153.0, "cooler_param": -8.0}
+{"time": 1795177397.7952087, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.2, "pwm_read": 151.0, "cooler_param": -8.0}
+{"time": 1795177402.7980554, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.3, "pwm_read": 149.0, "cooler_param": -8.0}
+{"time": 1795177407.8011582, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.3, "pwm_read": 145.0, "cooler_param": -8.0}
+{"time": 1795177412.80351, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.3, "pwm_read": 141.0, "cooler_param": -8.0}
+{"time": 1795177417.8068273, "run": "cooler_ramp_-10", "label": "cool", "target": -8, "temp": -8.3, "pwm_read": 139.0, "cooler_param": -8.0}
+{"time": 1795177422.8100693, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -8.3, "pwm_read": 137.0, "cooler_param": -9.0}
+{"time": 1795177427.8126502, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -8.4, "pwm_read": 169.0, "cooler_param": -9.0}
+{"time": 1795177432.8159397, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -8.7, "pwm_read": 171.0, "cooler_param": -9.0}
+{"time": 1795177437.8187141, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -8.8, "pwm_read": 171.0, "cooler_param": -9.0}
+{"time": 1795177442.821068, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.0, "pwm_read": 171.0, "cooler_param": -9.0}
+{"time": 1795177447.8243322, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.0, "pwm_read": 167.0, "cooler_param": -9.0}
+{"time": 1795177452.8273835, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.2, "pwm_read": 165.0, "cooler_param": -9.0}
+{"time": 1795177457.8296678, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.2, "pwm_read": 161.0, "cooler_param": -9.0}
+{"time": 1795177462.832656, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.3, "pwm_read": 157.0, "cooler_param": -9.0}
+{"time": 1795177467.8356652, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.3, "pwm_read": 153.0, "cooler_param": -9.0}
+{"time": 1795177472.8380291, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.3, "pwm_read": 151.0, "cooler_param": -9.0}
+{"time": 1795177477.8411875, "run": "cooler_ramp_-10", "label": "cool", "target": -9, "temp": -9.2, "pwm_read": 149.0, "cooler_param": -9.0}
+{"time": 1795177482.8442502, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -9.2, "pwm_read": 147.0, "cooler_param": -10.0}
+{"time": 1795177487.8465774, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -9.2, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795177492.8497121, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -9.4, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795177497.8527577, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -9.7, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795177502.8551881, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -9.8, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795177507.858242, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 181.0, "cooler_param": -10.0}
+{"time": 1795177512.8608503, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795177517.8630707, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795177522.865795, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795177527.867938, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795177532.8702269, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 167.0, "cooler_param": -10.0}
+{"time": 1795177537.8731282, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177542.8760414, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177547.8786244, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177552.8813298, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177557.884216, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177562.8865976, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177567.8894231, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177572.8924098, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177577.8946862, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177582.8976014, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177587.9005282, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795177592.9028697, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177597.9058084, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177602.908847, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177607.9109616, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177612.913476, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177617.9157197, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177622.9180818, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177627.9211755, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177632.923601, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177637.9257152, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177642.9285562, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177647.9311352, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177652.9333563, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177657.9362307, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177662.9392366, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177667.941416, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177672.9446077, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177677.9484854, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177682.9510007, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177687.9544985, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177692.9576433, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177697.9601498, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177702.9627237, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177707.9655786, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177712.9679573, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177717.9710271, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177722.9741251, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177727.9771316, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177732.9802198, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177737.9830253, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177742.9861689, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795177747.9892216, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177752.9923613, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177757.995237, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177762.998371, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177768.0012403, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177773.0041983, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177778.0069516, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177783.0101185, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177788.0131638, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177793.01643, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177798.0198727, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177803.0225942, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177808.025634, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177813.028613, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177818.0313911, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177823.0342865, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177828.0372138, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177833.0398471, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177838.0426016, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177843.0451717, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177848.047659, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177853.0504334, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177858.0536249, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177863.0565786, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177868.0593524, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177873.0622456, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177878.0642252, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177883.0673661, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177888.070545, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177893.07317, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177898.0764463, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177903.0791867, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177908.0816834, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177913.084683, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177918.0880446, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177923.0909507, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177928.094013, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177933.0964537, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177938.0990982, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177943.1018398, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177948.1048844, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177953.1074183, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177958.1105285, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177963.11369, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177968.1165397, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177973.11905, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177978.1221554, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177983.1244931, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177988.12777, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795177993.1303356, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795177998.133069, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178003.136101, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178008.1392589, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178013.1418786, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178018.1454034, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178023.1487641, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178028.1509721, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178033.1539028, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178038.1568477, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178043.159516, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178048.162587, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178053.165459, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178058.1682181, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178063.1714723, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178068.1742833, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178073.1766536, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178078.1791935, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178083.1820798, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178088.184514, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178093.1875231, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178098.1904285, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178103.1931825, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178108.195966, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178113.1991458, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178118.202113, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178123.2045922, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178128.2081175, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178133.2105324, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178138.21319, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178143.2158754, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178148.2185948, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178153.2216976, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178158.2241178, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178163.2264802, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178168.2290792, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178173.2318916, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178178.2348523, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178183.2375095, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178188.240531, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178193.243368, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178198.246587, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178203.24951, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178208.2517502, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178213.2547565, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178218.2579105, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 161.0, "cooler_param": -10.0}
+{"time": 1795178223.2624967, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178228.2652998, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178233.2685194, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178238.2714982, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178243.2747867, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178248.277584, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178253.2805076, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178258.283357, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178263.2865274, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178268.2893, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178273.2920458, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178278.295099, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178283.298151, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178288.301208, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178293.3043642, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178298.3071048, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178303.3101945, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178308.3133452, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178313.316255, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178318.3195817, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178323.3226924, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178328.3251061, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178333.3280642, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178338.3303533, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178343.3328311, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178348.336048, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178353.3387144, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178358.3415728, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178363.3446066, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178368.3476486, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178373.3507204, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178378.3540406, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178383.3576021, "run": "cooler_ramp_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178383.3579316, "run": "cooler_ramp_-10", "label": "result", "outcome": "time", "lowest_temp": -10.3, "end_temp": -10.0, "elapsed_s": 2641.4940979480743}
+{"time": 1795178388.3586907, "run": "cooler_ramp_-10", "label": "off", "pwm_read": 0.0, "temp": -8.3}
+{"time": 1795178388.3601472, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -8.3}
+{"time": 1795178393.3685658, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -6.6}
+{"time": 1795178398.3691723, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -5.1}
+{"time": 1795178403.370296, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -3.8}
+{"time": 1795178408.3713653, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -2.6}
+{"time": 1795178413.3723435, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -1.4}
+{"time": 1795178418.3733578, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -0.4}
+{"time": 1795178423.3743393, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 0.7}
+{"time": 1795178428.375089, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 1.6}
+{"time": 1795178433.3758016, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 2.5}
+{"time": 1795178438.3764493, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 3.3}
+{"time": 1795178443.3776536, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 4.1}
+{"time": 1795178448.3785305, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 4.8}
+{"time": 1795178453.3794906, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 5.5}
+{"time": 1795178458.380386, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 6.1}
+{"time": 1795178463.3813164, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 6.7}
+{"time": 1795178468.382273, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.4}
+{"time": 1795178473.3832784, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.9}
+{"time": 1795178478.3841696, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 8.5}
+{"time": 1795178483.385101, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.0}
+{"time": 1795178488.3857973, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.4}
+{"time": 1795178493.3862755, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.9}
+{"time": 1795178498.3869612, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 10.3}
+{"time": 1795178503.3879526, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 10.7}
+{"time": 1795178508.3889632, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.1}
+{"time": 1795178513.3897164, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.5}
+{"time": 1795178518.3907084, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.9}
+{"time": 1795178523.3916445, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.2}
+{"time": 1795178528.392655, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.5}
+{"time": 1795178533.3935747, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.8}
+{"time": 1795178538.3945122, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.1}
+{"time": 1795178543.3954954, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.4}
+{"time": 1795178548.396423, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.6}
+{"time": 1795178553.3973951, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.9}
+{"time": 1795178558.3983824, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.2}
+{"time": 1795178563.3993497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.4}
+{"time": 1795178568.4003608, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.6}
+{"time": 1795178573.401342, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.8}
+{"time": 1795178578.4023159, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.0}
+{"time": 1795178583.403304, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.2}
+{"time": 1795178588.4043353, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.4}
+{"time": 1795178593.4053316, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.5}
+{"time": 1795178598.4063191, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.7}
+{"time": 1795178603.4073656, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.9}
+{"time": 1795178608.4085004, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.0}
+{"time": 1795178613.409374, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.2}
+{"time": 1795178618.4102156, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.3}
+{"time": 1795178623.4109216, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.4}
+{"time": 1795178628.4115555, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.5}
+{"time": 1795178633.412495, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.7}
+{"time": 1795178638.4132018, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.8}
+{"time": 1795178643.413896, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.9}
+{"time": 1795178648.4148483, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.0}
+{"time": 1795178659.9607208, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 17.2, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178664.9632592, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 15.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178669.96578, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 13.3, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178674.9682767, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 12.0, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178679.9712403, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 10.2, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178684.9743383, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 9.1, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178689.9769971, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 7.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178694.9805837, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 6.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178699.9838245, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 5.4, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178704.9863677, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 4.5, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178709.989399, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 3.4, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178714.9920816, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 2.3, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178719.9945836, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 1.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178724.9976451, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 0.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178730.000743, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": 0.0, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178735.0031488, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -0.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178740.0064044, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -1.2, "pwm_read": 227.0, "cooler_param": -10.0}
+{"time": 1795178745.0095847, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -1.8, "pwm_read": 215.0, "cooler_param": -10.0}
+{"time": 1795178750.0119982, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -2.3, "pwm_read": 205.0, "cooler_param": -10.0}
+{"time": 1795178755.0151088, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -2.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178760.0183785, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -3.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178765.021063, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -4.0, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178770.024603, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -4.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178775.027531, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -5.1, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178780.0302815, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -5.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178785.033046, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -6.0, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178790.0357666, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -6.5, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178795.0383167, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -6.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178800.0416028, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -7.2, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178805.0445313, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -7.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178810.0471053, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -7.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178815.0503078, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -8.3, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178820.053277, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -8.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178825.0556724, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -8.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178830.058745, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.2, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178835.0615156, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.4, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178840.064158, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178845.0674052, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178850.0706294, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178855.0731668, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178860.0763516, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178865.0793903, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178870.081635, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.9, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178875.0847476, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.1, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178880.0881355, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.3, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178885.0911326, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.5, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178890.0942457, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.6, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178895.0965974, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.7, "pwm_read": 255.0, "cooler_param": -10.0}
+{"time": 1795178900.0992944, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.8, "pwm_read": 233.0, "cooler_param": -10.0}
+{"time": 1795178905.102686, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.8, "pwm_read": 217.0, "cooler_param": -10.0}
+{"time": 1795178910.1060743, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.7, "pwm_read": 201.0, "cooler_param": -10.0}
+{"time": 1795178915.1087635, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.6, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795178920.1117454, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.3, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795178925.1150768, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -11.1, "pwm_read": 163.0, "cooler_param": -10.0}
+{"time": 1795178930.11773, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.8, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795178935.1204767, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.6, "pwm_read": 155.0, "cooler_param": -10.0}
+{"time": 1795178940.1231818, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.3, "pwm_read": 155.0, "cooler_param": -10.0}
+{"time": 1795178945.125713, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.2, "pwm_read": 157.0, "cooler_param": -10.0}
+{"time": 1795178950.1287854, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 159.0, "cooler_param": -10.0}
+{"time": 1795178955.131752, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 165.0, "cooler_param": -10.0}
+{"time": 1795178960.134336, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 167.0, "cooler_param": -10.0}
+{"time": 1795178965.1373415, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.8, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795178970.140627, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.8, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795178975.143187, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.8, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795178980.146166, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.8, "pwm_read": 181.0, "cooler_param": -10.0}
+{"time": 1795178985.1490633, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795178990.1519911, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 185.0, "cooler_param": -10.0}
+{"time": 1795178995.1553307, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -9.9, "pwm_read": 185.0, "cooler_param": -10.0}
+{"time": 1795179000.1582358, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 187.0, "cooler_param": -10.0}
+{"time": 1795179005.1607897, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 185.0, "cooler_param": -10.0}
+{"time": 1795179010.163664, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 187.0, "cooler_param": -10.0}
+{"time": 1795179015.1663606, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 185.0, "cooler_param": -10.0}
+{"time": 1795179020.1690168, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 185.0, "cooler_param": -10.0}
+{"time": 1795179025.1720018, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795179030.174998, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795179035.1772568, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 183.0, "cooler_param": -10.0}
+{"time": 1795179040.1803389, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 181.0, "cooler_param": -10.0}
+{"time": 1795179045.183618, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 181.0, "cooler_param": -10.0}
+{"time": 1795179050.186258, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795179055.1895928, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 181.0, "cooler_param": -10.0}
+{"time": 1795179060.1926425, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795179065.1949928, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795179070.1980877, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795179075.201051, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 179.0, "cooler_param": -10.0}
+{"time": 1795179080.203197, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179085.2059474, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179090.2090254, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179095.211408, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179100.214278, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179105.2175887, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179110.2200432, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179115.2232938, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179120.2263114, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179125.2290807, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179130.2320812, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179135.2350006, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179140.2372885, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179145.24077, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179150.2438993, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179155.2455392, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179160.2486398, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179165.2518125, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 177.0, "cooler_param": -10.0}
+{"time": 1795179170.254351, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179175.2577684, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179180.261119, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179185.2636206, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179190.2666214, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179195.270483, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179200.2725039, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179205.275597, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179210.2790856, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179215.2817073, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179220.2850964, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179225.2884173, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179230.2907138, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 175.0, "cooler_param": -10.0}
+{"time": 1795179235.2940948, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179240.2972987, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179245.2999637, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179250.303583, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179255.306723, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179260.3091514, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179265.3116963, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179270.3149807, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179275.3172636, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179280.3205082, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179285.3264887, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179290.3291733, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179295.3324437, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179300.33581, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179305.338292, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179310.3413022, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179315.344091, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179320.346581, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179325.3497202, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179330.3526802, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179335.355211, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179340.3585865, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 173.0, "cooler_param": -10.0}
+{"time": 1795179345.3617194, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179350.3643541, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179355.3673415, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179360.370515, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179365.3729453, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179370.3761108, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179375.3790174, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179380.3813248, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179385.3838773, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179390.3872442, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179395.3892488, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179400.3917058, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179405.3938684, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179410.3959856, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179415.3994436, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179420.4026494, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179425.4051695, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179430.4082866, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179435.4109735, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179440.4131596, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179445.4158876, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179450.419309, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179455.4216673, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179460.4246688, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 171.0, "cooler_param": -10.0}
+{"time": 1795179465.427497, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179470.4299505, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179475.4330404, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179480.436595, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179485.4385414, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179490.4406395, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179495.4439452, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179500.4461582, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179505.4486713, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179510.451477, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179515.4535928, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179520.4568732, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 167.0, "cooler_param": -10.0}
+{"time": 1795179525.4600754, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179530.4626281, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 167.0, "cooler_param": -10.0}
+{"time": 1795179535.4656448, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179540.4686391, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179545.4711413, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 167.0, "cooler_param": -10.0}
+{"time": 1795179550.4743311, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179555.4770486, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.1, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179560.4795303, "run": "temp_jump_-10", "label": "cool", "target": -10, "temp": -10.0, "pwm_read": 169.0, "cooler_param": -10.0}
+{"time": 1795179560.480438, "run": "temp_jump_-10", "label": "result", "outcome": "time", "lowest_temp": -11.8, "end_temp": -10.0, "elapsed_s": 900.5204892158508}
+{"time": 1795179565.4820771, "run": "temp_jump_-10", "label": "off", "pwm_read": 0.0, "temp": -8.3}
+{"time": 1795179565.4834456, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -8.3}
+{"time": 1795179570.4841075, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -6.5}
+{"time": 1795179575.4847639, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -4.7}
+{"time": 1795179580.4856286, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -3.4}
+{"time": 1795179585.4862812, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -2.2}
+{"time": 1795179590.4869273, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -1.1}
+{"time": 1795179595.4877715, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": -0.0}
+{"time": 1795179600.4883, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 0.9}
+{"time": 1795179605.4889495, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 1.8}
+{"time": 1795179610.4898427, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 2.6}
+{"time": 1795179615.4905462, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 3.6}
+{"time": 1795179620.491148, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 4.4}
+{"time": 1795179625.4920993, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 5.1}
+{"time": 1795179630.4927926, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 5.8}
+{"time": 1795179635.493426, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 6.4}
+{"time": 1795179640.4944975, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.0}
+{"time": 1795179645.4952447, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 7.6}
+{"time": 1795179650.4959702, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 8.1}
+{"time": 1795179655.4970105, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 8.7}
+{"time": 1795179660.4977465, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.3}
+{"time": 1795179665.498458, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 9.7}
+{"time": 1795179670.4994175, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 10.2}
+{"time": 1795179675.5001645, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 10.6}
+{"time": 1795179680.5007741, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.0}
+{"time": 1795179685.5017898, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.4}
+{"time": 1795179690.5024893, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 11.7}
+{"time": 1795179695.5030966, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.1}
+{"time": 1795179700.5042498, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.4}
+{"time": 1795179705.5045636, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 12.8}
+{"time": 1795179710.505312, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.1}
+{"time": 1795179715.506394, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.4}
+{"time": 1795179720.5071588, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.7}
+{"time": 1795179725.5078483, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 13.9}
+{"time": 1795179730.5088193, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.1}
+{"time": 1795179735.510517, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.4}
+{"time": 1795179740.5112317, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.6}
+{"time": 1795179745.5122387, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 14.9}
+{"time": 1795179750.5129497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.1}
+{"time": 1795179755.513497, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.3}
+{"time": 1795179760.514298, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.4}
+{"time": 1795179765.5149872, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.6}
+{"time": 1795179770.5156553, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.8}
+{"time": 1795179775.5166528, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 15.9}
+{"time": 1795179780.5173159, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.1}
+{"time": 1795179785.5179963, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.2}
+{"time": 1795179790.518976, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.4}
+{"time": 1795179795.5197024, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.5}
+{"time": 1795179800.5205193, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.7}
+{"time": 1795179805.5215383, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.8}
+{"time": 1795179810.522314, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 16.9}
+{"time": 1795179815.523029, "label": "warm", "pwm_set": 0, "pwm_read": 0.0, "temp": 17.0}
