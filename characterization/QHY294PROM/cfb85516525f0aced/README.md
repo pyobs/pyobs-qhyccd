@@ -13,9 +13,11 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 ## Summary
 
 - **Bias noise** is 7.2 ADU at gain 10 and offset 140 (measured). It grows to 8.4 ADU at gain 400 and 10.5 ADU at gain
-  800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. The conversion gain is 1.01 e-/ADU at gain 0,
-  0.97 at 100, 0.83 at 400, 0.52 at 1000 and 0.18 at 2000, so the read noise is about 7.1 e- at gains 0 to 400
-  (flat fields, four runs agree to 2%, see [Gain and linearity](#gain-and-linearity-from-flat-fields-measured)).
+  800, falls back to 7.6 ADU at gain 1600 and is 19 ADU at gain 3000. The conversion gain (flat fields, errors 1 to 2%)
+  is 1.03 e-/ADU at gain 0, 0.98 at 100, 0.83 at 400, 0.51 at 1000, 0.22 at 1600, 0.175 at 2000 and 0.068 at 3000, so the
+  read noise is about 7.2 e- at gains 0 to 400 and 1.7 e- at gain 1600 (see
+  [Gain and linearity](#gain-and-linearity-from-flat-fields-measured)). The drop in e- looks like a switch of the
+  conversion gain between gain 800 and 1600 (inferred).
 - **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. At -10 °C it is about 0.0037 ADU/s (300 s and
   900 s darks), and at -5 °C about 0.006 ADU/s (measured). There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
@@ -25,11 +27,14 @@ checked separately) or **from the SDK**. All numbers are for this unit.
 - **Read mode 1 (47M):** bias noise 23 ADU at gain 10 (3 times that of mode 0), 11.4 ADU from gain 200 up; readout 1.4 to
   1.5 s per frame; same share of noisy pixels as mode 0 but a fixed pattern of offset pixels (measured). Offset 0 clips
   98% of the pixels, use 10 or more.
-- **Linearity and short exposures:** linear within about 1 to 3% from 3000 ADU of signal up (flat fields) and linear in
-  exposure time down to 5 ms; times of 1 ms and shorter carry about 0.1 ms of extra signal at most (measured, light
-  source not steady to better than about 1%).
-- **Not measured:** the real full well (only the ADC full scale in e-), gain of read mode 1, the gain between 1000 and
-  3000 in detail.
+- **Read mode 1** has 0.32 e-/ADU at gain 0 (3 times lower than mode 0), the same 7.4 e- read noise at gains 0 and 100
+  and about 2.5 e- from gain 200 up (switch between gain 100 and 200, inferred).
+- **Linearity and short exposures:** with a steady artificial light (0.18% per minute) the response is linear within
+  0.3% above 4000 ADU at gains 0 to 400 and within 1% up to gain 2000, in both modes (measured). Linear in exposure time
+  down to 5 ms; times of 1 ms and shorter carry about 0.1 ms of extra signal at most.
+- **Full well:** the ADC clips at 65535 ADU before the pixels saturate (linear to 64000 ADU, no roll-off). The range
+  above the bias is 58 ke- at gain 0 in mode 0 and 18 ke- in mode 1; the true full well is at least that (inferred).
+- **Not measured:** the bias noise at gains 1000 to 1400 (where the conversion gain switches in mode 0).
 
 ## Setup
 
@@ -339,36 +344,79 @@ is 1 / gain in e-/ADU. Exposures 30, 100 and 300 s. Data: [gain.jsonl](gain.json
 
 ## Gain and linearity from flat fields (measured)
 
-The `flat` step takes pairs of frames at 12 exposure times that cover 3% to 85% of the full scale, at five gains (offset
-140, read mode 0, 2048 x 2048 window, cooler off, sensor at about 14 to 18 °C). Pairs are drift corrected (the second
-frame is scaled by the ratio of the means) and the noise variance of one frame is the variance of the difference over
-two. The slope of variance over signal is 1 / gain in e-/ADU. Pairs with more than 2% drift, saturated pairs and signal
-above 45000 ADU are left out of the fit. Light source: a wall in daylight with the room lights on and a tissue over the
-lens. Data: [flat.jsonl](flat.jsonl), plot: [images/flat.png](images/flat.png).
+The `flat` step takes pairs of frames at 12 exposure times that cover 3% to 85% of the full scale (offset 140,
+2048 x 2048 window, cooler off, sensor at about 22 °C). The ladder measures the bias with the shortest exposure first.
+Pairs are drift corrected (the second frame is scaled by the ratio of the means) and the noise variance of one frame is
+the variance of the difference over two. The slope of variance over signal is 1 / gain in e-/ADU, fitted with weights of
+1/variance. Pairs with more than 2% drift and saturated pairs are left out. Light source: an artificial light that was
+checked first (trend 0.18% per minute, 0.11% frame to frame over 30 s). Data: [flat.jsonl](flat.jsonl), plot:
+[images/flat.png](images/flat.png).
 
 ![Photon transfer and linearity from flats](images/flat.png)
 
-| Gain | e-/ADU (final run) | e-/ADU, four runs | Pairs used | Max. nonlinearity | Read noise [e-] | ADC full scale [ke-] |
-|---|---|---|---|---|---|---|
-| 0 | 1.013 | 1.00 to 1.03 | 12 of 12 | 4.9% | 7.2 | 66 |
-| 100 | 0.969 | 0.97 to 0.98 | 10 of 12 | 2.0% | 7.2 | 64 |
-| 400 | 0.831 | 0.82 to 0.83 | 11 of 12 | 1.7% | 7.0 | 54 |
-| 1000 | 0.520 | 0.515 to 0.52 | 12 of 12 | 2.9% | not measured | 34 |
-| 2000 | 0.182 | 0.176 to 0.182 | 12 of 12 | 4.0% | not measured | 12 |
+Read mode 0:
 
-- Read noise in e- is the bias noise in ADU (7.15, 7.43 and 8.43 ADU at offset 140) times the conversion gain. It is
-  about 7 e- at gains 0 to 400 (inferred from two separate measurements).
-- "ADC full scale" is 65535 ADU times the conversion gain. It is not the full well of the pixels, which was not measured
-  (the sensor saturates at 65535 ADU in these runs, which was not checked against a true full well).
-- Four runs with different light (lamps on, daylight only, brighter, with the tissue) gave the same gains to about 2%.
-  Gains 0 to 1000 are solid. The 0.18 e-/ADU at gain 2000 repeats, but the fitted variance at zero signal is 890 ADU^2
-  (too high for read noise alone), so I would not rely on it (the gain step near 1600 lies between 1000 and 2000).
-- Nonlinearity in the right panel is the deviation of the level from a straight line against exposure time. It is within
-  about 1 to 3% above 3000 ADU and reaches up to 5% at the shortest exposures, where the pair drift and the light source are
-  the likely cause (not separated). The earlier runs with a brighter light had up to 13% at 1 to 2 ms.
-- **The light source was the limit.** The scene brightened by 13% per minute in a daylight-only test with the room lights
-  off (all exposures together, correlation 1.00), and by 0.5 to 1.8% between frames with the lamps on. Frame scatter did
-  not depend on exposure time, so it was not 100 Hz flicker (measured, 30 to 40 frames per exposure).
+| Gain | e-/ADU | Error | Max. nonlinearity above 4000 ADU | Read noise [e-] | Range above bias [ke-] |
+|---|---|---|---|---|---|
+| 0 | 1.032 | 0.9% | 0.15% | 7.4 | 58 |
+| 100 | 0.982 | 1.2% | 0.31% | 7.3 | 56 |
+| 400 | 0.829 | 0.9% | 0.24% | 7.0 | 47 |
+| 1000 | 0.513 | 2.3% | 0.48% | not measured | 29 |
+| 1200 | 0.419 | 2.4% | 0.35% | not measured | 24 |
+| 1400 | 0.316 | 1.8% | 0.77% | not measured | 18 |
+| 1600 | 0.221 | 1.4% | 0.81% | 1.7 | 13 |
+| 1800 | 0.197 | 1.4% | 0.60% | not measured | 11 |
+| 2000 | 0.175 | 1.4% | 0.73% | not measured | 9.9 |
+| 2200 | 0.154 | 1.1% | 1.8% | not measured | 8.7 |
+| 2500 | 0.120 | 1.3% | 1.5% | not measured | 6.8 |
+| 3000 | 0.068 | 1.1% | 3.8% | 1.35 | 3.9 |
+
+Read mode 1 (same method, 8336 x 5648 pixels, 2048 x 2048 window):
+
+| Gain | e-/ADU | Error | Max. nonlinearity above 4000 ADU | Read noise [e-] | Range above bias [ke-] |
+|---|---|---|---|---|---|
+| 0 | 0.323 | 0.6% | 0.44% | 7.4 | 18 |
+| 100 | 0.275 | 0.2% | 0.46% | 7.2 | 16 |
+| 400 | 0.210 | 0.7% | 0.26% | 2.5 | 12 |
+| 1000 | 0.172 | 0.4% | 0.19% | not measured | 9.7 |
+
+- Read noise in e- is the bias noise in ADU at offset 140 (table in [Bias and read noise](#bias-and-read-noise-measured))
+  times the conversion gain. The intercept of the photon transfer fit is not used (it is 0 to 17 ADU and jumps between
+  gains, so it is not a read noise).
+- **Conversion gain switch (inferred, not checked directly).** The read noise in e- falls from about 7 e- (gain 400) to
+  1.7 e- (gain 1600) in mode 0, and from 7.2 e- (gain 100) to 2.5 e- (gain 400) in mode 1, where the bias noise in ADU
+  already drops between gain 100 and 200. The switch sits between gain 800 and 1600 in mode 0 (the bias noise at gains
+  1000 to 1400 was not measured, so the exact gain is unknown) and between gain 100 and 200 in mode 1.
+- Mode 1 has a 3 times lower gain in e-/ADU (0.32 against 1.03 at gain 0), so its bias noise of 23 ADU is the same 7.4 e-
+  as mode 0.
+- "Range above bias" is the clip level (65535 ADU minus the bias, about 56600 ADU) times the conversion gain. See the
+  next section for what limits the full well.
+- Nonlinearity is the deviation of the signal from a straight line against exposure time. It is at most 0.3% for gains 0
+  to 400 and below 1% up to gain 2000 in both modes. From gain 2200 it reaches 1.5 to 3.8%; the cause was not looked
+  into (few electrons per ADU, so the variance estimate and the slope are the weakest here).
+- The earlier flat runs (wall in daylight, a short ladder that stopped at 22000 to 43000 ADU because the script guessed the
+  bias as 1400 ADU instead of about 9000) gave the same gains within 2 to 4% and a nonlinearity of 1 to 5%. That
+  nonlinearity came from the light source. The old data are kept as [flat_daylight.jsonl](flat_daylight.jsonl) and
+  [flat_shortladder.jsonl](flat_shortladder.jsonl) (mode 1: in `..._mode1`).
+
+### Full well (measured)
+
+The `fullwell` step takes single frames from 3% up to 120% of the ADC range (29 exposures, 2048 x 2048 window) and
+checks the linearity, the variance and the fraction of clipped pixels. Data: [fullwell.jsonl](fullwell.jsonl), plot:
+[images/fullwell.png](images/fullwell.png).
+
+![Full well](images/fullwell.png)
+
+- **The ADC clips before the pixels saturate.** The signal stays linear within 0.3 to 0.6% up to a mean level of 64000
+  ADU at gains 0 and 400 in both modes (0.6% at gain 1000), and the variance keeps rising with the signal. At the clip
+  the first pixels hit 65535 ADU (0.01% to 0.6% of the pixels at 64000 ADU) and the rest follow within one ladder step
+  (variance collapses, mean sticks at 65535). No roll-off of the response appears before the clip.
+- So the full well is at least the range above the bias at that gain (inferred): about 58 ke- at gain 0, 47 ke- at gain
+  400 and 29 ke- at gain 1000 in mode 0, and 18 ke- at gain 0 and 12 ke- at gain 400 in mode 1. The true full well of
+  the pixel can be higher; it cannot be measured with this ADC at these gains (it would need a lower gain than 0, which
+  the SDK does not offer).
+- At gain 1000 the response is 0.2 to 0.6% above the straight line from 50000 ADU up, so the linear range is slightly
+  smaller there (measured).
 
 ## Short exposures (measured)
 
@@ -492,11 +540,10 @@ is why the PWM trace is a sawtooth during the ramps.
 
 ## Not measured yet
 
-- **Gain in the range 1000 to 3000** in finer steps (the step near gain 1600) and the read noise in e- there, plus the
-  gain of read mode 1.
-- **The real full well** (only the ADC full scale in e- is known), and flats with a steadier light source (an LED panel
-  or a closed box) to tighten the nonlinearity below 1%.
-- **Read mode 1:** temperature series, cold pixels and gain (the other steps are in the subsections above).
+- **Bias noise at gains 1000 to 1400** (the conversion gain switch; needs the lens capped), and at gains 800 to 1600 in
+  mode 1.
+- **Nonlinearity at gain 2200 and up** (1.5 to 3.8%, cause unknown), and whether a steadier light changes it.
+- **Read mode 1:** temperature series and cold pixels (the other steps are in the subsections above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Dark current** with 900 s darks at 0 and -5 °C and at -12 °C (only -10 °C was done).
 - **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY

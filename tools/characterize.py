@@ -6,6 +6,7 @@ Run with the lens capped and without any other program using the camera, e.g.::
     uv run python tools/characterize.py gain
     uv run python tools/characterize.py temperature
     uv run python tools/characterize.py flat   # lens uncapped, pointed at a steady, defocused light source
+    uv run python tools/characterize.py fullwell  # same light source, up to saturation
     uv run python tools/characterize.py short  # same light source
     uv run python tools/characterize.py readout
     uv run python tools/characterize.py pixels --target-temp -5  # lens capped
@@ -31,6 +32,9 @@ Steps (all on a central 2048x2048 window of the effective area, USB traffic as s
   ``--wrap-workaround`` the PWM > 250 workaround. Log: ``driver.jsonl``, the checks are in its last record.
 * ``flat``: photon transfer curve from pairs of frames of a steady, roughly uniform light source (e.g. a wall): gain in
   e-/ADU, read noise in e-, saturation and linearity. The bias level comes from the fit of level vs. exposure time.
+* ``fullwell``: the flat step with a ladder from 3% to 120% of the ADC range (default gain 0), to see whether the
+  pixels saturate below the ADC limit: the signal rolls off against exposure time and the variance stops following
+  the photon transfer line before 65535 ADU. Data: ``fullwell.jsonl``. Needs the same light source as ``flat``.
 * ``short``: signal vs. exposure times from the minimum up to 100 ms with a steady light source, to find an offset in
   the exposure time or a nonlinearity for short exposures.
 * ``readout``: time per frame for the full frame vs. binning and bit depth, for several USB traffic values, and the
@@ -59,6 +63,7 @@ import sys
 import threading
 import time
 from collections import deque
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -112,6 +117,9 @@ FULL_SCALE = 65535
 FLAT_GAINS = [0, 100, 400, 1000, 2000]
 FLAT_POINTS = 12
 FLAT_RANGE = (0.03, 0.85)  # fractions of full scale covered by the exposure ladder
+# fullwell step: a few points from 3% for the fit of the bias and the exposure slope, then steps of 3.5% up to 120% of
+# the ADC range, so that the top points saturate
+FULLWELL_FRACTIONS = [*np.geomspace(0.03, 0.45, 8), *np.linspace(0.5, 1.2, 21)]
 FLAT_MAX_EXPOSURE_S = 20.0
 LINEAR_MAX_FRACTION = 0.6  # bias and rate are fitted below this level
 FIT_MAX_FRACTION = 0.75  # the photon transfer fit uses signals below this fraction of full scale
@@ -535,10 +543,15 @@ def crop(data: np.ndarray) -> np.ndarray:
     return data[y : y + CUTOUT, x : x + CUTOUT]
 
 
-def flat_ladder(cam: Camera, gain: int, offset: int) -> list[float]:
-    """Exposure times (s) that cover FLAT_RANGE of the full scale, from a probe of the light level."""
-    guess = offset * 10.0  # bias level estimate, only used to set the ladder
+def flat_ladder(cam: Camera, gain: int, offset: int, fractions: Sequence[float] | None = None) -> list[float]:
+    """Exposure times (s) that give the fractions of the full scale (default: FLAT_RANGE), from a probe of the light."""
+    if fractions is None:
+        fractions = list(np.geomspace(*FLAT_RANGE, FLAT_POINTS))
     min_s = cam.min_exposure_us * 1e-6
+    # bias level from the shortest exposure, only used to set the ladder (it was assumed to be offset * 10 before, which
+    # is far below the real bias of this camera and left the ladder at about a third of the intended signal)
+    cam.grab(min_s, gain, offset)  # discard
+    guess = float(np.median(crop(cam.grab(min_s, gain, offset))))
     t, rate = 0.01, 0.0
     for _ in range(5):
         cam.grab(t, gain, offset)  # discard
@@ -549,17 +562,27 @@ def flat_ladder(cam: Camera, gain: int, offset: int) -> list[float]:
         if 0.2 * FULL_SCALE < level < 0.6 * FULL_SCALE:
             break
         t = float(np.clip(0.4 * (FULL_SCALE - guess) / rate, min_s, FLAT_MAX_EXPOSURE_S))
-    levels = np.geomspace(*FLAT_RANGE, FLAT_POINTS) * (FULL_SCALE - guess)
+    levels = np.array(fractions) * (FULL_SCALE - guess)
     exposures = [round(float(level / rate), 6) for level in levels]
     usable = [e for e in exposures if min_s <= e <= FLAT_MAX_EXPOSURE_S]
-    if len(usable) < FLAT_POINTS:
-        print(f"  gain {gain}: only {len(usable)} of {FLAT_POINTS} exposures are within the camera limits.", flush=True)
+    if len(usable) < len(fractions):
+        print(
+            f"  gain {gain}: only {len(usable)} of {len(fractions)} exposures are within the camera limits.", flush=True
+        )
     return usable
 
 
-def run_flat(cam: Camera, out: Output, gains: list[int], offset: int) -> None:
+def run_flat(
+    cam: Camera,
+    out: Output,
+    gains: list[int],
+    offset: int,
+    name: str = "flat",
+    fractions: Sequence[float] | None = None,
+) -> None:
+    """Photon transfer from pairs of frames. The step ``fullwell`` is the same with a ladder up to saturation."""
     for gain in gains:
-        ladder = flat_ladder(cam, gain, offset)
+        ladder = flat_ladder(cam, gain, offset, fractions)
         if len(ladder) < 4:
             print(f"gain={gain:3d}: too few usable exposures, skipping.", flush=True)
             continue
@@ -597,14 +620,14 @@ def run_flat(cam: Camera, out: Output, gains: list[int], offset: int) -> None:
                 "max_adu": int(max(a.max(), b.max())),
                 "nonlin_pct": float((mean - (bias + rate * exposure)) / (rate * exposure) * 100),
             }
-            out.write("flat", record)
+            out.write(name, record)
             print(
                 f"  t={exposure:9.6f}s signal={record['signal_adu']:8.1f} ADU variance={record['variance_adu2']:9.1f} "
                 f"drift={record['drift_pct']:+.2f}% nonlin={record['nonlin_pct']:+.2f}%",
                 flush=True,
             )
-        out.save_cutout(f"flat_g{gain}_low", pairs[0][1], gain=gain, offset=offset, exptime=pairs[0][0])
-        out.save_cutout(f"flat_g{gain}_high", pairs[-1][1], gain=gain, offset=offset, exptime=pairs[-1][0])
+        out.save_cutout(f"{name}_g{gain}_low", pairs[0][1], gain=gain, offset=offset, exptime=pairs[0][0])
+        out.save_cutout(f"{name}_g{gain}_high", pairs[-1][1], gain=gain, offset=offset, exptime=pairs[-1][0])
 
 
 def run_temperature(
@@ -1292,34 +1315,41 @@ def make_report(out: Output) -> None:
         fig.tight_layout()
         save(fig, "gain.png")
 
-    flat = out.read("flat")
-    if flat:
-        fig, axs = plt.subplots(1, 2, figsize=(12, 4.5))
-        for g in sorted({r["gain"] for r in flat}):
-            rows = [r for r in flat if r["gain"] == g]
-            good = [r for r in rows if r["sat_frac"] == 0 and 0 < r["signal_adu"] <= FIT_MAX_FRACTION * FULL_SCALE]
-            (line,) = axs[0].loglog(
-                [max(r["signal_adu"], 0.1) for r in rows], [r["variance_adu2"] for r in rows], "o", label=f"gain {g}"
-            )
-            axs[1].semilogx(
-                [max(r["signal_adu"], 0.1) for r in rows], [r["nonlin_pct"] for r in rows], "o-", color=line.get_color()
-            )
-            fit = fit_gain(good, g, weighted=True)
-            if fit is None:
-                continue
-            xs = np.geomspace(min(r["signal_adu"] for r in good), max(r["signal_adu"] for r in good), 20)
-            axs[0].loglog(
-                xs, fit["adu_per_e"] * xs + fit["read_noise_adu"] ** 2, "-", color=line.get_color(), alpha=0.5
-            )
-        axs[0].set_xlabel("signal [ADU]")
-        axs[0].set_ylabel("noise variance of one frame [ADU^2]")
-        axs[1].set_xlabel("signal [ADU]")
-        axs[1].set_ylabel("deviation from linear in exposure time [%]")
-        for ax in axs:
-            ax.grid(alpha=0.3)
-        axs[0].legend()
-        fig.tight_layout()
-        save(fig, "flat.png")
+    for flat_name in ("flat", "fullwell"):
+        flat = out.read(flat_name)
+        if flat:
+            fig, axs = plt.subplots(1, 2, figsize=(12, 4.5))
+            for g in sorted({r["gain"] for r in flat}):
+                rows = [r for r in flat if r["gain"] == g]
+                good = [r for r in rows if r["sat_frac"] == 0 and 0 < r["signal_adu"] <= FIT_MAX_FRACTION * FULL_SCALE]
+                (line,) = axs[0].loglog(
+                    [max(r["signal_adu"], 0.1) for r in rows],
+                    [r["variance_adu2"] for r in rows],
+                    "o",
+                    label=f"gain {g}",
+                )
+                axs[1].semilogx(
+                    [max(r["signal_adu"], 0.1) for r in rows],
+                    [r["nonlin_pct"] for r in rows],
+                    "o-",
+                    color=line.get_color(),
+                )
+                fit = fit_gain(good, g, weighted=True)
+                if fit is None:
+                    continue
+                xs = np.geomspace(min(r["signal_adu"] for r in good), max(r["signal_adu"] for r in good), 20)
+                axs[0].loglog(
+                    xs, fit["adu_per_e"] * xs + fit["read_noise_adu"] ** 2, "-", color=line.get_color(), alpha=0.5
+                )
+            axs[0].set_xlabel("signal [ADU]")
+            axs[0].set_ylabel("noise variance of one frame [ADU^2]")
+            axs[1].set_xlabel("signal [ADU]")
+            axs[1].set_ylabel("deviation from linear in exposure time [%]")
+            for ax in axs:
+                ax.grid(alpha=0.3)
+            axs[0].legend()
+            fig.tight_layout()
+            save(fig, f"{flat_name}.png")
 
     if temp:
         fig, axs = plt.subplots(1, 3, figsize=(15, 4))
@@ -1417,6 +1447,7 @@ def main() -> None:
             "sdkcool",
             "driver",
             "flat",
+            "fullwell",
             "short",
             "readout",
             "pixels",
@@ -1502,6 +1533,8 @@ def main() -> None:
             )
         elif args.step == "flat":
             run_flat(cam, out, args.gains or FLAT_GAINS, args.offset)
+        elif args.step == "fullwell":
+            run_flat(cam, out, args.gains or [0], args.offset, "fullwell", FULLWELL_FRACTIONS)
         elif args.step == "short":
             run_short(cam, out, args.gain, args.offset, args.reference)
         elif args.step == "readout":

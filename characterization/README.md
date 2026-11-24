@@ -43,6 +43,7 @@ With the lens open, pointed at a steady, defocused light source:
 
 ```bash
 uv run python tools/characterize.py flat
+uv run python tools/characterize.py fullwell
 uv run python tools/characterize.py short
 ```
 
@@ -55,5 +56,5 @@ uv run python tools/characterize.py report --folder characterization/QHY294PROM/
 ```
 
 Read mode 1 is measured with `--read-mode 1` and written to `<serial number>_mode1`; the report of the unit covers
-both modes. Not done yet for this camera: `flat`, `short` and the gain measurement. See the
-[unit report](QHY294PROM/cfb85516525f0aced/README.md#not-measured-yet).
+both modes. The flat steps need a steady light (check it first; a drifting light spoils the photon transfer). See the
+[unit report](QHY294PROM/cfb85516525f0aced/README.md#not-measured-yet) for what is still open.
