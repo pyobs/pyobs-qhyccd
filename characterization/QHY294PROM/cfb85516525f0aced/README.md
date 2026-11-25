@@ -118,8 +118,8 @@ Data: [bias.jsonl](bias.jsonl) and [bias.jsonl of mode 1](../cfb85516525f0aced_m
 | 1600 | 7.60 | 8981.3 | 15.82 |
 
 - **Mode 0 switches between gain 1500 and 1600** (measured): the noise falls from 21.2 to 7.6 ADU and the bias level falls
-  by 75 ADU. In e- (times the conversion gain, interpolated at 1500) the noise is 6.3 e- at gain 1000, 5.8 e- at 1400,
-  about 5.7 e- at 1500 and 1.7 e- at 1600. So gain 1600 is the lowest setting with the low-noise conversion gain
+  by 75 ADU. In e- (times the conversion gain from the flats) the noise is 6.3 e- at gain 1000, 5.9 e- at 1400, 5.8 e- at 1500
+  and 1.7 e- at 1600. So gain 1600 is the lowest setting with the low-noise conversion gain
   (inferred from the e- values, the switch itself is only seen in the noise).
 - **Mode 1 shows no switch in 800 to 1600** (noise rises smoothly from 12.8 to 15.8 ADU). Its drop lies between gain 100
   and 200 (26.2 to 11.4 ADU, see the mode 1 table above). A scan in steps of 10 puts it **between gain 190 and 200**
@@ -399,9 +399,12 @@ Read mode 0:
 | 0 | 1.032 | 0.9% | 0.15% | 7.4 | 58 |
 | 100 | 0.982 | 1.2% | 0.31% | 7.3 | 56 |
 | 400 | 0.829 | 0.9% | 0.24% | 7.0 | 47 |
-| 1000 | 0.513 | 2.3% | 0.48% | not measured | 29 |
-| 1200 | 0.419 | 2.4% | 0.35% | not measured | 24 |
-| 1400 | 0.316 | 1.8% | 0.77% | not measured | 18 |
+| 1000 | 0.518 | 1.0% | 0.48% | 6.3 | 29 |
+| 1100 | 0.471 | 0.8% | not checked | 6.3 | 27 |
+| 1200 | 0.419 | 1.2% | 0.35% | 6.1 | 24 |
+| 1300 | 0.372 | 0.9% | not checked | 6.0 | 21 |
+| 1400 | 0.322 | 0.8% | 0.77% | 5.9 | 18 |
+| 1500 | 0.273 | 0.9% | not checked | 5.8 | 16 |
 | 1600 | 0.221 | 1.4% | 0.81% | 1.7 | 13 |
 | 1800 | 0.197 | 1.4% | 0.60% | not measured | 11 |
 | 2000 | 0.175 | 1.4% | 0.73% | not measured | 9.9 |
@@ -418,6 +421,9 @@ Read mode 1 (same method, 8336 x 5648 pixels, 2048 x 2048 window):
 | 400 | 0.210 | 0.7% | 0.26% | 2.5 | 12 |
 | 1000 | 0.172 | 0.4% | 0.19% | not measured | 9.7 |
 
+- **Gains 1000 to 1500** are two or three runs each (the first of 1000, 1200 and 1400 plus the repeats in
+  [flat_repeat.jsonl](flat_repeat.jsonl), 25 Nov); the runs agree within 2% and the table shows the fit over all runs
+  (error 0.8 to 1.2%). The nonlinearity column is from the first run only.
 - Read noise in e- is the bias noise in ADU at offset 140 (table in [Bias and read noise](#bias-and-read-noise-measured))
   times the conversion gain. The intercept of the photon transfer fit is not used (it is 0 to 17 ADU and jumps between
   gains, so it is not a read noise).
@@ -583,8 +589,7 @@ is why the PWM trace is a sawtooth during the ramps.
 
 ## Not measured yet
 
-- **The photon transfer gain between 1000 and 1500** with more frames (the e-/ADU there is interpolated at 1500). The
-  switch gains are now known to 10 (mode 1: 200, mode 0: 1600), not to 1.
+- **The switch gain to 1** (known to 10: mode 1 at 200, mode 0 at 1600).
 - **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
   darks are wrong).
 - **Read mode 1:** 900 s darks.
