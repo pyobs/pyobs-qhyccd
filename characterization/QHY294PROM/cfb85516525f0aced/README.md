@@ -17,7 +17,7 @@ checked separately) or **from the SDK**. All numbers are for this unit.
   is 1.03 e-/ADU at gain 0, 0.98 at 100, 0.83 at 400, 0.51 at 1000, 0.22 at 1600, 0.175 at 2000 and 0.068 at 3000, so the
   read noise is about 7.2 e- at gains 0 to 400 and 1.7 e- at gain 1600 (see
   [Gain and linearity](#gain-and-linearity-from-flat-fields-measured)). The drop in e- looks like a switch of the
-  conversion gain between gain 800 and 1600 (inferred).
+  conversion gain between gain 1500 and 1600 (the bias noise falls from 21 to 7.6 ADU there, measured; the e- are inferred).
 - **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. At -10 °C it is about 0.0037 ADU/s (300 s and
   900 s darks), and at -5 °C about 0.006 ADU/s (measured). There is no sign of amp glow in the mean (mean only; no images checked by eye).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
@@ -99,6 +99,32 @@ Same method as in read mode 0. Data: [bias.csv](../cfb85516525f0aced_mode1/bias.
 - **Offset 0 is unusable in read mode 1:** 98% to 99.9% of the pixels are clipped at zero (in mode 0 about 0.2%). Use
   offset 10 or higher.
 - The noise does not depend on the offset (offset 10 to 200).
+
+## Bias noise across the conversion gain switch (measured)
+
+Bias pairs at offset 140, gains 800 to 1600 in steps of 100, lens capped, sensor about 22 °C, 2048 x 2048 window.
+Data: [bias.jsonl](bias.jsonl) and [bias.jsonl of mode 1](../cfb85516525f0aced_mode1/bias.jsonl).
+
+| Gain | Mode 0 noise [ADU] | Mode 0 bias level | Mode 1 noise [ADU] |
+|---|---|---|---|
+| 800 | 10.58 | 9000.0 | 12.76 |
+| 900 | 11.34 | 9004.0 | 13.10 |
+| 1000 | 12.21 | 9008.7 | 13.39 |
+| 1100 | 13.27 | 9014.4 | 13.68 |
+| 1200 | 14.56 | 9021.0 | 14.05 |
+| 1300 | 16.22 | 9029.7 | 14.41 |
+| 1400 | 18.33 | 9040.9 | 14.82 |
+| 1500 | 21.23 | 9056.2 | 15.30 |
+| 1600 | 7.60 | 8981.3 | 15.82 |
+
+- **Mode 0 switches between gain 1500 and 1600** (measured): the noise falls from 21.2 to 7.6 ADU and the bias level falls
+  by 75 ADU. In e- (times the conversion gain, interpolated at 1500) the noise is 6.3 e- at gain 1000, 5.8 e- at 1400,
+  about 5.7 e- at 1500 and 1.7 e- at 1600. So gain 1600 is the lowest setting with the low-noise conversion gain
+  (inferred from the e- values, the switch itself is only seen in the noise).
+- **Mode 1 shows no switch in 800 to 1600** (noise rises smoothly from 12.8 to 15.8 ADU). Its drop lies between gain 100
+  and 200 (26.2 to 11.4 ADU, see the mode 1 table above), so the switch there was not scanned in finer steps.
+- Below the switch the read noise in e- falls slowly with gain (7.4 e- at 0, 5.7 e- at 1500); the ADU noise growth is the
+  falling e-/ADU.
 
 ## Readout (measured)
 
@@ -279,6 +305,12 @@ The supply does not change the dark current at the temperatures where both worke
   a 300 s dark collects about 1 ADU per pixel, and the median pixel shows 0.000 ADU/s everywhere, so the mean comes
   from a small share of pixels (hot fraction 1e-4 to 3e-4, defined as 20 sigma above the median). Treat 0.003 to
   0.004 ADU/s as an upper bound (inferred).
+- **900 s darks at 0, -5 and -12 °C (mode 0, 5 A supply, 24 Nov):** 0.0121, 0.0057 and 0.0032 ADU/s (mean), median
+  0.0111, 0.0022 and 0.0022 ADU/s, hot fraction 2.1e-3, 1.3e-3 and 4.5e-4, bias noise 6.90, 6.82 and 6.74 ADU. These agree
+  with the 300 s values above (0.011, 0.0064, 0.0030). **The sensor temperature in the records is wrong for the first
+  two** (-12.1 and -8.2 °C instead of 0 and -5 °C, with power 0 and 22%): the log has no sample during the three 900 s
+  exposures and the reading after them is not trustworthy (cause not found). The cooler had held 0.0 and -5.1 °C at 32% and
+  41% before the darks and the dark currents match those temperatures, so I take the setpoints (inferred).
 - **Longer darks (5 A supply, -10 °C, 60 / 300 / 900 s):** 0.0052 / 0.0039 / 0.0036 ADU/s at -10.7 / -11.1 / -10.7 °C,
   bias noise 6.77 ADU, hot fraction 1e-4 / 3e-4 / 5e-4, dark noise 6.77 / 6.97 / 7.75 ADU. The 300 s and 900 s values
   agree, and the three 300 s or longer darks at -10 °C (0.0038, 0.0039, 0.0036) are within 10%. So the dark current at
@@ -308,6 +340,8 @@ Same procedure as above (5 A supply, PI controller, gain 10, offset 140, 60 s an
 |---|---|---|---|---|---|
 | -5 | -5.6 / -6.5 | 44% / 38% | 0.0172 | 0.0082 | 22.26 |
 | -10 | -10.1 / -10.1 | 59% | 0.0021 | 0.0036 | 22.02 |
+| 0 | -0.1 / -1.1 | 28% | 0.0108 | 0.0096 | 22.47 |
+| 10 | 9.1 / 16.4 | 8% / 52% | 0.0486 | 0.0434 | 22.89 |
 
 - At -10 °C the dark current per pixel is 0.0036 ADU/s (300 s), the same as in read mode 0 (0.0037 ADU/s from 300 s and
   900 s darks). The 60 s value is lower at -10 °C and much higher at -5 °C (0.0172, against 0.0065 in mode 0), so the 60 s
@@ -394,6 +428,11 @@ Read mode 1 (same method, 8336 x 5648 pixels, 2048 x 2048 window):
 - Nonlinearity is the deviation of the signal from a straight line against exposure time. It is at most 0.3% for gains 0
   to 400 and below 1% up to gain 2000 in both modes. From gain 2200 it reaches 1.5 to 3.8%; the cause was not looked
   into (few electrons per ADU, so the variance estimate and the slope are the weakest here).
+- **Repeat at gains 2200, 2500 and 3000** (two more runs each, [flat_repeat.jsonl](flat_repeat.jsonl); the light had
+  0.5% per minute trend and 0.11% frame to frame at the time). The deviations from the straight line change sign between
+  runs at the same exposure time (for example +1.8%, -1.8%, -2.1% at the lowest point of gain 2200) and are largest at the
+  lowest signals (about 4000 ADU), where the variance estimate is worst. Above about 10000 ADU they stay within about 1%
+  in all runs. So the 1.5 to 3.8% is scatter of the method, not a nonlinearity of the camera (inferred).
 - The earlier flat runs (wall in daylight, a short ladder that stopped at 22000 to 43000 ADU because the script guessed the
   bias as 1400 ADU instead of about 9000) gave the same gains within 2 to 4% and a nonlinearity of 1 to 5%. That
   nonlinearity came from the light source. The old data are kept as [flat_daylight.jsonl](flat_daylight.jsonl) and
@@ -540,12 +579,12 @@ is why the PWM trace is a sawtooth during the ramps.
 
 ## Not measured yet
 
-- **Bias noise at gains 1000 to 1400** (the conversion gain switch; needs the lens capped), and at gains 800 to 1600 in
-  mode 1.
-- **Nonlinearity at gain 2200 and up** (1.5 to 3.8%, cause unknown), and whether a steadier light changes it.
-- **Read mode 1:** temperature series and cold pixels (the other steps are in the subsections above).
+- **The mode 0 switch gain exactly** (1500 or 1600 in finer steps, 1501 to 1599), and the photon transfer gain between
+  1000 and 1500 with more frames (the e-/ADU there are interpolated at 1500).
+- **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
+  darks are wrong).
+- **Read mode 1:** 900 s darks, and the exact gain of its conversion gain switch (between 100 and 200).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
-- **Dark current** with 900 s darks at 0 and -5 °C and at -12 °C (only -10 °C was done).
 - **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY
   cameras: not tested; on this unit with the 5 A supply it was not needed.
 

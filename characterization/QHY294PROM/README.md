@@ -40,7 +40,7 @@ cooling numbers):
 - Gain 10 and offset 140 give a bias noise of 7.2 ADU. The noise rises slowly to 8.4 ADU at gain 400 and 10.5 ADU at
   gain 800, drops to 7.6 ADU at gain 1600 and jumps to 19 ADU at gain 3000. The conversion gain is 1.03 e-/ADU at gain 0,
   0.83 at 400, 0.51 at 1000, 0.22 at 1600 and 0.068 at 3000, so the read noise is 7.2 e- up to gain 400 and 1.7 e- at gain
-  1600: a switch of the conversion gain between gain 800 and 1600 (inferred from photon transfer, exact gain not found).
+  1600: a switch of the conversion gain between gain 1500 and 1600 (bias noise 21 to 7.6 ADU, e- from photon transfer).
   For low noise use gain 1600 or higher, for dynamic range gain 0 to 100 (58 ke- above the bias, the ADC clips before
   the pixels saturate).
 - Binning in the camera adds the pixels (bias 4x at bin 2, 16x at bin 4) and the read noise grows with the square root of

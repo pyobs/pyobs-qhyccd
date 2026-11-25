@@ -43,3 +43,12 @@
 {"gain": 3000, "offset": 50, "temp": 19.8, "time": 1795004936.2481122, "mean": 3076.6425037384033, "median": 3072.0, "noise_std_adu": 38.44534607840979, "noise_mad_adu": 33.54740844118961, "clipped_frac": 0.0}
 {"gain": 3000, "offset": 140, "temp": 19.8, "time": 1795004940.978793, "mean": 8836.599784851074, "median": 8832.0, "noise_std_adu": 38.41059700726326, "noise_mad_adu": 33.54740844118961, "clipped_frac": 0.0}
 {"gain": 3000, "offset": 200, "temp": 19.8, "time": 1795004945.735436, "mean": 12676.515336990356, "median": 12672.0, "noise_std_adu": 38.4430694499942, "noise_mad_adu": 33.54740844118961, "clipped_frac": 0.0}
+{"gain": 800, "offset": 140, "temp": 23.4, "time": 1795521267.013985, "mean": 8928.842832565308, "median": 8928.0, "noise_std_adu": 12.759155586278482, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 900, "offset": 140, "temp": 23.4, "time": 1795521271.8022976, "mean": 8927.747940063477, "median": 8928.0, "noise_std_adu": 13.103788965086492, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1000, "offset": 140, "temp": 23.3, "time": 1795521276.913755, "mean": 8926.636623382568, "median": 8928.0, "noise_std_adu": 13.390919450070589, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1100, "offset": 140, "temp": 23.3, "time": 1795521281.7983394, "mean": 8925.48359298706, "median": 8928.0, "noise_std_adu": 13.67835893135057, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1200, "offset": 140, "temp": 23.2, "time": 1795521286.5932434, "mean": 8924.17511177063, "median": 8928.0, "noise_std_adu": 14.049983522137547, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1300, "offset": 140, "temp": 23.2, "time": 1795521291.4743185, "mean": 8922.385271072388, "median": 8928.0, "noise_std_adu": 14.413789200923448, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1400, "offset": 140, "temp": 23.2, "time": 1795521296.5030992, "mean": 8920.740575790405, "median": 8928.0, "noise_std_adu": 14.8167935034013, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1500, "offset": 140, "temp": 23.1, "time": 1795521301.2240229, "mean": 8919.058378219604, "median": 8912.0, "noise_std_adu": 15.295202787575317, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
+{"gain": 1600, "offset": 140, "temp": 23.1, "time": 1795521306.2882316, "mean": 8917.060508728027, "median": 8912.0, "noise_std_adu": 15.815401491896981, "noise_mad_adu": 16.773704220594805, "clipped_frac": 0.0}
