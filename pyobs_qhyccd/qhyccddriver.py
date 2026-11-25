@@ -28,6 +28,18 @@ DEFAULT_SDK_PATH = "/usr/local/lib/libqhyccd.so"
 SDK_ENV_VAR = "QHYCCD_SDK"
 CALL_CLOSE_ENV_VAR = "QHYCCD_CALL_CLOSE"
 
+# A QHY294PRO-M was seen to get into a state where every frame comes back as zeros, about 60 s after the exposure
+# should have ended, while GetQHYCCDSingleFrame still reports success. Only unplugging USB and power brought it back.
+# A real frame is never all zero (the bias is hundreds of ADU at any sensible offset), so such a frame is refused.
+EMPTY_FRAME_MESSAGE = (
+    "The camera returned an empty frame (all pixels zero). It probably hangs: unplug USB and power of the camera."
+)
+
+
+class EmptyFrameError(ValueError):
+    """The SDK reported success but delivered a frame of zeros."""
+
+
 # the SDK reports success as 0
 _SUCCESS = 0
 # the SDK writes camera IDs like "QHY294PROM-cfb85516525f0aced" into this; the SDK header says 32 bytes, the buffer is
@@ -467,8 +479,12 @@ class QHYCCDDriver:
             raise ValueError("Could not fetch image data.")
         pixels = width.value * height.value * channels.value
         if bpp.value == 8:
-            return buffer[:pixels].reshape((height.value, width.value)).copy()
-        return buffer[: pixels * 2].view(np.uint16).reshape((height.value, width.value)).copy()
+            frame = buffer[:pixels].reshape((height.value, width.value)).copy()
+        else:
+            frame = buffer[: pixels * 2].view(np.uint16).reshape((height.value, width.value)).copy()
+        if not frame.any():
+            raise EmptyFrameError(EMPTY_FRAME_MESSAGE)
+        return frame
 
     def begin_live(self) -> None:
         """Start continuous exposures in live mode.

@@ -1,6 +1,7 @@
 import asyncio
 import math
 import sys
+import time
 import traceback
 from datetime import UTC, datetime
 from typing import Any
@@ -25,11 +26,13 @@ from pyobs.utils.parallel import event_wait
 from PySide6 import QtCore, QtWidgets  # type: ignore[import-untyped]
 
 from .coolingramper import SdkCoolingRamper
-from .qhyccddriver import Control, QHYCCDDriver, set_sdk_path
+from .qhyccddriver import Control, EmptyFrameError, QHYCCDDriver, set_sdk_path
 
 # pixel sizes outside this range (um) are taken as garbage; GetQHYCCDChipInfo returned garbage on a QHY294PRO-M
 PIXEL_SIZE_RANGE = (0.5, 50.0)
 # gain and offset the GUI starts with (the pyobs-qhyccd defaults; 140 keeps the bias clear of the clipping of offset 0)
+# a readout longer than this (seconds) hints at a hanging camera; a normal one takes at most about 1.5 s
+SLOW_READOUT = 30.0
 DEFAULT_GAIN = 10
 DEFAULT_OFFSET = 140
 # setpoint range of the cooler widget if the SDK does not tell
@@ -338,7 +341,19 @@ class MainWindow(QtWidgets.QMainWindow):
             return
 
         loop = asyncio.get_running_loop()
-        image_data = await loop.run_in_executor(None, self.device.get_single_frame)
+        start = time.monotonic()
+        try:
+            image_data = await loop.run_in_executor(None, self.device.get_single_frame)
+        except EmptyFrameError as e:
+            QtWidgets.QMessageBox.critical(self, "Readout", str(e))
+            return
+        finally:
+            readout = time.monotonic() - start
+            if readout > SLOW_READOUT:
+                print(
+                    f"Warning: the readout took {readout:.0f} s, the camera may hang (unplug USB and power).",
+                    file=sys.stderr,
+                )
 
         header = await loop.run_in_executor(
             None,

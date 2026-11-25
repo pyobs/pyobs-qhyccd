@@ -389,6 +389,21 @@ def test_single_frame_8_bit(sdk: FakeSdk, driver: QHYCCDDriver) -> None:
     np.testing.assert_array_equal(frame, sdk.frame)
 
 
+@pytest.mark.parametrize("dtype", [np.uint16, np.uint8])
+def test_single_frame_all_zero_is_refused(sdk: FakeSdk, driver: QHYCCDDriver, dtype: Any) -> None:
+    # the SDK reports success, but a hanging camera delivers only zeros
+    sdk.frame = np.zeros((2, 3), dtype=dtype)
+    sdk.bpp = 8 if dtype == np.uint8 else 16
+    with pytest.raises(qhyccddriver.EmptyFrameError, match="unplug USB and power"):
+        driver.get_single_frame()
+
+
+def test_single_frame_with_one_nonzero_pixel_is_accepted(sdk: FakeSdk, driver: QHYCCDDriver) -> None:
+    sdk.frame = np.zeros((2, 3), dtype=np.uint16)
+    sdk.frame[1, 2] = 1
+    np.testing.assert_array_equal(driver.get_single_frame(), sdk.frame)
+
+
 def test_single_frame_error(sdk: FakeSdk, driver: QHYCCDDriver) -> None:
     sdk.fail["GetQHYCCDSingleFrame"] = 1
     with pytest.raises(ValueError, match="image data"):

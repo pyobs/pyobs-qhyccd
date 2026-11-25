@@ -125,6 +125,7 @@ LINEAR_MAX_FRACTION = 0.6  # bias and rate are fitted below this level
 FIT_MAX_FRACTION = 0.75  # the photon transfer fit uses signals below this fraction of full scale
 DEFAULT_OFFSET = 140  # as in pyobs-qhyccd
 DEFAULT_USB_TRAFFIC = 60  # as in pyobs-qhyccd
+SLOW_READOUT = 30.0  # seconds beyond the exposure time; a hanging camera adds about 60 s per frame
 READOUT_USB_TRAFFICS = [0, 60, 150]
 SHORT_EXPOSURES_S = [0.0, 0.00005, 0.0001, 0.0002, 0.0005, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
 SHORT_REFERENCE_S = 0.01  # repeated between the points to follow the light source
@@ -291,14 +292,23 @@ class Camera:
         )
         if bpp.value != 16 or ch.value != 1:
             raise RuntimeError(f"Unexpected frame format: {bpp.value} bit, {ch.value} channels.")
-        return buf[: w.value * h.value * 2].view(np.uint16).reshape(h.value, w.value).copy()
+        frame = buf[: w.value * h.value * 2].view(np.uint16).reshape(h.value, w.value).copy()
+        if not frame.any():
+            # the SDK reports success for these; seen when the camera hangs (see the unit report)
+            raise RuntimeError("Empty frame (all pixels zero): the camera hangs, unplug USB and power.")
+        return frame
 
     def grab(self, exposure_s: float, gain: int, offset: int) -> np.ndarray:
         self.set_param(CONTROL_GAIN, gain)
         self.set_param(CONTROL_OFFSET, offset)
         self.set_param(CONTROL_EXPOSURE, max(int(exposure_s * 1e6), self.min_exposure_us))
         self.set_roi(self.left, self.top, ROI, ROI)
-        return self.expose()
+        start = time.monotonic()
+        frame = self.expose()
+        extra = time.monotonic() - start - exposure_s
+        if extra > SLOW_READOUT:
+            print(f"Warning: frame took {extra:.0f} s longer than the exposure, the camera may hang.", flush=True)
+        return frame
 
     def temperature(self) -> float:
         return self.get_param(CONTROL_CURTEMP)

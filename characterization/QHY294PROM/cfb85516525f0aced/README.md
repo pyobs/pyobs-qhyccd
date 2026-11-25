@@ -587,12 +587,27 @@ is why the PWM trace is a sawtooth during the ramps.
   state agreed with the camera. The warm-up was stopped by hand at 13.9 °C (stopped on purpose), so the
   PWM 0 check after cooling off was not recorded for this mode (it was in the `cooler` run).
 
+## Camera hang with empty frames (open problem)
+
+On 25 Nov the camera got into a state where every frame came back as zeros, about 60 s after the exposure should have
+ended (a 1 ms bias took 60 s, a 60 s dark 121 s), while `GetQHYCCDSingleFrame` reported success (measured). It hit a
+mode 1 series of 900 s darks from its start (3.5 h of empty frames, removed from the data), then went away for a mode 1
+test and came back in the next process in mode 0, with the cooler off. The kernel log showed no USB errors. Unplugging
+the 12 V supply alone does not help, because the camera electronics run on USB power; unplugging USB and power brought it
+back (Tim saw the same at the telescope, where only a replug helped). The cause is unknown. `tools/characterize.py`
+called `CloseQHYCCD` (the call with the broken thread join, see the [model notes](../README.md#software-notes)) at the end
+of every run, which may leave the camera in a bad state for the next process (inferred, not tested).
+
+The driver now refuses all-zero frames (`EmptyFrameError`), the GUI and the script warn when a readout takes more than
+30 s, and the script stops at the first empty frame. Not tested: whether `CancelQHYCCDExposingAndReadout` frees a hung
+camera, and whether switching off the USB port power (for example with `uhubctl` on a hub that supports it) is enough.
+
 ## Not measured yet
 
 - **The switch gain to 1** (known to 10: mode 1 at 200, mode 0 at 1600).
 - **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
   darks are wrong).
-- **Read mode 1:** 900 s darks.
+- **Read mode 1:** 900 s darks (the run on 25 Nov gave only empty frames, see the camera hang above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY
   cameras: not tested; on this unit with the 5 A supply it was not needed.

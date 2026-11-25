@@ -9,6 +9,11 @@ Entries for releases before this file existed were generated from commit subject
 
 ## [Unreleased]
 
+- Driver: `get_single_frame` raises `EmptyFrameError` (a `ValueError`) for a frame of zeros. A QHY294PRO-M was seen
+  to hang so that every frame comes back empty, about 60 s late, while the SDK reports success; only unplugging USB and
+  power of the camera helped. The camera module fails the exposure, the GUI shows the error and warns on stderr when a
+  readout takes longer than 30 s.
+
 - Cooling: the setpoint is written to `CONTROL_COOLER` (the camera regulates by itself) instead of calling
   `ControlQHYCCDTemp` once per ramp step. `cooling_control="temperature"` keeps the old SDK call and now repeats it
   every second, as the SDK asks. Cooling off writes PWM 0 to the manual PWM control.
