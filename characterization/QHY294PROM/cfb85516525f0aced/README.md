@@ -122,7 +122,11 @@ Data: [bias.jsonl](bias.jsonl) and [bias.jsonl of mode 1](../cfb85516525f0aced_m
   about 5.7 e- at 1500 and 1.7 e- at 1600. So gain 1600 is the lowest setting with the low-noise conversion gain
   (inferred from the e- values, the switch itself is only seen in the noise).
 - **Mode 1 shows no switch in 800 to 1600** (noise rises smoothly from 12.8 to 15.8 ADU). Its drop lies between gain 100
-  and 200 (26.2 to 11.4 ADU, see the mode 1 table above), so the switch there was not scanned in finer steps.
+  and 200 (26.2 to 11.4 ADU, see the mode 1 table above). A scan in steps of 10 puts it **between gain 190 and 200**
+  (30.2 to 11.4 ADU, bias level 8902 to 8934 ADU; measured).
+- A mode 0 scan in steps of 10 from 1510 to 1590 shows the noise rising from 21.4 to 24.7 ADU with no earlier step, so the
+  switch is **between gain 1590 and 1600** (measured). So the low-noise conversion gain starts at gain 1600 in mode 0 and at
+  gain 200 in mode 1.
 - Below the switch the read noise in e- falls slowly with gain (7.4 e- at 0, 5.7 e- at 1500); the ADU noise growth is the
   falling e-/ADU.
 
@@ -579,11 +583,11 @@ is why the PWM trace is a sawtooth during the ramps.
 
 ## Not measured yet
 
-- **The mode 0 switch gain exactly** (1500 or 1600 in finer steps, 1501 to 1599), and the photon transfer gain between
-  1000 and 1500 with more frames (the e-/ADU there are interpolated at 1500).
+- **The photon transfer gain between 1000 and 1500** with more frames (the e-/ADU there is interpolated at 1500). The
+  switch gains are now known to 10 (mode 1: 200, mode 0: 1600), not to 1.
 - **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
   darks are wrong).
-- **Read mode 1:** 900 s darks, and the exact gain of its conversion gain switch (between 100 and 200).
+- **Read mode 1:** 900 s darks.
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY
   cameras: not tested; on this unit with the 5 A supply it was not needed.
