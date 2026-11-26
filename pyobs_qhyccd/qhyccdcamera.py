@@ -25,14 +25,20 @@ from pyobs.interfaces import (
 )
 from pyobs.mixins import CoolingRampMixin
 from pyobs.modules.camera.basecamera import BaseCamera
-from pyobs.utils.exceptions import AbortedError
+from pyobs.utils.exceptions import AbortedError, GrabImageError
 from pyobs.utils.frameheader import FrameSettings, make_frame_header
 from pyobs.utils.parallel import event_wait
 
 from .blocking import SDK_CALL_TIMEOUT, BlockingSdkMixin
-from .qhyccddriver import Control, QHYCCDDriver, set_log_level, set_sdk_path
+from .qhyccddriver import Control, EmptyFrameError, QHYCCDDriver, set_log_level, set_sdk_path
 
 log = logging.getLogger(__name__)
+
+# after a failed readout: how long to wait for the SDK call to return (a hanging camera takes about 60 s), and the time
+# limit for opening the camera again
+HUNG_READOUT_WAIT = 90.0
+REOPEN_TIMEOUT = 15.0
+UNPLUG = "Unplug USB and power of the camera."
 
 # GetQHYCCDParam(CONTROL_COOLER) returns the last target that was set, and -100 if none was set since the camera was
 # powered up (measured on a QHY294PRO-M)
@@ -124,35 +130,16 @@ class QHYCCDCamera(
 
         def _connect() -> tuple[int, int]:
             set_log_level(0)
+            self._driver = driver = self._open_driver(self._default_gain, self._default_offset)
+            self._init_cooling_state(driver)
 
-            devices = QHYCCDDriver.list_devices()
-            self._driver = QHYCCDDriver(devices[0])
-            self._driver.open()
-
-            if self._driver.is_control_available(Control.CAM_COLOR):
-                raise ValueError("Color cams are not supported.")
-
-            if self._driver.is_control_available(Control.CONTROL_USBTRAFFIC):
-                self._driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
-
-            if self._driver.is_control_available(Control.CONTROL_GAIN):
-                self._driver.set_param(Control.CONTROL_GAIN, self._default_gain)
-
-            if self._driver.is_control_available(Control.CONTROL_OFFSET):
-                self._driver.set_param(Control.CONTROL_OFFSET, self._default_offset)
-
-            if self._driver.is_control_available(Control.CONTROL_TRANSFERBIT):
-                self._driver.set_bits_mode(16)
-
-            self._init_cooling_state(self._driver)
-
-            chip = self._driver.get_chip_info()
+            chip = driver.get_chip_info()
             log.info("Chip  size:     %.3fx%.3f [mm]", chip[0], chip[1])
             log.info("Pixel size:     %.3fx %.3f [um]", chip[4], chip[5])
             log.info("Image size:     %dx%d", chip[2], chip[3])
-            overscan = self._driver.get_overscan_area()
+            overscan = driver.get_overscan_area()
             log.info("Overscan Area:  %dx%d from %d,%d", overscan[2], overscan[3], overscan[0], overscan[1])
-            effective = self._driver.get_effective_area()
+            effective = driver.get_effective_area()
             log.info("Effective Area: %dx%d from %d,%d", effective[2], effective[3], effective[0], effective[1])
 
             return chip[2], chip[3]
@@ -182,6 +169,78 @@ class QHYCCDCamera(
         gain, offset = await self._run_blocking_or_raise(_get_gain_offset)
         self._gain, self._offset = gain, offset
         await self.comm.set_state(IGain, GainState(gain=gain, offset=offset))
+
+    @staticmethod
+    def _open_driver(gain: float | None, offset: float | None) -> QHYCCDDriver:
+        """Open the first camera and set USB traffic, gain, offset and 16 bit (blocking)."""
+        devices = QHYCCDDriver.list_devices()
+        driver = QHYCCDDriver(devices[0])
+        driver.open()
+
+        if driver.is_control_available(Control.CAM_COLOR):
+            raise ValueError("Color cams are not supported.")
+
+        if driver.is_control_available(Control.CONTROL_USBTRAFFIC):
+            driver.set_param(Control.CONTROL_USBTRAFFIC, 60)
+
+        if gain is not None and driver.is_control_available(Control.CONTROL_GAIN):
+            driver.set_param(Control.CONTROL_GAIN, gain)
+
+        if offset is not None and driver.is_control_available(Control.CONTROL_OFFSET):
+            driver.set_param(Control.CONTROL_OFFSET, offset)
+
+        if driver.is_control_available(Control.CONTROL_TRANSFERBIT):
+            driver.set_bits_mode(16)
+
+        return driver
+
+    def _reopen_driver(self) -> None:
+        """Close the camera and open it again with the current gain, offset, setpoint and custom params (blocking).
+
+        Binning and window need nothing, they are written before every exposure.
+        """
+        old, self._driver = self._driver, None
+        if old is not None:
+            try:
+                old.close()
+            except ValueError as e:
+                log.warning("Closing the camera failed: %s", e)
+
+        driver = self._open_driver(self._gain, self._offset)
+        if self._params is not None:
+            self._set_custom_params(driver, self._params)
+        if driver.is_control_available(Control.CONTROL_COOLER):
+            if self._cooling_off:
+                driver.set_param(Control.CONTROL_MANULPWM, 0)
+            else:
+                # whether the camera keeps its setpoint over a reopen is not known, so give it again
+                self._write_setpoint(driver, self._commanded_setpoint())
+        self._driver = driver
+
+    async def _recover_from_failed_readout(self, error: Exception) -> str:
+        """Open the camera again after a readout that timed out or gave an empty frame.
+
+        A hanging QHY294PRO-M returns an all-zero frame about 60 s late while the SDK reports success. A reset of the
+        device under an open handle gives the same, and opening the camera again cleared that (measured). Whether it
+        also clears the hang seen at the telescope, which needed a replug, is not known.
+
+        Returns:
+            The message for the GrabImageError.
+        """
+        log.error("Readout failed (%s), the camera may hang. Opening it again...", error)
+        # a readout that timed out still holds the driver lock until the SDK returns
+        if not await self._run_blocking(lambda: None, timeout=HUNG_READOUT_WAIT):
+            return f"Readout failed ({error}) and the SDK did not return within {HUNG_READOUT_WAIT:.0f} s. {UNPLUG}"
+        try:
+            await self._run_blocking_or_raise(self._reopen_driver, timeout=REOPEN_TIMEOUT)
+        except Exception as e:
+            log.exception("Opening the camera again failed.")
+            return f"Readout failed ({error}) and opening the camera again failed ({e}). {UNPLUG}"
+        log.warning("Camera opened again after a failed readout.")
+        return (
+            f"Readout failed ({error}). The camera was opened again, the exposure can be repeated; if it fails again, "
+            "unplug USB and power of the camera."
+        )
 
     def _init_cooling_state(self, driver: QHYCCDDriver) -> None:
         """Find out whether the cooler was left running (blocking).
@@ -213,16 +272,17 @@ class QHYCCDCamera(
             if self._driver is None:
                 raise ValueError("No camera driver.")
             driver = self._driver
+            await self._run_blocking_or_raise(lambda: self._set_custom_params(driver, params))
 
-            def _set_custom_params() -> None:
-                for key, value in params.items():
-                    p = "CONTROL_" + key.upper()
-                    if hasattr(Control, p):
-                        control_param = getattr(Control, p)
-                        log.info("Setting %s to %s.", control_param, value)
-                        driver.set_param(control_param, value)
-
-            await self._run_blocking_or_raise(_set_custom_params)
+    @staticmethod
+    def _set_custom_params(driver: QHYCCDDriver, params: dict[str, float]) -> None:
+        """Write the params of the configuration, e.g. {"usbtraffic": 30} to CONTROL_USBTRAFFIC (blocking)."""
+        for key, value in params.items():
+            p = "CONTROL_" + key.upper()
+            if hasattr(Control, p):
+                control_param = getattr(Control, p)
+                log.info("Setting %s to %s.", control_param, value)
+                driver.set_param(control_param, value)
 
     async def _available_binnings(self) -> list[Binning]:
         if self._driver is None:
@@ -354,7 +414,11 @@ class QHYCCDCamera(
         if aborted:
             # a cancelled exposure must not be read out (see cancel_exposure/_abort_exposure)
             raise AbortedError()
-        image_data = await self._run_blocking_or_raise(driver.get_single_frame)
+        try:
+            image_data = await self._run_blocking_or_raise(driver.get_single_frame)
+        except (TimeoutError, EmptyFrameError) as e:
+            # a hanging camera delivers zeros about 60 s late, so the timeout usually comes first
+            raise GrabImageError(await self._recover_from_failed_readout(e)) from e
         return await self._get_image_with_header(image_data, date_obs, exposure_time)
 
     async def _wait_exposure(self, abort_event: asyncio.Event, exposure_time: float, open_shutter: bool) -> bool:
@@ -444,11 +508,14 @@ class QHYCCDCamera(
         await asyncio.sleep(5)
         if self._driver is None:
             raise ValueError("No camera driver.")
-        driver = self._driver
 
         while True:
             try:
                 await asyncio.sleep(1.0)
+                # looked up every time, the driver is replaced when the camera is opened again after a failed readout
+                driver = self._driver
+                if driver is None:
+                    continue
 
                 def _poll() -> tuple[float, float, bool]:
                     current_temp = float(driver.get_param(Control.CONTROL_CURTEMP))

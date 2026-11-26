@@ -7,14 +7,17 @@ Hardware I/O (opening, exposing, reading out) is out of scope here.
 import asyncio
 import threading
 import time
+from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import numpy as np
 import pytest
 from pyobs.interfaces import IBinning, ICooling, IWindow
-from pyobs_qhyccd.qhyccddriver import Control  # type: ignore
+from pyobs.utils.exceptions import GrabImageError
 
-from pyobs_qhyccd import QHYCCDCamera
+from pyobs_qhyccd import QHYCCDCamera, qhyccdcamera
+from pyobs_qhyccd.blocking import BlockingSdkMixin
+from pyobs_qhyccd.qhyccddriver import EMPTY_FRAME_MESSAGE, Control, EmptyFrameError  # type: ignore
 
 
 def test_constructor_defaults() -> None:
@@ -340,3 +343,123 @@ async def test_image_header_has_the_shared_cards() -> None:
     assert h["DET-TEMP"] == -9.5 and h["DET-COOL"] == 50.0 and "DET-TSET" in h
     assert h["DET-BIN1"] == 1 and h["XORGSUBF"] == 0
     assert (h["DATAMIN"], h["DATAMAX"], h["DATAMEAN"]) == (1.0, 8.0, 4.5)
+
+
+class _FakeDriverClass:
+    """Stands in for QHYCCDDriver when the camera is opened again; every instance is a MagicMock."""
+
+    def __init__(self) -> None:
+        self.opened: list[MagicMock] = []
+        self.fail: Exception | None = None
+        self.controls_available = False
+
+    def list_devices(self) -> list[bytes]:
+        if self.fail is not None:
+            raise self.fail
+        return [b"cam"]
+
+    def __call__(self, cam_id: bytes) -> MagicMock:
+        driver = MagicMock()
+        driver.is_control_available.side_effect = lambda c: self.controls_available and c is not Control.CAM_COLOR
+        self.opened.append(driver)
+        return driver
+
+
+def _camera_with_failing_readout(
+    monkeypatch: pytest.MonkeyPatch, get_single_frame: Any
+) -> tuple[QHYCCDCamera, MagicMock, _FakeDriverClass]:
+    camera = QHYCCDCamera()
+    old = MagicMock()
+    old.get_single_frame.side_effect = get_single_frame
+    camera._driver = old
+    camera._prepare_driver_for_exposure = AsyncMock()  # type: ignore[method-assign]
+    camera._wait_exposure = AsyncMock(return_value=False)  # type: ignore[method-assign]
+    fake = _FakeDriverClass()
+    monkeypatch.setattr(qhyccdcamera, "QHYCCDDriver", fake)
+    return camera, old, fake
+
+
+def _raise_empty() -> None:
+    raise EmptyFrameError(EMPTY_FRAME_MESSAGE)
+
+
+@pytest.mark.asyncio
+async def test_empty_frame_opens_the_camera_again_with_its_settings(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera, old, fake = _camera_with_failing_readout(monkeypatch, _raise_empty)
+    camera._gain, camera._offset = 20.0, 30.0
+    camera._cooling_off = False
+    camera._cooling_commanded = -7.0
+    camera._params = {"usbtraffic": 30}
+    fake.controls_available = True
+
+    with pytest.raises(GrabImageError, match="opened again"):
+        await camera._expose(1.0, False, asyncio.Event())
+
+    old.close.assert_called_once()
+    assert camera._driver is fake.opened[0]
+    writes = [c.args for c in fake.opened[0].set_param.call_args_list]
+    assert (Control.CONTROL_GAIN, 20.0) in writes and (Control.CONTROL_OFFSET, 30.0) in writes
+    assert (Control.CONTROL_USBTRAFFIC, 30) in writes  # custom params after the default of 60
+    assert (Control.CONTROL_COOLER, -7.0) in writes
+
+
+@pytest.mark.asyncio
+async def test_reopen_with_cooler_off_writes_pwm_zero(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera, _, fake = _camera_with_failing_readout(monkeypatch, _raise_empty)
+    camera._cooling_off = True
+    fake.controls_available = True
+
+    with pytest.raises(GrabImageError):
+        await camera._expose(1.0, False, asyncio.Event())
+
+    fake.opened[0].set_param.assert_any_call(Control.CONTROL_MANULPWM, 0)
+    assert (Control.CONTROL_COOLER,) not in [c.args[:1] for c in fake.opened[0].set_param.call_args_list]
+
+
+@pytest.mark.asyncio
+async def test_timed_out_readout_reopens_only_after_the_sdk_returned(monkeypatch: pytest.MonkeyPatch) -> None:
+    returned = threading.Event()
+
+    def slow_zeros() -> None:
+        time.sleep(0.3)
+        returned.set()
+        _raise_empty()
+
+    camera, old, fake = _camera_with_failing_readout(monkeypatch, slow_zeros)
+    old.close.side_effect = lambda: closed_after_return.append(returned.is_set())
+    closed_after_return: list[bool] = []
+    monkeypatch.setattr(BlockingSdkMixin._run_blocking_or_raise, "__defaults__", (0.05,))
+
+    with pytest.raises(GrabImageError, match="opened again") as info:
+        await camera._expose(1.0, False, asyncio.Event())
+
+    assert isinstance(info.value.__cause__, TimeoutError)
+    assert closed_after_return == [True]
+    assert camera._driver is fake.opened[0]
+
+
+@pytest.mark.asyncio
+async def test_failed_reopen_says_unplug(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera, _, fake = _camera_with_failing_readout(monkeypatch, _raise_empty)
+    fake.fail = ValueError("No camera found.")
+
+    with pytest.raises(GrabImageError, match="opening the camera again failed.*Unplug USB and power"):
+        await camera._expose(1.0, False, asyncio.Event())
+
+    assert camera._driver is None
+
+
+@pytest.mark.asyncio
+async def test_sdk_that_never_returns_says_unplug(monkeypatch: pytest.MonkeyPatch) -> None:
+    release = threading.Event()
+    camera, old, _ = _camera_with_failing_readout(monkeypatch, lambda: release.wait())
+    monkeypatch.setattr(BlockingSdkMixin._run_blocking_or_raise, "__defaults__", (0.05,))
+    monkeypatch.setattr(qhyccdcamera, "HUNG_READOUT_WAIT", 0.1)
+
+    try:
+        with pytest.raises(GrabImageError, match="did not return.*Unplug USB and power"):
+            await camera._expose(1.0, False, asyncio.Event())
+        old.close.assert_not_called()
+    finally:
+        release.set()
+        await asyncio.sleep(0.05)

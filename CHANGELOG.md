@@ -13,6 +13,12 @@ Entries for releases before this file existed were generated from commit subject
   to hang so that every frame comes back empty, about 60 s late, while the SDK reports success; only unplugging USB and
   power of the camera helped. The camera module fails the exposure, the GUI shows the error and warns on stderr when a
   readout takes longer than 30 s.
+- Camera module: a readout that times out or gives an empty frame makes the module wait for the SDK call to return
+  (at most 90 s), close the camera and open it again with the current gain, offset, setpoint and `params`, and fail the
+  exposure with a `GrabImageError` that says so (or that the camera should be unplugged, if that did not work). The
+  exposure is not repeated automatically. A USB reset under an open handle gives the same empty frames, and opening
+  again cleared them; whether it clears the hang seen at the telescope is not known. Before, the 5 s timeout of the
+  readout came first and the module only reported the timeout.
 
 - Cooling: the setpoint is written to `CONTROL_COOLER` (the camera regulates by itself) instead of calling
   `ControlQHYCCDTemp` once per ramp step. `cooling_control="temperature"` keeps the old SDK call and now repeats it
