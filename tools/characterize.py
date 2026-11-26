@@ -59,6 +59,7 @@ import csv
 import ctypes
 import json
 import math
+import os
 import sys
 import threading
 import time
@@ -368,7 +369,10 @@ class Camera:
     def close(self) -> None:
         if self._controller is not None:
             self.set_cooler(False)
-        self.lib.CloseQHYCCD(self.handle)
+        # CloseQHYCCD of SDK 25.9.29.10 joins an uninitialized thread handle (see the docstring of
+        # pyobs_qhyccd.qhyccddriver), so it is skipped like in the driver unless QHYCCD_CALL_CLOSE=1
+        if os.environ.get("QHYCCD_CALL_CLOSE", "0") == "1":
+            self.lib.CloseQHYCCD(self.handle)
         self.lib.ReleaseQHYCCDResource()
 
 

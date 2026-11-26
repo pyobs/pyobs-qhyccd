@@ -20,6 +20,8 @@ checked separately) or **from the SDK**. All numbers are for this unit.
   conversion gain between gain 1500 and 1600 (the bias noise falls from 21 to 7.6 ADU there, measured; the e- are inferred).
 - **Dark current** is 0.045 ADU/s at 10 °C and halves about every 5 °C. At -10 °C it is about 0.0037 ADU/s (300 s and
   900 s darks), and at -5 °C about 0.006 ADU/s (measured). There is no sign of amp glow in the mean (mean only; no images checked by eye).
+  Mode 1 has a quarter of that per pixel in electrons (0.0008 e-/s at -12 °C against 0.0033), the same per sensor area
+  (inferred).
 - **Readout:** 0.6 s per full frame of the effective area, independent of binning (measured).
 - **Cooling:** with the 1.5 A supply the cooler stopped working at 66% to 78% drive level (measured, twice). With a
   5 A supply it ran at full drive without trouble and reached -12.8 °C at an ambient of about 20 °C (measured), which is about
@@ -352,9 +354,21 @@ Same procedure as above (5 A supply, PI controller, gain 10, offset 140, 60 s an
   pairs scatter by more than the 300 s darks, as in mode 0 (the hot fraction is also lower at 60 s).
 - At -5 °C the 300 s dark gives 0.0082 ADU/s, a little above mode 0 (0.0064). The sensor was 1 °C colder during the 300 s
   dark than the setpoint, so the temperatures are not exactly the same. Two points are too few for an activation energy.
-- Whether the dark current per electron differs between the modes cannot be said before the gain (e-/ADU) of mode 1 is
-  measured. In ADU/s per pixel at gain 10 it is the same.
 - The bias noise falls from 22.26 to 22.02 ADU between -5 and -10 °C (6.83 to 6.77 ADU in mode 0).
+- **900 s darks at 0, -5 and -12 °C (mode 1, 5 A supply, 25 Nov):** 0.0093, 0.0049 and 0.0026 ADU/s (mean), hot
+  fraction 6.9e-4, 4.5e-4 and 3.0e-4, bias noise 22.47, 22.23 and 21.94 ADU. As in mode 0, the sensor temperature in the
+  records is wrong for the first (-7.6 °C at the 0 °C setpoint, power 0%), so I take the setpoints (inferred). The other
+  two read -6.3 and -11.8 °C.
+- **Per electron** (e-/ADU at gain 10 interpolated from the flats: 0.318 in mode 1, 1.027 in mode 0, inferred):
+
+  | Setpoint [°C] | Mode 1 [e-/s/px] | Mode 0 [e-/s/px] | Ratio |
+  |---|---|---|---|
+  | 0 | 0.0030 | 0.0124 | 4.2 |
+  | -5 | 0.0016 | 0.0059 | 3.8 |
+  | -12 | 0.0008 | 0.0033 | 4.0 |
+
+  Mode 0 has 4 times the dark current per pixel. A pixel of mode 0 covers 4 pixels of mode 1 (2x2, 4164 x 2822 against
+  8336 x 5648), so per sensor area the dark current is the same in both modes (inferred from the pixel counts).
 
 ## Gain from the dark shot noise, warm (measured, not usable)
 
@@ -602,12 +616,26 @@ The driver now refuses all-zero frames (`EmptyFrameError`), the GUI and the scri
 30 s, and the script stops at the first empty frame. Not tested: whether `CancelQHYCCDExposingAndReadout` frees a hung
 camera, and whether switching off the USB port power (for example with `uhubctl` on a hub that supports it) is enough.
 
+The script no longer calls `CloseQHYCCD` (only with `QHYCCD_CALL_CLOSE=1`), like the driver. The rerun of the mode 1
+900 s darks after that (25 Nov, 3.3 h) had no empty frames. The hang is rare, so this one run says little.
+
+USB tests on the healthy camera (26 Nov, camera on a root port of the PC, measured):
+
+- `usbreset` between two processes, and `authorized` 0/1 in sysfs: the camera works afterwards (1 ms bias 8982 ADU,
+  std 7.2, 0.8 s per frame). `authorized` 0/1 kept the device number, so it only rebinds; neither cuts the USB power.
+- **`usbreset` while the camera is open reproduces the symptom:** the next frame on the old handle came back as zeros
+  after 65.5 s, with success from the SDK. Closing and opening the camera again in the same process gave normal frames
+  at once. So a reset of the device under an open handle is one way to get the empty frames (measured). The hang on
+  25 Nov lasted across new processes and needed a replug, and the kernel log showed no reset then, so it is probably a
+  different state inside the camera (inferred).
+- Switching off the port power could not be tested: the root ports of this PC are not switchable (`uhubctl`), and the
+  only switchable hub belongs to a KVM switch, which drops its devices when switched.
+
 ## Not measured yet
 
 - **The switch gain to 1** (known to 10: mode 1 at 200, mode 0 at 1600).
 - **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
   darks are wrong).
-- **Read mode 1:** 900 s darks (the run on 25 Nov gave only empty frames, see the camera hang above).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
 - **Restart of the module with the cooler on** and the driver's PWM workaround (switched off by default) on the other QHY
   cameras: not tested; on this unit with the 5 A supply it was not needed.
