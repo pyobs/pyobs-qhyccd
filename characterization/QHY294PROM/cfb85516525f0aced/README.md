@@ -675,18 +675,27 @@ The pyobs log has no check for empty frames, so a hang shows up as a readout mor
   number is not in the log, so it may be another unit. SDK 25.6.16.15 (this unit: 25.9.29.10), always the full image
   4212x2850 with overscan, binning 2x2 (77%) or 4x4, gain 2, 1600 or 2500, offset 2 or 15. The read mode was not
   logged (Tim: never changed). The old module called `CloseQHYCCD` when it shut down.
-- 6100 slow exposures in 48 episodes, the first on 24 Aug 2025. No episode ended on its own; each ended with a restart
-  of the module, sometimes after several restarts.
+- 6100 slow exposures in 48 episodes, the first on 24 Aug 2025. No episode ended on its own; in the log each ends at a
+  start of the module. A new open or a restart of the module did not clear it, only a power cycle of the camera did
+  (Tim). Opening it in the other read mode, which cleared it here, was never tried there.
+- The kernel log of the telescope PC (journal for every boot from Aug 2025 to Mar 2026) shows no USB disconnect, reset
+  or transfer error of the camera during or just before any episode, so the USB link did not drop (inferred; a drop
+  usually shows up there). The camera was found anew only a few times while the PC was running (24 Sep, 28 Oct,
+  11 Nov, 31 Dec 2025), none of them at an episode.
 - 30 episodes started in a running session, 21 to 3258 exposures (up to 5 days) after the start of the module, with the
   exposure before it normal and no warning or error in the log. That is about one per 3000 healthy exposures. The
   `CloseQHYCCD` and mode-switch trigger above cannot explain these.
 - 18 episodes started with the first exposure after a start of the module, most of them right after an earlier hang
-  (the hang lasting across the restart, like in the tests, or `CloseQHYCCD` at the shutdown; the log cannot tell).
+  (the hang lasting across the restart because the camera was not power cycled, or `CloseQHYCCD` at the shutdown; the
+  log cannot tell).
 - The first bad exposure had any parameter: 0 to 300 s, open or closed shutter, binning 2x2 or 4x4.
 
 So the hang at the telescope has a second trigger that was not reproduced here. Differences to the tests that are still
 open: the SDK version, the gain (1600 is where the conversion gain switches, see the summary) and offset, the overscan
-in the window, exposures of 300 s, and the cabling.
+in the window, exposures of 300 s, and the cabling. Since the USB link stayed up, a loose 12 V connector while the
+telescope moves is a candidate: the camera runs on USB power without the 12 V supply (seen on 27 Nov, when it took
+frames for 8 min with the 12 V unplugged), so a short drop of the 12 V would not show up in the kernel log (inferred,
+not tested).
 
 ### USB tests
 
