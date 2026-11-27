@@ -1,0 +1,12 @@
+-- qhyccd.cpp param
+QHYCCD|QHYCCD.CPP|InitQHYCCDResource()|START
+QHYCCD|QHYCCD.CPP|InitQHYCCDResource|auto_detect_camera:false,call InitQHYCCDResourceInside
+QHYCCD|QHYCCD.CPP|InitQHYCCDResourceInside|START
+QHYCCD|QHYCCD.CPP|libusb_version 1.0.29.11953
+QHYCCD|QHYCCD.CPP|libusb_init(libqhyccd_context) called...
+QHYCCD|QHYCCD.CPP|InitQHYCCDResourceInside|numdev set to 0
+QHYCCD|QHYCCD.CPP|InitQHYCCDResourceInside|END
+************************** config file path  25.9.29.10 svn: 15848  ************************************
+QHYCCD|QHYCCD.CPP|InitQHYCCDResource|Load ini filePath = /home/husser/code/pyobs/pyobs-qhyccd  fileName = qhyccd.ini
+OK 4160x2794 mean=8982.1 frame=0.8s
+CYCLE 5.4s

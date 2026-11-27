@@ -36,6 +36,10 @@ checked separately) or **from the SDK**. All numbers are for this unit.
   down to 5 ms; times of 1 ms and shorter carry about 0.1 ms of extra signal at most.
 - **Full well:** the ADC clips at 65535 ADU before the pixels saturate (linear to 64000 ADU, no roll-off). The range
   above the bias is 58 ke- at gain 0 in mode 0 and 18 ke- in mode 1; the true full well is at least that (inferred).
+- **Camera hang:** reproduced with `CloseQHYCCD` followed by opening in the other read mode (about 3% per switch);
+  opening in the other mode and back clears it without a replug. At the telescope most hangs started in a running
+  session without either, about one per 3000 exposures; that trigger is not reproduced (see
+  [Camera hang](#camera-hang-with-empty-frames-open-problem)).
 - **Not measured:** the bias noise at gains 1000 to 1400 (where the conversion gain switches in mode 0).
 
 ## Setup
@@ -610,16 +614,83 @@ test and came back in the next process in mode 0, with the cooler off. The kerne
 the 12 V supply alone does not help, because the camera electronics run on USB power; unplugging USB and power brought it
 back (Tim saw the same at the telescope, where only a replug helped). The cause is unknown. `tools/characterize.py`
 called `CloseQHYCCD` (the call with the broken thread join, see the [model notes](../README.md#software-notes)) at the end
-of every run, which may leave the camera in a bad state for the next process (inferred, not tested).
+of every run. Together with a change of read mode in the next process this does give the hang (see
+[Reproduced](#reproduced-closeqhyccd-and-a-change-of-read-mode-measured-26-nov)).
 
 The driver now refuses all-zero frames (`EmptyFrameError`), the GUI and the script warn when a readout takes more than
-30 s, and the script stops at the first empty frame. Not tested: whether `CancelQHYCCDExposingAndReadout` frees a hung
+30 s, and the script stops at the first empty frame. The hang in mode 1 gives frames that are not all zeros (see
+below): the camera module catches them anyway, as it gives up on a readout after 5 s and opens the camera again, but
+`tools/characterize.py` only warns and goes on. Not tested: whether `CancelQHYCCDExposingAndReadout` frees a hung
 camera, and whether switching off the USB port power (for example with `uhubctl` on a hub that supports it) is enough.
 
 The script no longer calls `CloseQHYCCD` (only with `QHYCCD_CALL_CLOSE=1`), like the driver. The rerun of the mode 1
 900 s darks after that (25 Nov, 3.3 h) had no empty frames. The hang is rare, so this one run says little.
 
-USB tests on the healthy camera (26 Nov, camera on a root port of the PC, measured):
+### What to do when it hangs
+
+1. Signs: a readout takes about 60 s longer than the exposure. In mode 0 the frame is all zeros, in mode 1 it has a mean
+   of about 1.6 ADU instead of the bias level (not all zeros, so a check for zeros alone misses it).
+2. Note the time, the read mode and what ran before (which process, which read mode, whether it ended with
+   `CloseQHYCCD`), and save `lsusb` and `journalctl -k`.
+3. Close the camera and open it in the other read mode, take one frame, close it, open it again in the wanted mode. This
+   cleared every hang in the tests below without a replug (measured, 23 of 23, all of them after a mode switch).
+4. Only if that does not help: unplug USB and power.
+
+### Reproduced: `CloseQHYCCD` and a change of read mode (measured, 26 Nov)
+
+Each cycle opens the camera in one process, takes one full-frame bias of 1 ms and closes it, with `CloseQHYCCD` on or
+off (scripts and logs in [hang/](hang/)):
+
+| Test | `CloseQHYCCD` | Cycles | Hangs |
+|---|---|---|---|
+| Mode 0 only (`cycleloop.sh`) | every second cycle | 1620 (810 with it) | 0 |
+| Mode 0 and 1 alternating (`modeloop.sh`, `modeloop2.sh 1`) | on | 4 + 779 | 1 + 23 |
+| Mode 0 and 1 alternating (`modeloop2.sh 0`) | off | 52 | 0 |
+
+- The hung cycle always followed a closed cycle in the other read mode. In the 779 cycles: mode 0 hung 9 times in 389
+  cycles (all zeros, 124.8 s for a 1 ms bias), mode 1 14 times in 390 cycles plus once during a recovery (60.4 s, mean
+  1.6 ADU). That is about 3% per mode switch.
+- Once hung, the same mode stays hung in new processes (12:47 run: mode 0 empty twice in a row). One cycle in the other
+  mode cleared it every time.
+- `CloseQHYCCD` alone does not do it: 0 hangs in 810 closes in mode 0, where 3% would give about 24.
+- Without `CloseQHYCCD` the mode switch gave no hang in 52 cycles. At 3%, zero in 52 happens by chance in about 20% of
+  runs, so this is open.
+- The kernel log showed no USB events, and the device stayed `1618:c297` (no firmware reload).
+
+### Other tests without a hang (26 and 27 Nov)
+
+- `coolstress.py`, one process in mode 0, exposures of 1 ms to 30 s, cooler phases changing every 2 to 8 min: 804 frames
+  with all SDK calls under one lock and 726 without a lock (poller writing the PWM every second): no hang.
+- `longrun.py`, one process in mode 0 like the module at the telescope (full image, binning 2x2/4x4/1x1, 0 to 45 s,
+  setpoint -5 °C, all calls locked): 5560 frames in 15.6 h, no hang (stopped by hand). At the telescope rate (below)
+  about 1.8 hangs were expected, and zero happens by chance in about 16% of runs, so this does not rule it out.
+
+### At the telescope (frontend.log, Feb 2025 to Mar 2026)
+
+The pyobs log has no check for empty frames, so a hang shows up as a readout more than 50 s longer than the exposure
+(script `hang/scripts/telescope_episodes.py`, table in `hang/telescope/episodes.txt`):
+
+- A QHY163M took 29306 exposures until 14 Aug 2025 with no slow readout. From then on a camera with the same chip and
+  areas as this unit (19.5x13.2 mm, 4.63 µm pixels, effective 4164x2795 from 36,28) took 97185 exposures; this serial
+  number is not in the log, so it may be another unit. SDK 25.6.16.15 (this unit: 25.9.29.10), always the full image
+  4212x2850 with overscan, binning 2x2 (77%) or 4x4, gain 2, 1600 or 2500, offset 2 or 15. The read mode was not
+  logged (Tim: never changed). The old module called `CloseQHYCCD` when it shut down.
+- 6100 slow exposures in 48 episodes, the first on 24 Aug 2025. No episode ended on its own; each ended with a restart
+  of the module, sometimes after several restarts.
+- 30 episodes started in a running session, 21 to 3258 exposures (up to 5 days) after the start of the module, with the
+  exposure before it normal and no warning or error in the log. That is about one per 3000 healthy exposures. The
+  `CloseQHYCCD` and mode-switch trigger above cannot explain these.
+- 18 episodes started with the first exposure after a start of the module, most of them right after an earlier hang
+  (the hang lasting across the restart, like in the tests, or `CloseQHYCCD` at the shutdown; the log cannot tell).
+- The first bad exposure had any parameter: 0 to 300 s, open or closed shutter, binning 2x2 or 4x4.
+
+So the hang at the telescope has a second trigger that was not reproduced here. Differences to the tests that are still
+open: the SDK version, the gain (1600 is where the conversion gain switches, see the summary) and offset, the overscan
+in the window, exposures of 300 s, and the cabling.
+
+### USB tests
+
+On the healthy camera (26 Nov, camera on a root port of the PC, measured):
 
 - `usbreset` between two processes, and `authorized` 0/1 in sysfs: the camera works afterwards (1 ms bias 8982 ADU,
   std 7.2, 0.8 s per frame). `authorized` 0/1 kept the device number, so it only rebinds; neither cuts the USB power.
@@ -634,6 +705,8 @@ USB tests on the healthy camera (26 Nov, camera on a root port of the PC, measur
 ## Not measured yet
 
 - **The switch gain to 1** (known to 10: mode 1 at 200, mode 0 at 1600).
+- **The mid-session hang:** a long run with the telescope settings (SDK 25.6.16.15, gain 1600, offset 2, 300 s darks)
+  for several days.
 - **Sensor temperature during long darks:** log it from a second process or between frames (the readings after the 900 s
   darks are wrong).
 - **Temperature below -13 °C:** not reachable at about 20 °C ambient (see [Cooling](#cooling-and-the-power-supply)).
